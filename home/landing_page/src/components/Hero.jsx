@@ -66,12 +66,35 @@ const Hero = () => {
           <h1>
             Lumi Car <em>Spa</em>
             <span className="h1-seo">
-              Premium hand wash, interior vacuuming &amp; detailing — West Pennant Hills, NSW · Mon–Sun 9am–5pm
+              <span className="h1-seo-set h1-seo-set--mobile">
+                <span className="h1-seo-line h1-seo-line--single">
+                  Premium hand wash, interior vacuuming &amp; detailing&nbsp;
+                </span>
+                <span className="h1-seo-line">–&nbsp;West Pennant Hills, NSW · Mon–Sun 9am–5pm</span>
+              </span>
+              <span className="h1-seo-set h1-seo-set--desktop">
+                <span className="h1-seo-line">Premium hand wash, interior vacuuming &amp; detailing&nbsp;—</span>
+                <span className="h1-seo-line">West Pennant Hills, NSW · Mon–Sun 9am–5pm</span>
+              </span>
             </span>
           </h1>
           <p className="hsub">
-            Eco-safe, car-safe products and careful hand work. Drop your car, enjoy a complimentary coffee on selected
-            services, and relax while we look after your vehicle.
+            <span className="hsub-copy hsub-copy--desktop">
+              Eco-safe, car-safe products and careful hand work. Drop your
+              <br aria-hidden="true" />
+              car, enjoy a complimentary coffee on selected services, and relax
+              <br aria-hidden="true" />
+              while we look after your vehicle.
+            </span>
+            <span className="hsub-copy hsub-copy--mobile">
+              Eco-safe, car-safe products and careful hand
+              <br aria-hidden="true" />
+              work. Drop your car, enjoy a complimentary coffee
+              <br aria-hidden="true" />
+              on selected services, and relax while we look after
+              <br aria-hidden="true" />
+              your vehicle.
+            </span>
           </p>
           <div className="hbtns">
             <a href="#/login" className="bg" aria-label="Book your car wash service — sign in">
@@ -86,8 +109,9 @@ const Hero = () => {
               Our Services →
             </a>
           </div>
-          <p className="hformer">Formerly known as Coonara Professional Hand Car Wash</p>
-          <div className="hstats" aria-label="Service highlights">
+          <div className="hero-footer">
+            <p className="hformer">Formerly known as Coonara Professional Hand Car Wash</p>
+            <div className="hstats" aria-label="Service highlights">
             <div className="hstat">
               <span className="sn">850+</span>
               <span className="sl">Happy Cars</span>
@@ -108,6 +132,7 @@ const Hero = () => {
                 <span className="sn">7 Days</span>
               </div>
               <span className="sl">9am–5pm</span>
+            </div>
             </div>
           </div>
         </div>

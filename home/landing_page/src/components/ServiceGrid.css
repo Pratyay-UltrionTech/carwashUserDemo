@@ -1,15 +1,12 @@
-.landing-page .strip{background:var(--green);padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:.9rem;flex-wrap:wrap;text-align:center}
+.landing-page .strip{background:var(--green);padding:1.1rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;text-align:center}
 .landing-page .strip-coffee-icon{color:rgba(255,255,255,0.95);display:flex;align-items:center;line-height:0;flex-shrink:0}
-.landing-page .strip-coffee-icon-inline{color:rgba(255,255,255,0.95);display:inline-flex;vertical-align:baseline;transform:translateY(1px);margin-left:.28rem}
-.landing-page .stag{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:3px 12px;border-radius:100px;font-size:11px;font-weight:600}
-.landing-page .strip p{color:#fff;font-size:13px}
+.landing-page .strip-coffee-icon-inline{color:rgba(255,255,255,0.95);display:inline-flex;vertical-align:baseline;transform:translateY(1px);margin-left:.35rem}
+.landing-page .stag{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:5px 14px;border-radius:100px;font-size:clamp(12px,1.1vw,14px);font-weight:600;letter-spacing:.04em}
+.landing-page .strip p{color:#fff;font-size:clamp(15px,1.25vw,17px);line-height:1.45}
 .landing-page .strip strong{color:#a8e6c5}
 
-/* Tighter top spacing only where the green strip meets Our Services (not other .sec blocks) */
-.landing-page .sec.service-section{padding-top:1.25rem}
-@media(max-width:768px){
-  .landing-page .sec.service-section{padding-top:1rem}
-}
+.landing-page .service-section .lbl{font-size:clamp(12px,1.1vw,14px);letter-spacing:2.5px;margin-bottom:.65rem}
+.landing-page .service-section .sub{font-size:clamp(1.05rem,1.2vw,1.2rem);line-height:1.75;max-width:560px}
 .landing-page .sg{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:230px;gap:12px;margin-top:2rem}
 .landing-page .sc{position:relative;border-radius:12px;overflow:hidden;cursor:pointer;background:#102547}
 .landing-page .sc img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .5s ease, opacity .4s ease;opacity:.95}

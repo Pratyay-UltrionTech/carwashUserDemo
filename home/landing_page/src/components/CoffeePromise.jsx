@@ -15,15 +15,15 @@ const CoffeePromise = () => {
         <div className="vct">
           <div className="vct-head">
             <span className="vct-coffee-icon">
-              <CoffeeIcon size={24} />
+              <CoffeeIcon size={28} />
             </span>
-            <div style={{ fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '.4rem' }}>COMPLIMENTARY</div>
+            <div className="vct-lbl">COMPLIMENTARY</div>
           </div>
           <h3>Coffee on Us</h3>
           <p>
             Relax with a complimentary coffee
             <span className="vct-coffee-icon-inline" aria-hidden="true">
-              <CoffeeIcon size={15} />
+              <CoffeeIcon size={18} />
             </span>
             {' '}— available on selected services.
           </p>

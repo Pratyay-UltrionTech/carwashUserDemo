@@ -50,7 +50,7 @@ const ServiceGrid = () => {
           <p>
             Relax with a complimentary coffee
             <span className="strip-coffee-icon-inline" aria-hidden="true">
-              <CoffeeIcon size={16} />
+              <CoffeeIcon size={20} />
             </span>
             {' '}— available on selected services.
           </p>

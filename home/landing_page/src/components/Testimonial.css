@@ -5,7 +5,7 @@
   overflow:hidden;
 }
 .landing-page .t-head{margin-bottom:clamp(1.25rem,2.5vw,1.75rem)}
-.landing-page .t-head .lbl{text-align:center}
+.landing-page .tsec .lbl{font-size:clamp(12px,1.1vw,14px);letter-spacing:2.5px;text-align:center}
 .landing-page .t-head h2{text-align:center;margin-bottom:0}
 
 .landing-page .t-stage{
@@ -87,22 +87,22 @@
 .landing-page .t-quote{
   display:block;
   font-family:'Bebas Neue',sans-serif;
-  font-size:2.75rem;
+  font-size:3rem;
   line-height:1;
   color:var(--green2);
   margin-bottom:.15rem;
   font-weight:400;
   letter-spacing:.02em;
 }
-.landing-page .t-card--active .t-quote{font-size:3.25rem}
+.landing-page .t-card--active .t-quote{font-size:3.5rem}
 .landing-page .tst{
   color:var(--gold);
-  font-size:13px;
+  font-size:clamp(14px,1.1vw,16px);
   letter-spacing:1px;
-  margin-bottom:.65rem;
+  margin-bottom:.75rem;
 }
 .landing-page .tt{
-  font-size:.88rem;
+  font-size:clamp(.95rem,1.15vw,1.05rem);
   color:var(--navy);
   line-height:1.75;
   font-style:italic;
@@ -113,7 +113,7 @@
   overflow:hidden;
 }
 .landing-page .t-card--active .tt{
-  font-size:.92rem;
+  font-size:clamp(1rem,1.2vw,1.1rem);
   line-height:1.85;
   -webkit-line-clamp:6;
 }
@@ -125,8 +125,8 @@
 }
 .landing-page .ta-meta{min-width:0}
 .landing-page .tav{
-  width:38px;
-  height:38px;
+  width:40px;
+  height:40px;
   border-radius:50%;
   background:linear-gradient(145deg,var(--green),#1e4f38);
   display:flex;
@@ -134,13 +134,13 @@
   justify-content:center;
   font-weight:600;
   color:#fff;
-  font-size:12px;
+  font-size:clamp(13px,1vw,14px);
   flex-shrink:0;
   box-shadow:0 4px 12px rgba(42,99,71,.25);
 }
-.landing-page .t-card--active .tav{width:42px;height:42px;font-size:13px}
-.landing-page .tan{font-weight:600;font-size:13px;color:var(--navy)}
-.landing-page .tar{font-size:11px;color:var(--muted);line-height:1.4}
+.landing-page .t-card--active .tav{width:44px;height:44px;font-size:clamp(14px,1.05vw,15px)}
+.landing-page .tan{font-weight:600;font-size:clamp(14px,1.1vw,16px);color:var(--navy)}
+.landing-page .tar{font-size:clamp(12px,1vw,14px);color:var(--muted);line-height:1.4}
 
 .landing-page .tdots{
   display:flex;
