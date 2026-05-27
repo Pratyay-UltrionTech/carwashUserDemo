@@ -20,6 +20,7 @@ import { useAdminBridgeSync } from '../hooks/useAdminBridgeSync';
 import { listAllBookableVehicleTypes } from '../lib/adminPortalBridge';
 import { AddressDetailsFields } from '../components/AddressDetailsFields';
 import { createEmptyAddressDetails } from '../lib/addressDetails';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 
 interface Vehicle { id: string; type: string; number: string; model: string }
 
@@ -57,7 +58,7 @@ function Section({
             <Icon className="w-4 h-4" style={{ color: NAVY }} />
           </span>
         )}
-        <h2 className="font-semibold text-gray-900" style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}>
+        <h2 className="font-semibold text-gray-900" style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}>
           {title}
         </h2>
         {badge && (
@@ -346,7 +347,7 @@ export function ProfileSetup() {
           <div className="mb-8">
             <h1
               className="text-2xl font-bold"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               {session?.profileCompleted ? 'Your Profile' : 'Set Up Your Profile'}
             </h1>
@@ -371,7 +372,7 @@ export function ProfileSetup() {
                 <div className="flex-1">
                   <p
                     className="text-sm font-semibold mb-1"
-                    style={{ color: GOLD, fontFamily: "'Playfair Display', serif" }}
+                    style={{ color: GOLD, fontFamily: HEADING_FONT_FAMILY }}
                   >
                     Loyalty Rewards Programme
                   </p>

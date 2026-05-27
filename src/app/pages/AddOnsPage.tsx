@@ -7,6 +7,7 @@ import { getCatalogForVehicle, listBranchAddons } from '../lib/adminPortalBridge
 import { getCachedMobileSnapshot, getMobileCatalogForVehicle } from '../lib/mobilePublicBridge';
 import { useAdminBridgeSync } from '../hooks/useAdminBridgeSync';
 import { cn } from '../components/ui/utils';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 import {
 
 
@@ -22,6 +23,31 @@ import {
 
 /** Additional services from menu — flat rates (branch & mobile). */
 export function AddOnsPage() {
+  const formatAddonName = (raw: string) => {
+    const trimmed = (raw ?? '').trim();
+    if (!trimmed) return '';
+
+    // UI wants a clean English display (e.g. "BUG/TAR REMOVING" → "Bug & Tar Removing")
+    const withAmpersand = trimmed.replace(/\s*\/\s*/g, ' & ');
+
+    const titleCase = (s: string) =>
+      s
+        .toLowerCase()
+        .split(/\s+/)
+        .map((word) => {
+          if (!word) return word;
+          // Keep apostrophes: "DOG'S" -> "Dog's"
+          const [first, ...rest] = word;
+          return first.toUpperCase() + rest.join('');
+        })
+        .join(' ');
+
+    return withAmpersand
+      .split(' & ')
+      .map((part) => titleCase(part))
+      .join(' & ');
+  };
+
   const navigate = useNavigate();
   const {
     selectedBranch,
@@ -46,7 +72,7 @@ export function AddOnsPage() {
           })();
     return source.map((a) => ({
       id: a.id,
-      name: a.name,
+      name: formatAddonName(a.name),
       price: a.price,
       description: (a.descriptionPoints ?? []).join(', '),
     }));
@@ -90,7 +116,7 @@ export function AddOnsPage() {
           <div>
             <h1
               className="text-xl font-bold leading-tight text-gray-900"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Add-ons
             </h1>
@@ -173,8 +199,8 @@ export function AddOnsPage() {
                     <div className="mb-3 flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <h3
-                          className="text-[15px] font-bold uppercase leading-snug tracking-tight text-gray-900"
-                          style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+                          className="text-[16px] font-bold leading-snug tracking-normal text-gray-900 break-words"
+                          style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
                         >
                           {addon.name}
                         </h3>
@@ -203,7 +229,7 @@ export function AddOnsPage() {
                         )}
                       </span>
                     </div>
-                    <p className={cn('text-base font-bold tracking-tight', isSelected ? 'text-[#0c1d3a]' : 'text-gray-800')} style={{ color: isSelected ? NAVY : undefined }}>
+                    <p className={cn('text-base font-bold tracking-normal', isSelected ? 'text-[#0c1d3a]' : 'text-gray-800')} style={{ color: isSelected ? NAVY : undefined }}>
                       +${Number(addon.price).toFixed(2)}
                     </p>
                   </button>

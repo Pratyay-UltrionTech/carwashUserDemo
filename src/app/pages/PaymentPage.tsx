@@ -41,6 +41,7 @@ import { sanitizePostcode } from '../lib/addressDetails';
 import { AuStateSelect } from '../components/AuStateSelect';
 import { cn } from '../components/ui/utils';
 import { API_BASE } from '../lib/apiBase';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 import {
   BOOKING_NAVY as NAVY,
   BOOKING_NAVY_TINT as NAVY_TINT,
@@ -754,7 +755,7 @@ export function PaymentPage() {
           <div>
             <h1
               className="text-xl font-bold text-gray-900"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Payment
             </h1>
@@ -881,7 +882,12 @@ export function PaymentPage() {
                     >
                       {userType === 'existing' && <div className="w-2 h-2 bg-white rounded-full" />}
                     </div>
-                    <span className="font-medium text-gray-900">Log in as existing customer</span>
+                    <div className="min-w-0">
+                      <span className="font-medium text-gray-900">Log in as existing customer</span>
+                      <p className="mt-1 text-xs font-normal leading-snug text-gray-500">
+                        (10th wash will be free if booked as a member)
+                      </p>
+                    </div>
                   </div>
                 </div>
               </button>

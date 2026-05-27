@@ -6,12 +6,36 @@ import { getCatalogForVehicle, listBranchAddons } from '../lib/adminPortalBridge
 export function AddOnsPageConnected() {
   const navigate = useNavigate();
   const { selectedBranch, vehicleType, selectedAddOns, toggleAddOn } = useBooking();
+
+  const formatAddonName = (raw: string) => {
+    const trimmed = (raw ?? '').trim();
+    if (!trimmed) return '';
+    const withAmpersand = trimmed.replace(/\s*\/\s*/g, ' & ');
+    const titleCase = (s: string) =>
+      s
+        .toLowerCase()
+        .split(/\s+/)
+        .map((word) => {
+          if (!word) return word;
+          const [first, ...rest] = word;
+          return first.toUpperCase() + rest.join('');
+        })
+        .join(' ');
+    return withAmpersand
+      .split(' & ')
+      .map((part) => titleCase(part))
+      .join(' & ');
+  };
+
   const addons = useMemo(() => {
     if (!selectedBranch) return [];
     const branchAddons = listBranchAddons(selectedBranch.id);
     if (branchAddons.length > 0) return branchAddons;
     if (!vehicleType) return [];
-    return getCatalogForVehicle(selectedBranch.id, vehicleType).addons;
+    return getCatalogForVehicle(selectedBranch.id, vehicleType).addons.map((a: any) => ({
+      ...a,
+      name: formatAddonName(a.name),
+    }));
   }, [selectedBranch, vehicleType]);
 
   return (
@@ -27,8 +51,10 @@ export function AddOnsPageConnected() {
               onClick={() => toggleAddOn({ id: addon.id, name: addon.name, price: addon.price })}
               className={`rounded-lg border p-4 text-left ${selected ? 'border-indigo-600 bg-indigo-50' : ''}`}
             >
-              <p className="font-medium">{addon.name}</p>
-              <p className="text-sm text-gray-600">${addon.price.toFixed(2)}</p>
+              <p className="font-semibold text-[14px] leading-snug tracking-normal break-words text-gray-900">
+                {addon.name}
+              </p>
+              <p className="text-[14px] font-bold tracking-normal text-gray-800">${addon.price.toFixed(2)}</p>
             </button>
           );
         })}

@@ -23,6 +23,7 @@ import {
 } from '../lib/addressDetails';
 import { apiListAddresses, type SavedAddress } from '../lib/userApi';
 import { BrandLoading } from '../components/BrandLoading';
+import { homeHeadingStyle, homePageType } from '../lib/homePageTypography';
 
 const NAVY      = '#0c1d3a';
 const NAVY_TINT = '#e8eef8';
@@ -265,13 +266,10 @@ export function HomePage() {
 
         {/* ── Welcome ── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-          <h1
-            className="text-2xl font-bold"
-            style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
-          >
+          <h1 className={homePageType.heroTitle} style={{ ...homeHeadingStyle, color: NAVY }}>
             {firstName ? `Welcome back, ${firstName}` : 'Welcome to Lumi Car Spa'}
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className={homePageType.heroSubtitle}>
             Your Hills shine specialist — book a service in under two minutes.
           </p>
         </motion.div>
@@ -300,21 +298,21 @@ export function HomePage() {
                 transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
                 className="shrink-0 mt-0.5"
               >
-                <Sparkles className="h-5 w-5" style={{ color: GOLD }} />
+                <Sparkles className="h-6 w-6" style={{ color: GOLD }} />
               </motion.div>
               <div>
-                <div className="flex items-center gap-2 mb-1.5">
+                <div className="flex items-center gap-2 mb-2">
                   <span
-                    className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
+                    className={homePageType.offerLabel}
                     style={{ background: 'rgba(201,168,76,0.25)', color: GOLD }}
                   >
                     Active Offers
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-white leading-snug">
+                <h3 className={`${homePageType.offerHeadline} text-white`} style={homeHeadingStyle}>
                   Save with time-based pricing
                 </h3>
-                <p className="text-sm mt-0.5" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                <p className={homePageType.offerBody} style={{ color: 'rgba(255,255,255,0.7)' }}>
                   Book during off-peak hours and enjoy exclusive savings across all services.
                 </p>
               </div>
@@ -329,9 +327,9 @@ export function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
           >
-            <div className="flex items-center gap-2 mb-4">
-              <Zap className="h-4 w-4" style={{ color: NAVY }} />
-              <h3 className="text-base font-semibold" style={{ color: NAVY, fontFamily: "'Playfair Display', serif" }}>
+            <div className="flex items-center gap-2.5 mb-4">
+              <Zap className="h-5 w-5 shrink-0" style={{ color: NAVY }} />
+              <h3 className={homePageType.sectionTitle} style={{ ...homeHeadingStyle, color: NAVY }}>
                 Current Offers
               </h3>
             </div>
@@ -379,7 +377,7 @@ export function HomePage() {
                           <motion.span
                             animate={{ scale: [1, 1.04, 1] }}
                             transition={{ duration: 2.5, repeat: Infinity }}
-                            className={`rounded-full bg-white px-2.5 py-0.5 shadow-sm text-xs font-bold bg-gradient-to-r ${promo.grad} bg-clip-text text-transparent`}
+                            className={`${homePageType.marqueeDiscount} bg-gradient-to-r ${promo.grad} bg-clip-text text-transparent`}
                           >
                             {promo.discount}
                           </motion.span>
@@ -388,7 +386,7 @@ export function HomePage() {
                         {/* service scope badge */}
                         <div className="mb-2 flex items-center gap-1.5">
                           <span
-                            className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-semibold"
+                            className={homePageType.marqueeScope}
                             style={{ background: NAVY_TINT, color: NAVY }}
                           >
                             {promo.serviceType === 'branch' ? (
@@ -401,12 +399,12 @@ export function HomePage() {
                           </span>
                         </div>
 
-                        <h4 className="font-semibold text-gray-900 leading-snug text-sm mb-1">{promo.title}</h4>
-                        <p className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-                          <Clock className="h-3 w-3 shrink-0" />{promo.time}
+                        <h4 className={homePageType.marqueeTitle}>{promo.title}</h4>
+                        <p className={homePageType.marqueeMeta}>
+                          <Clock className="h-3.5 w-3.5 shrink-0" />{promo.time}
                         </p>
-                        <p className="flex items-center gap-1 text-xs text-gray-400">
-                          <MapPin className="h-3 w-3 shrink-0" />
+                        <p className={homePageType.marqueeMetaMuted}>
+                          <MapPin className="h-3.5 w-3.5 shrink-0" />
                           {promo.branches[0] === 'All Branches' ? 'All locations' : promo.branches.join(', ')}
                         </p>
                       </div>
@@ -427,17 +425,14 @@ export function HomePage() {
           className="scroll-mt-24"
         >
           <div className="mb-5">
-            <h3
-              className="text-base font-semibold mb-0.5"
-              style={{ color: NAVY, fontFamily: "'Playfair Display', serif" }}
-            >
+            <h3 className={`${homePageType.sectionTitle} mb-1`} style={{ ...homeHeadingStyle, color: NAVY }}>
               Book Your Wash
             </h3>
-            <p className="text-xs text-gray-500">Choose how you'd like your car serviced today.</p>
+            <p className={homePageType.sectionSubtitle}>Choose how you'd like your car serviced today.</p>
           </div>
 
           {/* ── Two equal-height side-by-side tiles (h-full so both fill the grid row) ── */}
-          <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:items-stretch">
 
             {/* ── Tile 1: Coonara Wash (branch) ── */}
             {BRANCHES.length === 0 ? (
@@ -446,7 +441,7 @@ export function HomePage() {
                 style={{ borderColor: NAVY_TINT, minHeight: 320 }}
               >
                 <Building2 className="w-8 h-8 mb-3 opacity-30" style={{ color: NAVY }} />
-                <p className="text-sm text-gray-400">No locations available at this time.</p>
+                <p className={homePageType.emptyState}>No locations available at this time.</p>
               </div>
             ) : (
               BRANCHES.map((branch, index) => (
@@ -458,35 +453,32 @@ export function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.06 }}
                   whileHover={{ y: -3 }}
-                  className="group flex min-h-0 flex-col text-left rounded-2xl border-2 overflow-hidden transition-all duration-200 hover:shadow-xl w-full"
+                  className="group flex h-full min-h-0 flex-col text-left rounded-2xl border-2 overflow-hidden transition-all duration-200 hover:shadow-xl w-full"
                   style={{ background: NAVY, borderColor: NAVY, boxShadow: '0 4px 20px rgba(12,29,58,0.18)' }}
                 >
-                  {/* top section — flex-1 + mt-auto on perks avoids a dead gap under the list when the card stretches */}
-                  <div className="flex min-h-0 flex-1 flex-col px-5 pt-5 pb-4">
+                  <div className="flex flex-col px-5 pt-5 pb-3">
                     <div className="flex items-center justify-between mb-4">
                       <span className="w-10 h-10 rounded-xl flex items-center justify-center"
                         style={{ background: 'rgba(201,168,76,0.2)' }}>
                         <Building2 className="w-5 h-5" style={{ color: GOLD }} />
                       </span>
-                      <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
+                      <span className={homePageType.cardBadge}
                         style={{ background: 'rgba(201,168,76,0.15)', color: GOLD }}>
                         In-Bay Wash
                       </span>
                     </div>
 
-                    <p className="text-base font-bold text-white leading-snug mb-1"
-                      style={{ fontFamily: "'Playfair Display', serif" }}>
+                    <p className={`${homePageType.cardTitle} text-white mb-1`} style={homeHeadingStyle}>
                       {branch.name}
                     </p>
-                    <p className="flex items-start gap-1 text-xs" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                      <MapPin className="h-3 w-3 shrink-0 mt-0.5" />
+                    <p className={`flex items-start gap-1.5 ${homePageType.cardBody}`} style={{ color: 'rgba(255,255,255,0.6)' }}>
+                      <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                       <span className="line-clamp-2">{branch.location}</span>
                     </p>
 
-                    {/* stats + perks — mt-auto pins this block to the footer so extra card height sits above, not between perks */}
-                    <div className="mt-auto flex flex-col gap-4 pt-5">
+                    <div className="flex flex-col gap-4 pt-3">
                       <div
-                        className="flex items-center gap-3 rounded-xl border px-3 py-3"
+                        className="flex items-center gap-3 rounded-xl border px-3 py-2.5"
                         style={{ borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}
                       >
                         <span
@@ -497,9 +489,9 @@ export function HomePage() {
                         </span>
                         <div className="min-w-0">
                           
-                          <p className="text-base font-bold tabular-nums leading-tight text-white">
+                          <p className={`${homePageType.cardStat} text-white`}>
                             {branch.bayCount}
-                            <span className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                            <span className={homePageType.cardStatSuffix} style={{ color: 'rgba(255,255,255,0.55)' }}>
                               {' '}
                               Wash Bays
                             </span>
@@ -507,7 +499,7 @@ export function HomePage() {
                         </div>
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         {[
                           'Trained detailing specialists',
                           'Walk-in friendly',
@@ -518,7 +510,7 @@ export function HomePage() {
                               style={{ background: 'rgba(201,168,76,0.2)' }}>
                               <Check className="w-2.5 h-2.5" style={{ color: GOLD }} />
                             </span>
-                            <p className="text-xs leading-snug" style={{ color: 'rgba(255,255,255,0.65)' }}>{perk}</p>
+                            <p className={homePageType.cardFeature} style={{ color: 'rgba(255,255,255,0.7)' }}>{perk}</p>
                           </div>
                         ))}
                       </div>
@@ -528,55 +520,61 @@ export function HomePage() {
                   {/* footer */}
                   <div className="px-5 py-3.5 flex items-center justify-between"
                     style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                    <span className="flex items-center gap-1.5 text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                      <Clock className="h-3 w-3 shrink-0" />
+                    <span className={`flex items-center gap-1.5 ${homePageType.cardFooter}`} style={{ color: 'rgba(255,255,255,0.5)' }}>
+                      <Clock className="h-3.5 w-3.5 shrink-0" />
                       {branch.openTime} – {branch.closeTime}
                     </span>
-                    <span className="flex items-center gap-1 text-xs font-semibold transition-all group-hover:gap-2"
+                    <span className={`flex items-center gap-1.5 ${homePageType.cardCta} transition-all group-hover:gap-2`}
                       style={{ color: GOLD }}>
-                      Book now <ArrowRight className="w-3.5 h-3.5" />
+                      Book now <ArrowRight className="w-4 h-4" />
                     </span>
                   </div>
                 </motion.button>
               ))
             )}
 
-            {/* ── Tile 2: Mobile Service ── */}
+            {/* ── Tile 2: Mobile Service (same row height as branch card) ── */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.06 }}
-              className="flex min-h-0 flex-col rounded-2xl border-2 overflow-hidden"
+              className="flex h-full min-h-0 flex-col rounded-2xl border-2 overflow-hidden"
               style={{ background: '#fff', borderColor: 'rgba(12,29,58,0.12)' }}
             >
-              {/* top section */}
-              <div className="px-5 pt-5 pb-4 flex-1 flex flex-col">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="w-10 h-10 rounded-xl flex items-center justify-center"
+              <div className="flex h-full min-h-0 flex-col px-5 pt-5 pb-4">
+                <div className="mb-4 flex items-start justify-between gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                     style={{ background: NAVY_TINT }}>
                     <Car className="w-5 h-5" style={{ color: NAVY }} />
                   </span>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full"
-                    style={{ background: NAVY_TINT, color: NAVY }}>
-                    We Come to You
-                  </span>
+                  <div className="flex min-w-0 flex-col items-end gap-1.5 text-right">
+                    <span
+                      className="whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider sm:text-sm"
+                      style={{ background: 'rgba(201,168,76,0.22)', color: NAVY }}
+                    >
+                      Coming Soon
+                    </span>
+                    <span className={homePageType.cardBadge}
+                      style={{ background: NAVY_TINT, color: NAVY }}>
+                      We Come to You
+                    </span>
+                  </div>
                 </div>
 
-                <p className="text-base font-bold leading-snug mb-1"
-                  style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}>
+                <p className={`${homePageType.cardTitle} mb-1`} style={{ ...homeHeadingStyle, color: NAVY }}>
                   Mobile Service
                 </p>
-                <p className="text-xs text-gray-400 mb-4">
+                <p className={`${homePageType.cardBody} text-gray-500 mb-3`}>
                   {mobileCardStep === 'pin'
                     ? 'Enter your postcode to check if a driver can reach your area.'
                     : 'Great — mobile wash is available. Enter the full address where we should meet you (include the same postcode).'}
                 </p>
 
                 {/* form — PIN step then address step in the same card */}
-                <div className="flex min-h-0 flex-1 flex-col gap-3">
+                <div className="flex flex-1 flex-col gap-3">
                   {mobileCardStep === 'pin' ? (
                     <div className="relative">
-                      <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2"
+                      <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2"
                         style={{ color: NAVY }} />
                       <input
                         type="text"
@@ -591,7 +589,7 @@ export function HomePage() {
                         onKeyDown={e => { if (e.key === 'Enter' && mobilePinValid) void handleMobileCheckPin(); }}
                         placeholder="e.g. 2125 or 721101"
                         aria-label="Postcode or service PIN (4–6 digits)"
-                        className="h-12 w-full rounded-xl border pl-10 pr-4 text-sm text-gray-900 outline-none transition-all focus:border-transparent focus:ring-2"
+                        className={homePageType.input}
                         style={{ borderColor: 'rgba(12,29,58,0.18)', ['--tw-ring-color' as any]: NAVY }}
                       />
                     </div>
@@ -603,7 +601,7 @@ export function HomePage() {
                       className="space-y-3"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <p className="text-xs text-gray-600">
+                        <p className={homePageType.formHint}>
                           Postcode checked:{' '}
                           <span className="font-semibold tabular-nums" style={{ color: NAVY }}>
                             {normalizePinDigits(mobileLocation) || mobileLocation}
@@ -611,7 +609,7 @@ export function HomePage() {
                         </p>
                         <button
                           type="button"
-                          className="text-xs font-semibold underline-offset-2 hover:underline"
+                          className={homePageType.textLink}
                           style={{ color: NAVY }}
                           onClick={() => {
                             setMobileCardStep('pin');
@@ -625,7 +623,7 @@ export function HomePage() {
                       {/* ── Saved address selector ── */}
                       {matchingAddresses.length > 0 && (
                         <div className="rounded-xl border p-3 space-y-2" style={{ borderColor: 'rgba(12,29,58,0.12)', background: NAVY_TINT }}>
-                          <p className="text-xs font-semibold uppercase tracking-wider" style={{ color: NAVY }}>
+                          <p className={homePageType.savedSectionLabel} style={{ color: NAVY }}>
                             Saved Addresses
                           </p>
                           {matchingAddresses.map((addr) => (
@@ -656,8 +654,8 @@ export function HomePage() {
                                 )}
                               </span>
                               <div className="min-w-0">
-                                <p className="text-xs font-semibold" style={{ color: NAVY }}>{addr.label}</p>
-                                <p className="text-xs text-gray-500 mt-0.5 leading-snug truncate">
+                                <p className={homePageType.savedAddrTitle} style={{ color: NAVY }}>{addr.label}</p>
+                                <p className={`${homePageType.savedAddrLine} truncate`}>
                                   {[addr.street_address, addr.suburb, [addr.state, addr.postcode].filter(Boolean).join(' ')].filter(Boolean).join(', ')}
                                 </p>
                               </div>
@@ -673,7 +671,7 @@ export function HomePage() {
                                 setMobileAddressError('');
                                 setTimeout(() => streetInputRef.current?.focus(), 80);
                               }}
-                              className="text-xs font-medium underline-offset-2 hover:underline"
+                              className={`${homePageType.textLink} font-medium`}
                               style={{ color: NAVY }}
                             >
                               Enter a different address
@@ -693,6 +691,7 @@ export function HomePage() {
                         }}
                         postcodeLocked
                         required
+                        size="lg"
                         errors={addressErrors}
                         focusStyle={{ ['--tw-ring-color' as any]: NAVY }}
                         streetInputRef={streetInputRef}
@@ -701,13 +700,13 @@ export function HomePage() {
                   )}
 
                   {mobileError && (
-                    <p className="text-xs text-red-500 flex items-center gap-1">
-                      <span>⚠</span>{mobileError}
+                    <p className={homePageType.formError}>
+                      <span aria-hidden>⚠</span>{mobileError}
                     </p>
                   )}
                   {mobileAddressError && (
-                    <p className="text-xs text-red-500 flex items-center gap-1">
-                      <span>⚠</span>{mobileAddressError}
+                    <p className={homePageType.formError}>
+                      <span aria-hidden>⚠</span>{mobileAddressError}
                     </p>
                   )}
 
@@ -716,7 +715,7 @@ export function HomePage() {
                     type="button"
                     onClick={() => void handleMobileCheckPin()}
                     disabled={!mobilePinValid || mobileBusy}
-                    className="flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                    className={homePageType.btn}
                     style={{
                       background: mobilePinValid && !mobileBusy ? BTN_BG : '#e5e7eb',
                       color:      mobilePinValid && !mobileBusy ? BTN_TEXT : '#9ca3af',
@@ -725,14 +724,14 @@ export function HomePage() {
                   >
                     {mobileBusy ? (
                       <>
-                        <svg className="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                         </svg>
                         Checking…
                       </>
                     ) : (
-                      <>Check availability <ArrowRight className="w-4 h-4" /></>
+                      <>Check availability <ArrowRight className="w-5 h-5" /></>
                     )}
                   </button>
                   ) : (
@@ -740,38 +739,44 @@ export function HomePage() {
                     type="button"
                     onClick={handleMobileAddressContinue}
                     disabled={!canContinueToBooking}
-                    className="flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                    className={homePageType.btn}
                     style={{
                       background: canContinueToBooking ? BTN_BG : '#e5e7eb',
                       color:      canContinueToBooking ? BTN_TEXT : '#9ca3af',
                       boxShadow:  canContinueToBooking ? '0 4px 14px rgba(201,168,76,0.35)' : 'none',
                     }}
                   >
-                    Continue to booking <ArrowRight className="w-4 h-4" />
+                    Continue to booking <ArrowRight className="w-5 h-5" />
                   </button>
                   )}
 
-                  {/* highlights — single row, icon + label (no bordered pills) */}
-                  <div className="mt-auto flex min-h-0 flex-1 flex-col justify-end">
-                    <div
-                      className="flex flex-nowrap items-center justify-between gap-2 overflow-x-auto pt-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                      style={{ borderTop: '1px solid rgba(12,29,58,0.06)' }}
-                    >
-                      {[
-                        { icon: Car,      text: 'We come to you' },
-                        { icon: Clock,    text: 'Flexible scheduling' },
-                        { icon: Sparkles, text: 'Premium finish' },
-                      ].map(({ icon: Icon, text }) => (
+                  {/* highlights — horizontal row (compact; matches branch card height) */}
+                  <div
+                    className="mt-auto grid grid-cols-3 gap-2 border-t border-gray-100 pt-4 sm:gap-3"
+                  >
+                    {[
+                      { icon: Car, text: 'We come to you' },
+                      { icon: Clock, text: 'Flexible scheduling' },
+                      { icon: Sparkles, text: 'Premium finish' },
+                    ].map(({ icon: Icon, text }) => (
+                      <div
+                        key={text}
+                        className="flex min-w-0 flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:gap-1.5 sm:text-left"
+                      >
                         <span
-                          key={text}
-                          className="inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 whitespace-nowrap text-[11px] font-semibold tracking-tight sm:text-xs"
+                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full sm:mt-0.5"
+                          style={{ background: NAVY_TINT }}
+                        >
+                          <Icon className="h-2.5 w-2.5 shrink-0" style={{ color: NAVY }} />
+                        </span>
+                        <p
+                          className="min-w-0 text-[10px] font-semibold leading-tight sm:text-xs"
                           style={{ color: NAVY }}
                         >
-                          <Icon className="h-3.5 w-3.5 shrink-0 opacity-70" style={{ color: NAVY }} />
                           {text}
-                        </span>
-                      ))}
-                    </div>
+                        </p>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -779,7 +784,7 @@ export function HomePage() {
               {/* footer — mirrors branch tile footer height */}
               <div className="px-5 py-3.5 flex items-center justify-between"
                 style={{ borderTop: '1px solid rgba(12,29,58,0.06)' }}>
-                <span className="text-xs text-gray-400">
+                <span className={`${homePageType.cardFooter} text-gray-400`}>
                   {mobileCardStep === 'pin' ? 'Mobile service · Postcode check' : 'Mobile service · Service address'}
                 </span>
                 <span className="w-2 h-2 rounded-full" style={{ background: GOLD }} />

@@ -26,6 +26,7 @@ import {
   type MobileSnapshot,
 } from '../lib/mobilePublicBridge';
 import { resolveOperatingCloseMinutes } from '../lib/operatingHours';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 /** Parse "HH:MM" to minutes — same logic as adminPortalBridge. */
 function parseHHMMToMinutes(t: string): number {
   const [h, m] = t.split(':').map((x) => parseInt(x, 10));
@@ -339,7 +340,7 @@ export function DateTimePage() {
           <div>
             <h1
               className="text-xl font-bold text-gray-900"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Date &amp; time
             </h1>
@@ -485,24 +486,44 @@ export function DateTimePage() {
                               setSelectedEndTime(slot.endTime ?? null);
                             }}
                             className={cn(
-                              'relative rounded-xl border-2 py-2.5 px-2 text-center text-xs font-semibold tabular-nums transition-all sm:px-3 sm:text-sm',
+                              'relative overflow-hidden rounded-xl border-2 py-2.5 px-2 text-center text-xs font-semibold tabular-nums transition-all sm:px-3 sm:text-sm',
                               isOriginal
                                 ? 'border-emerald-500 bg-emerald-50 text-emerald-900'
                                 : selected
-                                  ? 'shadow-sm ring-1 ring-[#0c1d3a]/10'
+                                  ? 'shadow-md ring-1 ring-[#0c1d3a]/20'
                                   : state === 'closed'
-                                    ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-500 line-through'
+                                    ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
                                     : state === 'full'
                                       ? 'cursor-not-allowed border-amber-300 bg-amber-50 text-amber-950'
                                       : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300',
                             )}
                             style={
                               selected && !isOriginal
-                                ? { borderColor: NAVY, background: NAVY_TINT, color: NAVY }
+                                ? { borderColor: NAVY, background: NAVY, color: '#fff' }
                                 : undefined
                             }
                           >
                             {time}
+
+                            {/* Closed: two diagonal cross lines */}
+                            {state === 'closed' && !isOriginal ? (
+                              <span className="pointer-events-none absolute inset-0" aria-hidden>
+                                <svg width="100%" height="100%" viewBox="0 0 60 40" preserveAspectRatio="none">
+                                  <line x1="4" y1="4" x2="56" y2="36" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
+                                  <line x1="56" y1="4" x2="4" y2="36" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
+                                </svg>
+                              </span>
+                            ) : null}
+
+                            {/* Selected: checkmark badge */}
+                            {selected && !isOriginal ? (
+                              <span className="pointer-events-none absolute right-1 top-1" aria-hidden>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                              </span>
+                            ) : null}
+
                             {isOriginal ? (
                               <span className="absolute -right-1 -top-2 rounded-full bg-emerald-600 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white shadow">
                                 Original
@@ -518,22 +539,38 @@ export function DateTimePage() {
                 <div className="mt-5 border-t border-gray-100 pt-4">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">Legend</p>
                   <div className="flex flex-wrap gap-2">
-                    {(
-                      [
-                        { k: 'a', label: 'Available', dot: 'border border-gray-300 bg-white' },
-                        { k: 'f', label: 'Full', dot: 'border border-amber-300 bg-amber-50' },
-                        { k: 'c', label: 'Closed', dot: 'border border-slate-200 bg-slate-100' },
-                        { k: 's', label: 'Selected', dot: 'border-2 border-[#0c1d3a] bg-[#e8eef8]' },
-                      ] as const
-                    ).map((row) => (
-                      <span
-                        key={row.k}
-                        className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-medium text-gray-700"
-                      >
-                        <span className={cn('h-2.5 w-2.5 shrink-0 rounded-sm', row.dot)} aria-hidden />
-                        {row.label}
+                    {/* Available */}
+                    <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-medium text-gray-700">
+                      <span className="h-3 w-3 shrink-0 rounded-sm border border-gray-300 bg-white" aria-hidden />
+                      Available
+                    </span>
+
+                    {/* Full */}
+                    <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-medium text-gray-700">
+                      <span className="h-3 w-3 shrink-0 rounded-sm border border-amber-300 bg-amber-50" aria-hidden />
+                      Full
+                    </span>
+
+                    {/* Closed — X icon */}
+                    <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-medium text-gray-700">
+                      <span className="relative h-3 w-3 shrink-0 overflow-hidden rounded-sm border border-slate-200 bg-slate-100" aria-hidden>
+                        <svg width="100%" height="100%" viewBox="0 0 12 12" className="absolute inset-0">
+                          <line x1="2" y1="2" x2="10" y2="10" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
+                          <line x1="10" y1="2" x2="2" y2="10" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
+                        </svg>
                       </span>
-                    ))}
+                      Closed
+                    </span>
+
+                    {/* Selected — solid navy + checkmark */}
+                    <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-medium text-gray-700">
+                      <span className="relative flex h-3 w-3 shrink-0 items-center justify-center rounded-sm" style={{ background: NAVY }} aria-hidden>
+                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </span>
+                      Selected
+                    </span>
                   </div>
                 </div>
               </>

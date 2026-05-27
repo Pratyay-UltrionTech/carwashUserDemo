@@ -7,6 +7,7 @@ import WhyUs from './components/WhyUs';
 import Neighborhood from './components/Neighborhood';
 import CoffeePromise from './components/CoffeePromise';
 import Testimonial from './components/Testimonial';
+import FAQ from './components/FAQ';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
 
@@ -21,6 +22,7 @@ function App() {
       <Neighborhood />
       <CoffeePromise />
       <Testimonial />
+      <FAQ />
       <ContactForm />
       <Footer />
     </div>

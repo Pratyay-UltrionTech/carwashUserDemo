@@ -8,6 +8,7 @@ import { apiCustomerServiceHistory, type CustomerServiceHistoryItem } from '../l
 import { getCatalogForVehicle, listBranches } from '../lib/adminPortalBridge';
 import { getMobilePinFromBranchId, getCachedMobileSnapshot, getMobileCatalogForVehicle } from '../lib/mobilePublicBridge';
 import { normalizeBookingStatus } from '../lib/bookingStatus';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 
 /* ── palette (matches ProfileSetup) ── */
 const NAVY      = '#0c1d3a';
@@ -224,7 +225,7 @@ export function ServiceHistoryPage() {
 
           {/* page header */}
           <div className="mb-8">
-            <h1 className="text-2xl font-bold" style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}>
+            <h1 className="text-2xl font-bold" style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}>
               Booking History
             </h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -253,7 +254,7 @@ export function ServiceHistoryPage() {
                 <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: NAVY_TINT }}>
                   <CalendarClock className="w-4 h-4" style={{ color: NAVY }} />
                 </span>
-                <h2 className="font-semibold" style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}>No Bookings Yet</h2>
+                <h2 className="font-semibold" style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}>No Bookings Yet</h2>
               </div>
               <div className="px-6 py-8 text-center">
                 <p className="text-sm text-gray-500 leading-relaxed max-w-sm mx-auto">
@@ -272,7 +273,7 @@ export function ServiceHistoryPage() {
                   <span className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0" style={{ background: NAVY_TINT }}>
                     <CalendarClock className="w-4 h-4" style={{ color: NAVY }} />
                   </span>
-                  <h2 className="font-semibold" style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}>
+                  <h2 className="font-semibold" style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}>
                     Your Bookings
                   </h2>
                   <div className="ml-auto flex items-center gap-2">

@@ -10,6 +10,7 @@ import { listApplicableDiscounts } from '../lib/adminPortalBridge';
 import { getCachedMobileSnapshot, listApplicableMobileDiscounts } from '../lib/mobilePublicBridge';
 import { useAdminBridgeSync } from '../hooks/useAdminBridgeSync';
 import { cn } from '../components/ui/utils';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 import {
   BOOKING_NAVY as NAVY,
   BOOKING_NAVY_TINT as NAVY_TINT,
@@ -178,7 +179,7 @@ export function BookingSummary() {
           <div>
             <h1
               className="text-xl font-bold text-gray-900"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Booking summary
             </h1>

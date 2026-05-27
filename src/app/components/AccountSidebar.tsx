@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { CircleUser, History, LogOut, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 
 const GOLD = '#c9a84c';
 const NAVY = '#0c1d3a';
@@ -69,7 +70,7 @@ export function AccountSidebar({ open, onClose }: Props) {
                 <h2
                   id="account-sidebar-title"
                   className="text-base font-bold leading-snug text-white truncate"
-                  style={{ fontFamily: "'Playfair Display', serif" }}
+                  style={{ fontFamily: HEADING_FONT_FAMILY }}
                 >
                   {session?.fullName || 'My Account'}
                 </h2>

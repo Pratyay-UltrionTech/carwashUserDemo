@@ -21,7 +21,115 @@
   .landing-page .hero h1 .h1-seo{max-width:36rem;text-wrap:unset}
   .landing-page .hsub{max-width:36rem;text-wrap:unset}
 }
-.landing-page .hbtns{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.landing-page .hbtns{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem}
+
+/* ─────────────────────────────────────────
+   Secondary action buttons row
+   ───────────────────────────────────────── */
+.landing-page .h-action-btns {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+/* Base button */
+.landing-page .h-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem 1.2rem;
+  border-radius: 100px;
+  border: 1.5px solid rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.13);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.18s ease,
+    box-shadow 0.2s ease;
+}
+.landing-page .h-action-btn:hover {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.28);
+}
+.landing-page .h-action-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Icon wrapper */
+.landing-page .h-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+/* Label */
+.landing-page .h-action-label {
+  line-height: 1;
+}
+
+/* ── Call Now — gold accent ── */
+.landing-page .h-action-btn--call {
+  border-color: rgba(201,168,76,0.7);
+  background: rgba(201,168,76,0.18);
+  color: #f0d98a;
+}
+.landing-page .h-action-btn--call .h-action-icon {
+  color: var(--gold);
+}
+.landing-page .h-action-btn--call:hover {
+  background: rgba(201,168,76,0.30);
+  border-color: var(--gold);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(201,168,76,0.30);
+}
+
+/* ── WhatsApp — green accent ── */
+.landing-page .h-action-btn--wa {
+  border-color: rgba(37,211,102,0.6);
+  background: rgba(37,211,102,0.14);
+  color: #7ff0ac;
+}
+.landing-page .h-action-btn--wa .h-action-icon {
+  color: #25d366;
+}
+.landing-page .h-action-btn--wa:hover {
+  background: rgba(37,211,102,0.24);
+  border-color: #25d366;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(37,211,102,0.25);
+}
+
+/* ── Quick Inquiry — sky accent ── */
+.landing-page .h-action-btn--inquiry {
+  border-color: rgba(147,197,253,0.55);
+  background: rgba(147,197,253,0.13);
+  color: #bfdbfe;
+}
+.landing-page .h-action-btn--inquiry .h-action-icon {
+  color: #93c5fd;
+}
+.landing-page .h-action-btn--inquiry:hover {
+  background: rgba(147,197,253,0.24);
+  border-color: #93c5fd;
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(147,197,253,0.22);
+}
 .landing-page .hformer{font-size:clamp(1rem,2vw,1.1rem);color:#fff;margin:0 0 1.75rem;line-height:1.5;letter-spacing:.01em;white-space:nowrap}
 .landing-page .hero-footer{display:contents}
 .landing-page .hstats{display:flex;gap:2rem;border-top:1px solid rgba(255,255,255,0.1);padding-top:1.75rem;flex-wrap:nowrap;align-items:flex-start}
@@ -75,6 +183,14 @@
     line-height:1.5;
   }
   .landing-page .hbtns{margin:0}
+  .landing-page .h-action-btns{
+    gap:.5rem;
+    margin-bottom:0;
+  }
+  .landing-page .h-action-btn{
+    padding:.5rem .9rem;
+    font-size:.7rem;
+  }
   .landing-page .hero-footer{display:flex;flex-direction:column;gap:0;margin:0}
   .landing-page .hformer{
     margin:calc(1rem - var(--hero-mobile-stack-gap)) 0 0;

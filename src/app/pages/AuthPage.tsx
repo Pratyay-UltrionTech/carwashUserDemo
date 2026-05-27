@@ -11,7 +11,7 @@ import {
   apiSendSignupOtp,
   apiVerifySignupOtp,
 } from '../lib/userApi';
-import { BRAND_NAME, TAGLINE } from '../lib/branding';
+import { BRAND_NAME, HEADING_FONT_FAMILY, TAGLINE } from '../lib/branding';
 import { AppLogo } from '../components/AppLogo';
 
 /* ─── design tokens (mirror landing-page palette) ─── */
@@ -51,7 +51,7 @@ function BrandPanel() {
         <div>
           <h2
             className="text-2xl font-bold leading-snug mb-0.5"
-            style={{ fontFamily: "'Playfair Display', serif", color: '#fff' }}
+            style={{ fontFamily: HEADING_FONT_FAMILY, color: '#fff' }}
           >
             {BRAND_NAME}
           </h2>
@@ -66,7 +66,7 @@ function BrandPanel() {
         <div className="w-8 h-0.5 mb-4 rounded-full" style={{ background: GOLD }} />
         <blockquote
           className="text-lg leading-relaxed italic"
-          style={{ color: 'rgba(255,255,255,0.85)', fontFamily: "'Playfair Display', serif" }}
+          style={{ color: 'rgba(255,255,255,0.85)', fontFamily: "'DM Sans', sans-serif" }}
         >
           "Your car deserves the best care — and so does your time."
         </blockquote>
@@ -625,7 +625,7 @@ export function AuthPage() {
                   <div className="mb-8 lg:hidden flex items-center gap-3">
                     <AppLogo variant="mark" className="max-h-10 shrink-0" />
                     <div>
-                      <p className="text-sm font-bold text-gray-900" style={{ fontFamily: "'Playfair Display', serif" }}>{BRAND_NAME}</p>
+                      <p className="text-sm font-bold text-gray-900" style={{ fontFamily: HEADING_FONT_FAMILY }}>{BRAND_NAME}</p>
                       <p className="text-[10px] tracking-widest uppercase mt-0.5" style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif" }}>{TAGLINE}</p>
                     </div>
                   </div>

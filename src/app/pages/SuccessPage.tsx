@@ -30,6 +30,7 @@ import {
 } from '../lib/mobilePublicBridge';
 import { useAuth } from '../context/AuthContext';
 import { apiCustomerLoyaltyOverview, type CustomerLoyaltyOverviewResponse } from '../lib/userApi';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 import { cn } from '../components/ui/utils';
 import {
   BOOKING_NAVY as NAVY,
@@ -374,7 +375,7 @@ export function SuccessPage() {
           <div>
             <h1
               className="text-xl font-bold text-gray-900"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Booking confirmed
             </h1>

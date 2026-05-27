@@ -5,7 +5,13 @@ import { Award, X, CircleUser, LogIn, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiCustomerLoyaltyOverview } from '../lib/userApi';
 import { AccountSidebar } from './AccountSidebar';
-import { BRAND_NAME, TAGLINE } from '../lib/branding';
+import {
+  BRAND_NAME,
+  LANDING_NAV_HEIGHT,
+  TAGLINE,
+  landingNavBrandNameStyle,
+  landingNavTaglineStyle,
+} from '../lib/branding';
 import { AppLogo } from './AppLogo';
 
 const NAVY      = '#0c1d3a';
@@ -69,14 +75,17 @@ export function UserNavbar() {
         className="sticky top-0 z-50 bg-white border-b"
         style={{ borderBottomColor: 'rgba(12,29,58,0.1)' }}
       >
-        <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
+        <div
+          className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3"
+          style={{ minHeight: LANDING_NAV_HEIGHT }}
+        >
 
-          {/* ── left: back + logo ── */}
-          <div className="flex min-w-0 flex-1 items-center gap-3 pr-2">
+          {/* ── left: back + logo (sizes match hero `.landing-page` navbar) ── */}
+          <div className="flex min-w-0 flex-1 items-center gap-[clamp(10px,1.5vw,14px)] pr-2">
             {!isHomePage && (
               <button
                 onClick={() => navigate(-1)}
-                className="p-2 rounded-xl transition-colors hover:bg-gray-100"
+                className="shrink-0 rounded-xl p-2 transition-colors hover:bg-gray-100"
                 aria-label="Go back"
               >
                 <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -86,20 +95,20 @@ export function UserNavbar() {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="group flex min-w-0 max-w-full shrink items-center gap-2.5 sm:gap-3 text-left transition-opacity hover:opacity-90"
+              className="group flex min-w-0 max-w-full shrink items-center gap-[clamp(10px,1.5vw,14px)] text-left transition-opacity hover:opacity-90"
               aria-label="Go to home"
             >
-              <AppLogo variant="mark" className="shrink-0" />
-              <div className="min-w-0 leading-tight">
+              <AppLogo variant="landingNav" className="shrink-0" />
+              <div className="min-w-0">
                 <p
-                  className="text-sm font-bold leading-snug text-balance sm:text-base"
-                  style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+                  className="truncate whitespace-nowrap"
+                  style={{ ...landingNavBrandNameStyle, color: NAVY }}
                 >
                   {BRAND_NAME}
                 </p>
                 <p
-                  className="mt-0.5 text-[9px] uppercase tracking-widest sm:text-[10px]"
-                  style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif" }}
+                  className="hidden uppercase md:block"
+                  style={{ ...landingNavTaglineStyle, color: GOLD2 }}
                 >
                   {TAGLINE}
                 </p>

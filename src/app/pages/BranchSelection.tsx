@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, useRef, type CSSProperties } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { Car, CarFront, Truck, Check, X, Award, Coffee, ChevronLeft, ChevronRight, LayoutGrid, MapPin } from 'lucide-react';
+import { Car, CarFront, Truck, Check, X, ChevronLeft, ChevronRight, LayoutGrid, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useBooking } from '../context/BookingContext';
 import { useAuth } from '../context/AuthContext';
@@ -37,6 +37,9 @@ import { addressMatchesAcceptedPins, normalizePinDigits } from '../lib/mobileVis
 import { createEmptyAddressDetails, sanitizePostcode, validateRequiredAddress, withFullAddress } from '../lib/addressDetails';
 import { AddressDetailsFields } from '../components/AddressDetailsFields';
 import { BookingDisclaimerNotes } from '../components/BookingDisclaimerNotes';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
+import { LoyaltyCountedIcon } from '../components/LoyaltyCountedIcon';
+import { TakeawayCoffeeIcon } from '../components/TakeawayCoffeeIcon';
 
 type ServicePackage = {
   id: string;
@@ -268,7 +271,7 @@ export function BranchSelection() {
       excludedFeatures: (s as any).excludedPoints ?? [],
       recommended: s.recommended === true,
       freeCoffeeCount: Math.max(0, Math.floor(Number(s.freeCoffeeCount ?? 0))),
-      eligibleForLoyaltyPoints: s.eligibleForLoyaltyPoints !== false,
+      eligibleForLoyaltyPoints: s.eligibleForLoyaltyPoints === true,
       durationMinutes: s.durationMinutes ?? 60,
       category: s.category || "Washing",
     }));
@@ -563,6 +566,14 @@ export function BranchSelection() {
   const selectedBodyLabel =
     VEHICLE_OPTIONS.find((v) => v.id === vehicleId)?.label ?? vehicleId ?? '';
 
+  const vehicleDetailsReady = Boolean(
+    vehicleId &&
+      vehicleModel.trim() &&
+      (!session
+        ? registrationNumber.trim()
+        : (!addingNewVehicleMode && !saveVehicleToProfileOnContinue) || newPlateValid),
+  );
+
   return (
     <div className="min-h-screen" style={{ background: '#eef3fa' }}>
       <div
@@ -580,7 +591,7 @@ export function BranchSelection() {
           <div className="mb-1">
             <h1
               className="text-2xl font-bold"
-              style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Vehicle &amp; service
             </h1>
@@ -703,12 +714,16 @@ export function BranchSelection() {
             </BookingFlowSection>
           ) : null}
 
-          <BookingFlowSection icon={Car} title="Select your vehicle" badge={vehicleId ? selectedBodyLabel : undefined}>
-            <div className="space-y-6">
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">
-                  Body type
-                </label>
+          <BookingFlowSection
+            step={1}
+            icon={Car}
+            title="Select your vehicle"
+            badge={vehicleId ? selectedBodyLabel : undefined}
+          >
+            <div>
+              <label className="block text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">
+                Body type
+              </label>
                 <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
                   {VEHICLE_OPTIONS.map((v) => {
                     const Icon = v.icon;
@@ -769,21 +784,18 @@ export function BranchSelection() {
                     );
                   })}
                 </div>
-              </div>
+            </div>
+          </BookingFlowSection>
 
-              <AnimatePresence>
-                {vehicleId ? (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="space-y-4 pt-1 border-t border-gray-100"
-                  >
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Vehicle details
-                      <span className="text-red-500 ml-0.5">*</span>
-                    </p>
-
+          <AnimatePresence>
+            {vehicleId ? (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+              >
+                <BookingFlowSection step={2} icon={Car} title="Model & registration">
                     {session ? (
                       <div className="flex flex-col gap-4">
                         {(() => {
@@ -1038,16 +1050,21 @@ export function BranchSelection() {
                         </div>
                       </div>
                     )}
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </div>
-          </BookingFlowSection>
+                </BookingFlowSection>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
 
           <AnimatePresence>
-            {vehicleId ? (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            {vehicleDetailsReady ? (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.28, ease: 'easeOut' }}
+              >
                 <BookingFlowSection
+                  step={3}
                   icon={LayoutGrid}
                   title="Choose your package"
                   badge={activeTab === 'wash' ? 'Wash' : 'Detailing'}
@@ -1130,7 +1147,7 @@ export function BranchSelection() {
                                         duration={`${svc.durationMinutes} mins`}
                                         badge={svc.recommended ? 'Recommended' : undefined}
                                         freeCoffeeCount={svc.freeCoffeeCount}
-                                        eligibleForLoyaltyPoints={hasCustomerSession ? svc.eligibleForLoyaltyPoints : false}
+                                        eligibleForLoyaltyPoints={svc.eligibleForLoyaltyPoints === true}
                                         isSelected={isSelected}
                                         onClick={() => {
                                           setSelectedPackageId(svc.id);
@@ -1152,7 +1169,7 @@ export function BranchSelection() {
                           disabled={!canGoLeft}
                           onClick={() => navigateCarousel(-1)}
                           className={cn(
-                            'absolute left-0 top-1/2 z-20 -translate-y-1/2',
+                            'absolute left-0 top-[22%] z-20 -translate-y-1/2 sm:top-[24%]',
                             'flex h-10 w-10 items-center justify-center rounded-full',
                             'bg-white/90 shadow-md border border-gray-200/80',
                             'transition-all duration-200 ease-out',
@@ -1172,7 +1189,7 @@ export function BranchSelection() {
                           disabled={!canGoRight}
                           onClick={() => navigateCarousel(1)}
                           className={cn(
-                            'absolute right-0 top-1/2 z-20 -translate-y-1/2',
+                            'absolute right-0 top-[22%] z-20 -translate-y-1/2 sm:top-[24%]',
                             'flex h-10 w-10 items-center justify-center rounded-full',
                             'bg-white/90 shadow-md border border-gray-200/80',
                             'transition-all duration-200 ease-out',
@@ -1310,7 +1327,9 @@ function ServiceCard({
   );
 
   const showRecommended = Boolean(badge);
-  const hasPerks = freeCoffeeCount > 0 || eligibleForLoyaltyPoints;
+  const priceDisplay =
+    Number(price) % 1 === 0 ? `$${Number(price).toFixed(0)}` : `$${Number(price).toFixed(2)}`;
+  const durationDisplay = duration.replace(/^duration:\s*/i, '').replace(/\s*mins?\s*$/i, ' min').trim();
 
   return (
     <button
@@ -1327,51 +1346,63 @@ function ServiceCard({
     >
       {showRecommended ? (
         <span
-          className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border-2 border-white px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide shadow-sm sm:text-[10px]"
+          className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border-2 border-white px-3 py-0.5 text-xs font-semibold uppercase tracking-wide shadow-sm sm:text-sm"
           style={{ background: NAVY_TINT, color: NAVY }}
         >
           {badge}
         </span>
       ) : null}
 
-      <div className="mb-3 flex min-h-[2.75rem] items-start justify-between gap-2">
+      {/* Title (left) · price, duration, perks (right) */}
+      <div className="mb-3 flex items-start justify-between gap-3 sm:mb-4">
         <h3
-          className="min-w-0 flex-1 text-left text-xs font-bold uppercase leading-snug tracking-tight text-balance break-words sm:text-sm"
-          style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+          className="min-w-0 flex-1 pr-2 text-left text-sm font-normal uppercase leading-snug tracking-[0.03em] sm:text-base md:text-lg"
+          style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
         >
           {title}
         </h3>
-        {hasPerks ? (
-          <div className="flex shrink-0 flex-row items-center justify-end gap-1.5">
-            {freeCoffeeCount > 0 ? (
-              <span
-                className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-amber-200/80 bg-amber-50 text-amber-900 shadow-sm"
-                title="Free Coffee"
-                aria-label="Free Coffee"
-              >
-                <Coffee className="size-3.5 shrink-0" strokeWidth={2} aria-hidden />
-              </span>
-            ) : null}
-            {eligibleForLoyaltyPoints ? (
-              <span
-                className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border shadow-sm"
-                style={{
-                  background: 'rgba(201,168,76,0.12)',
-                  color: '#92650a',
-                  borderColor: 'rgba(201,168,76,0.35)',
-                }}
-                title="Loyalty Eligible"
-                aria-label="Loyalty Eligible"
-              >
-                <Award className="size-3.5 shrink-0" strokeWidth={2} aria-hidden />
-              </span>
-            ) : null}
-          </div>
-        ) : null}
+        <div className="flex shrink-0 flex-col items-end text-right leading-none">
+          <p
+            className="text-xl font-normal tracking-[0.02em] sm:text-2xl"
+            style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
+          >
+            {priceDisplay}
+          </p>
+          {durationDisplay ? (
+            <p className="mt-1 text-sm font-normal text-gray-500">{durationDisplay}</p>
+          ) : null}
+          {freeCoffeeCount > 0 || eligibleForLoyaltyPoints ? (
+            <div className="mt-2 flex items-center justify-end gap-1.5">
+              {freeCoffeeCount > 0 ? (
+                <span
+                  className="inline-flex size-6 items-center justify-center rounded-full border border-amber-200/80 bg-amber-50 text-amber-900 shadow-sm"
+                  title="Complimentary takeaway coffee"
+                  aria-label="Complimentary takeaway coffee"
+                >
+                  <TakeawayCoffeeIcon size={12} />
+                </span>
+              ) : null}
+              {eligibleForLoyaltyPoints ? (
+                <span
+                  className="inline-flex size-6 items-center justify-center rounded-full border shadow-sm"
+                  style={{
+                    background: 'rgba(201,168,76,0.12)',
+                    color: '#92650a',
+                    borderColor: 'rgba(201,168,76,0.35)',
+                  }}
+                  title="Loyalty counted"
+                  aria-label="Loyalty counted"
+                >
+                  <LoyaltyCountedIcon size={12} strokeWidth={2} />
+                </span>
+              ) : null}
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {/* Service details: # heading, * / + included, - excluded (legacy arrays merged) */}
-      <div className="mb-4 flex w-full flex-grow flex-col gap-2 sm:mb-6">
+      <div className="flex w-full flex-grow flex-col gap-2.5">
         {detailRows.map((row, i) => {
           const prev = i > 0 ? detailRows[i - 1] : null;
           if (row.kind === 'heading') {
@@ -1381,8 +1412,8 @@ function ServiceCard({
                 className={cn('w-full scroll-mt-1', i > 0 && 'mt-3 pt-2')}
               >
                 <p
-                  className="text-left text-[11px] font-bold leading-snug tracking-wide text-gray-900 sm:text-xs"
-                  style={{ fontFamily: "'Playfair Display', serif", color: NAVY }}
+                  className="text-left text-sm font-normal leading-snug tracking-[0.03em] text-gray-900 sm:text-base"
+                  style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
                 >
                   {row.text}
                 </p>
@@ -1393,8 +1424,8 @@ function ServiceCard({
             const gapBefore = prev?.kind === 'excluded' ? 'mt-2 pt-1' : '';
             return (
               <div key={`d-${i}-${row.text}`} className={cn('flex w-full items-start gap-2', gapBefore)}>
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={3} aria-hidden style={{ color: NAVY }} />
-                <span className="min-w-0 flex-1 break-words text-[11px] font-medium leading-snug text-gray-700">
+                <Check className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={3} aria-hidden style={{ color: NAVY }} />
+                <span className="min-w-0 flex-1 break-words text-sm font-medium leading-relaxed text-gray-700">
                   {row.text}
                 </span>
               </div>
@@ -1404,21 +1435,14 @@ function ServiceCard({
             prev?.kind === 'included' || prev?.kind === 'heading' ? 'mt-1' : '';
           return (
             <div key={`d-${i}-${row.text}`} className={cn('flex w-full items-start gap-2', gapBefore)}>
-              <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gray-300" strokeWidth={2.5} aria-hidden />
-              <span className="min-w-0 flex-1 break-words text-[11px] font-medium leading-snug text-gray-400">
+              <X className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" strokeWidth={2.5} aria-hidden />
+              <span className="min-w-0 flex-1 break-words text-sm font-medium leading-relaxed text-gray-400">
                 {row.text}
                 <span className="sr-only"> — not included in this package</span>
               </span>
             </div>
           );
         })}
-      </div>
-
-      <div className="mt-auto border-t border-gray-100 pt-4 text-center space-y-0.5">
-        <p className="text-[10px] font-medium text-gray-600">Duration: {duration}</p>
-        <p className="text-base font-bold tracking-tight" style={{ color: NAVY }}>
-          ${Number(price).toFixed(2)}
-        </p>
       </div>
     </button>
   );

@@ -3,6 +3,7 @@
 :root {
   --font-size: 16px;
   --font-family: 'Inter', sans-serif;
+  --font-heading: 'Bebas Neue', sans-serif;
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
@@ -139,22 +140,26 @@
     font-family: var(--font-family);
   }
 
+  /* Booking / account pages (landing hero uses .landing-page in its own CSS) */
+  :not(.landing-page) h1,
+  :not(.landing-page) h2,
+  :not(.landing-page) h3 {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.15;
+  }
+
   h1 {
     font-size: var(--text-2xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
   }
 
   h2 {
     font-size: var(--text-xl);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
   }
 
   h3 {
     font-size: var(--text-lg);
-    font-weight: var(--font-weight-medium);
-    line-height: 1.5;
   }
 
   h4 {

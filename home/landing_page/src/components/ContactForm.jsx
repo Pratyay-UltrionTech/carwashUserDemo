@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
+import { API_BASE } from '../../../../src/app/lib/apiBase';
 import { CoffeeIcon } from './CoffeeIcon';
 import './ContactForm.css';
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000/api/v1';
 
 const ContactForm = () => {
   const [name, setName] = useState('');

@@ -1,0 +1,152 @@
+/* ================================================================
+   FAQ — accordion section
+   ================================================================ */
+
+.landing-page .faq-section {
+  background: #fff;
+}
+
+.landing-page .faq-inner {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Header ── */
+.landing-page .faq-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.landing-page .faq-sub {
+  margin: .75rem auto 0;
+  max-width: 480px;
+}
+
+/* ── List ── */
+.landing-page .faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid rgba(12, 29, 58, 0.08);
+}
+
+/* ── Individual item ── */
+.landing-page .faq-item {
+  border-bottom: 1px solid rgba(12, 29, 58, 0.08);
+  transition: background 0.2s;
+}
+
+.landing-page .faq-item--open {
+  background: #f8fafd;
+}
+
+/* ── Trigger button ── */
+.landing-page .faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+}
+
+.landing-page .faq-trigger:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Question text */
+.landing-page .faq-q {
+  font-size: clamp(.95rem, 1.8vw, 1.05rem);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.45;
+  flex: 1;
+  min-width: 0;
+}
+
+.landing-page .faq-item--open .faq-q {
+  color: var(--navy);
+}
+
+/* Icon wrapper */
+.landing-page .faq-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(12, 29, 58, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.landing-page .faq-item--open .faq-icon {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+/* Chevron rotation */
+.landing-page .faq-chevron {
+  transition: transform 0.28s cubic-bezier(.4, 0, .2, 1);
+}
+.landing-page .faq-chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── Collapsible body ── */
+.landing-page .faq-body {
+  max-height: var(--faq-max-h, 0px);
+  overflow: hidden;
+  transition: max-height 0.32s cubic-bezier(.4, 0, .2, 1);
+}
+
+.landing-page .faq-a {
+  padding: 0 2rem 1.35rem 0;
+  font-size: clamp(.9rem, 1.6vw, .97rem);
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+/* ── Bottom CTA line ── */
+.landing-page .faq-cta-line {
+  margin-top: 2.5rem;
+  text-align: center;
+  font-size: .92rem;
+  color: var(--muted);
+}
+
+.landing-page .faq-cta-link {
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.18s;
+}
+
+.landing-page .faq-cta-link:hover {
+  color: var(--gold);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .landing-page .faq-trigger {
+    padding: 1.1rem 0;
+  }
+  .landing-page .faq-a {
+    padding-bottom: 1.1rem;
+  }
+  .landing-page .faq-header {
+    margin-bottom: 2rem;
+  }
+}

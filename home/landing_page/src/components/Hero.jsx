@@ -1,22 +1,86 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import heroAssetUrl from '../assets/hero.png?url';
 import heroVideo from '../assets/hero-video.mp4';
 import { absoluteAssetUrl, getSiteOrigin } from '../seo/siteConfig';
 import { CoffeeIcon } from './CoffeeIcon';
 import { BRAND_NAME } from '../../../../src/app/lib/branding';
+import { API_BASE } from '../../../../src/app/lib/apiBase';
+import { BRAND_PHONE } from '../config/brand';
 import './Hero.css';
+
+/* ── Inline SVG icons (no external dep) ── */
+function PhoneIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+    </svg>
+  );
+}
+function WhatsAppIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+    </svg>
+  );
+}
+function InquiryIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  );
+}
 
 const SEO_TITLE = `${BRAND_NAME} | West Pennant Hills | Premium Detailing`;
 const SEO_DESCRIPTION = `${BRAND_NAME} in West Pennant Hills — premium hand car wash, interior vacuuming, window cleaning, tire shine, and luxury detailing. Eco-safe products; complimentary coffee on selected services. Mon–Sun 9am–5pm.`;
 
 const Hero = () => {
+  /* ── Dynamic phone: fetched from branch settings, falls back to branding const ── */
+  const [contactPhone, setContactPhone] = useState(BRAND_PHONE);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/public/branches`);
+        if (!res.ok) return;
+        const branches = await res.json();
+        const phone = branches?.[0]?.phone;
+        if (phone) {
+          // Strip all non-digits, ensure it's a valid E.164 number
+          const digits = String(phone).replace(/\D/g, '');
+          if (digits.length >= 8) setContactPhone(digits);
+        }
+      } catch {
+        // silently keep fallback
+      }
+    })();
+  }, []);
+
+  /* WhatsApp link — same number, pre-filled message */
+  const waMessage = encodeURIComponent(`Hi, I'd like to book a service at ${BRAND_NAME}`);
+  const waHref = `https://wa.me/${contactPhone}?text=${waMessage}`;
+  const telHref = `tel:+${contactPhone}`;
+
   const scrollToServices = (event) => {
     event.preventDefault();
     const section = document.getElementById('svc');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
+
+  /* ── Scroll to contact/inquiry form with navbar offset ── */
+  const scrollToInquiry = () => {
+    const section = document.getElementById('contact');
+    if (!section) return;
+    const navHeight = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-height') || '80',
+      10,
+    );
+    const offset = isNaN(navHeight) ? 80 : navHeight;
+    const top = section.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top, behavior: 'smooth' });
   };
 
   const origin = getSiteOrigin();
@@ -109,6 +173,38 @@ const Hero = () => {
               Our Services →
             </a>
           </div>
+
+          {/* ── Secondary quick-contact action buttons ── */}
+          <div className="h-action-btns" role="group" aria-label="Quick contact options">
+            <a
+              href={telHref}
+              className="h-action-btn h-action-btn--call"
+              aria-label="Call us now"
+            >
+              <span className="h-action-icon"><PhoneIcon /></span>
+              <span className="h-action-label">Call Now</span>
+            </a>
+            <a
+              href={waHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-action-btn h-action-btn--wa"
+              aria-label="Chat with us on WhatsApp"
+            >
+              <span className="h-action-icon"><WhatsAppIcon /></span>
+              <span className="h-action-label">WhatsApp</span>
+            </a>
+            <button
+              type="button"
+              className="h-action-btn h-action-btn--inquiry"
+              onClick={scrollToInquiry}
+              aria-label="Quick inquiry — scroll to contact form"
+            >
+              <span className="h-action-icon"><InquiryIcon /></span>
+              <span className="h-action-label">Quick Inquiry</span>
+            </button>
+          </div>
+
           <div className="hero-footer">
             <p className="hformer">Formerly known as Coonara Professional Hand Car Wash</p>
             <div className="hstats" aria-label="Service highlights">

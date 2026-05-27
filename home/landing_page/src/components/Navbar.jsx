@@ -16,7 +16,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="nb">
         <div className="ni">
-          <AppLogo variant="mark" className="ni-logo" />
+          <AppLogo variant="landingNav" className="ni-logo" />
         </div>
         <div className="nn">
           {BRAND_NAME}

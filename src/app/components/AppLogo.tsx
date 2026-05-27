@@ -2,10 +2,12 @@ import type { ComponentProps } from 'react';
 import { cn } from './ui/utils';
 import { BRAND_NAME, LOGO_PATH } from '../lib/branding';
 
-export type AppLogoVariant = 'nav' | 'sidebar' | 'hero' | 'loader' | 'auth' | 'mark' | 'inline' | 'rail';
+export type AppLogoVariant = 'nav' | 'landingNav' | 'sidebar' | 'hero' | 'loader' | 'auth' | 'mark' | 'inline' | 'rail';
 
 /** Wide lockup: always object-contain — never fixed squares (avoids circular crop). */
 const variantClass: Record<AppLogoVariant, string> = {
+  /** Same logo height as hero navbar (`.landing-page .ni-logo`). */
+  landingNav: 'h-[clamp(52px,6.5vw,62px)] w-auto max-w-[260px] object-left',
   nav: 'h-9 w-auto max-h-10 sm:h-10 max-w-[min(52vw,240px)] sm:max-w-[280px]',
   /** Full-width row in narrow sidebars (~248px) */
   sidebar: 'h-10 w-full max-h-12 max-w-none sm:h-11',

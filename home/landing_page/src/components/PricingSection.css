@@ -1,393 +1,742 @@
-/* ── Pricing Section ──────────────────────────────────────── */
-.landing-page .pricing-section {
-  background: #f4f7fb;
+/* ================================================================
+   PricingSection — premium spacing overhaul
+   Spacing scale (4-pt base): 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48 · 64
+   ================================================================ */
+
+/* ─────────────────────────────────────────
+   1. SECTION SHELL
+   ───────────────────────────────────────── */
+
+.landing-page .ps-section {
+  background: var(--cream);
 }
 
-/* Vehicle type pills */
-.landing-page .pricing-vehicles {
+/* Heading — generous gap below */
+.landing-page .ps-section h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Subtitle — comfortable breathing room before first card */
+.landing-page .ps-section-subtitle {
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.75;
+  margin-bottom: 40px;
+}
+@media (min-width: 768px) {
+  .landing-page .ps-section-subtitle { margin-bottom: 52px; }
+}
+
+/* Inner container — centred, wider layout for vehicle + package cards */
+.landing-page .ps-section-inner {
+  width: 100%;
+  max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-section-inner {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+}
+@media (min-width: 1280px) {
+  .landing-page .ps-section-inner { max-width: 1200px; }
+}
+
+/* Gap between the two FlowCards */
+.landing-page .ps-cards-wrap {
   display: flex;
-  flex-wrap: wrap;
-  gap: .6rem;
-  margin-top: 2rem;
-  justify-content: center;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
 }
-.landing-page .pricing-vpill {
-  background: #fff;
-  border: 1.5px solid #d1dbe8;
-  color: #0c1d3a;
-  font-size: clamp(13px, 1.1vw, 15px);
-  font-weight: 600;
-  padding: .55rem 1.4rem;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: background .18s, border-color .18s, color .18s;
-}
-.landing-page .pricing-vpill:hover {
-  border-color: #0c1d3a;
-  background: #0c1d3a;
-  color: #fff;
-}
-.landing-page .pricing-vpill.active {
-  background: #0c1d3a;
-  border-color: #0c1d3a;
-  color: #fff;
+@media (min-width: 768px) {
+  .landing-page .ps-cards-wrap { gap: 36px; }
 }
 
-/* Category tabs */
-.landing-page .pricing-cats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .4rem;
-  margin-top: 1.4rem;
-  justify-content: center;
-}
-.landing-page .pricing-cattab {
-  background: transparent;
-  border: 1.5px solid #c9d6e3;
-  color: #4a6080;
-  font-size: clamp(12px, 1vw, 13px);
-  font-weight: 600;
-  padding: .38rem 1.1rem;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: background .15s, border-color .15s, color .15s;
-  letter-spacing: .03em;
-  text-transform: uppercase;
-}
-.landing-page .pricing-cattab:hover {
-  border-color: #c9a84c;
-  color: #c9a84c;
-}
-.landing-page .pricing-cattab.active {
-  background: #c9a84c;
-  border-color: #c9a84c;
-  color: #fff;
-}
-
-/* ── Slider ──────────────────────────────────────────────── */
-.landing-page .pricing-slider-wrap {
-  position: relative;
-  margin-top: 2.5rem;
+/* ─────────────────────────────────────────
+   2. LOADING / ERROR / EMPTY
+   ───────────────────────────────────────── */
+.landing-page .ps-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* reserve space on both sides for arrows so cards never overlap them */
-  padding: 0 60px;
-  box-sizing: border-box;
+  gap: 12px;
+  padding: 56px 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+.landing-page .ps-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #0c1d3a;
+  border-radius: 50%;
+  animation: ps-spin 0.8s linear infinite;
+}
+@keyframes ps-spin { to { transform: rotate(360deg); } }
+.landing-page .ps-error {
+  text-align: center;
+  color: #6b7280;
+  padding: 40px 32px;
+  font-size: 14px;
+}
+.landing-page .ps-error a { color: #0c1d3a; font-weight: 600; text-decoration: underline; }
+.landing-page .ps-empty {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+  padding: 48px 16px;
 }
 
-.landing-page .pricing-track {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  justify-content: center;
-  overflow: hidden;
-}
+/* index.css resets `.landing-page * { padding:0; margin:0 }` — use `.landing-page`
+   prefix (0,2,0) so component padding/margins are not stripped. */
 
-/* ── Cards ── */
-.landing-page .pricing-card {
-  width: min(420px, 82vw);
-  max-height: min(72vh, 560px);
+/* ─────────────────────────────────────────
+   3. FLOW CARD  (BookingFlowSection shell)
+      white card · navy left accent · Bebas header
+   ───────────────────────────────────────── */
+.landing-page .ps-flow-card {
   background: #fff;
-  border: 1.5px solid #dde6f0;
-  border-radius: 16px;
-  padding: 1.5rem 1.6rem 1.35rem;
-  display: flex;
-  flex-direction: column;
-  gap: .9rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid #f0f1f3;
   overflow: hidden;
-  transition: transform .5s cubic-bezier(.4,0,.2,1), opacity .45s ease, box-shadow .35s ease;
-  will-change: transform, opacity;
+  width: 100%;
 }
 
-/* Center — fully visible, front; anchored to top so content grows downward */
-.landing-page .pricing-card.pc-center {
-  transform: translateX(0) scale(1);
-  transform-origin: top center;
-  opacity: 1;
-  z-index: 3;
-
-  box-shadow: 0 8px 36px rgba(12, 29, 58, .12);
-  border-color: #c9a84c;
-}
-/* Peek left — stays within the track (overflow hidden clips the rest) */
-.landing-page .pricing-card.pc-left {
-  transform: translateX(-72%) scale(.84);
-  transform-origin: top left;
-  opacity: .38;
-  z-index: 2;
-
-  pointer-events: none;
-}
-/* Peek right */
-.landing-page .pricing-card.pc-right {
-  transform: translateX(72%) scale(.84);
-  transform-origin: top right;
-  opacity: .38;
-  z-index: 2;
-
-  pointer-events: none;
-}
-/* Everything else hidden */
-.landing-page .pricing-card.pc-hidden {
-  transform: translateX(0) scale(.75);
-  transform-origin: top center;
-  opacity: 0;
-  z-index: 1;
-
-  pointer-events: none;
-}
-
-.landing-page .pricing-card-top {
+/* Header row */
+.landing-page .ps-flow-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
+  align-items: center;
+  gap: 12px;
+  /* top/bottom: 20px | right: 24px | left: 20px (plus the 4px border = 24px total visual) */
+  padding: 20px 24px 20px 20px;
+  border-bottom: 1px solid #f0f1f3;
+  border-left: 4px solid #0c1d3a;
+}
+@media (min-width: 768px) {
+  .landing-page .ps-flow-header { padding: 22px 28px 22px 24px; }
 }
 
-.landing-page .pricing-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
-  font-weight: 400;
-  letter-spacing: .04em;
-  color: #0c1d3a;
-  line-height: 1.15;
-  margin: 0;
-}
-
-.landing-page .pricing-price-block {
-  text-align: right;
+.landing-page .ps-flow-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #e8eef8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 }
-.landing-page .pricing-price {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(1.7rem, 2.5vw, 2.2rem);
-  color: #0c1d3a;
-  letter-spacing: .02em;
-  line-height: 1;
-  display: block;
-}
-.landing-page .pricing-duration {
-  font-size: 11px;
-  color: #7a90a8;
-  font-weight: 600;
-  display: block;
-  margin-top: .2rem;
+@media (min-width: 768px) {
+  .landing-page .ps-flow-icon { width: 40px; height: 40px; }
 }
 
-/* Points list — scrollable so long lists don't push Book Now off screen */
-.landing-page .pricing-points {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.landing-page .ps-flow-title {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #0c1d3a;
+}
+@media (min-width: 768px) {
+  .landing-page .ps-flow-title { font-size: 19px; }
+}
+
+.landing-page .ps-flow-badge {
+  flex-shrink: 0;
+  background: #e8eef8;
+  color: #1a3560;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 12px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+/* Card body */
+.landing-page .ps-flow-body {
+  padding: 32px 20px 36px;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-flow-body { padding: 36px 28px 40px; }
+}
+@media (min-width: 1024px) {
+  .landing-page .ps-flow-body { padding: 40px 36px 44px; }
+}
+/* Allow overflow-visible on the carousel body so arrows don't get clipped */
+.landing-page .ps-flow-body--overflow {
+  overflow: visible;
+}
+
+/* ─────────────────────────────────────────
+   4. VEHICLE SELECTOR
+   ───────────────────────────────────────── */
+
+/* "Body type" label */
+.landing-page .ps-body-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #9ca3af;
+  margin: 0 0 18px;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-body-label { margin-bottom: 22px; }
+}
+
+/* Vehicle card grid */
+.landing-page .ps-vehicles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 20px;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-vehicles { gap: 16px 24px; }
+}
+
+/* Individual vehicle card — spacing aligned with booking flow (BranchSelection) */
+.landing-page .ps-vcard {
   display: flex;
   flex-direction: column;
-  gap: .25rem;
-  flex: 1;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #c9d6e3 transparent;
+  align-items: center;
+  justify-content: center;
+  width: 144px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid rgba(12, 29, 58, 0.15);
+  background: #edf1f9;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 1px 3px rgba(12, 29, 58, 0.07);
+  gap: 8px;
 }
-.landing-page .pricing-points::-webkit-scrollbar { width: 4px; }
-.landing-page .pricing-points::-webkit-scrollbar-thumb { background: #c9d6e3; border-radius: 4px; }
-
-/* Section heading row (# prefix) */
-.landing-page .pricing-point-heading {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #0c1d3a;
-  margin-top: .55rem;
-  padding-left: 0;
+@media (min-width: 640px) {
+  .landing-page .ps-vcard { width: 160px; padding: 16px; }
 }
-.landing-page .pricing-point-heading:first-child { margin-top: 0; }
-
-/* Included row (* prefix) */
-.landing-page .pricing-point-included {
-  font-size: clamp(12px, 1vw, 13px);
-  color: #4a6080;
-  line-height: 1.5;
-  padding-left: 1.2rem;
-  position: relative;
+.landing-page .ps-vcard:hover {
+  box-shadow: 0 4px 16px rgba(12, 29, 58, 0.13);
+  border-color: rgba(12, 29, 58, 0.3);
 }
-.landing-page .pricing-point-included::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  color: #27ae60;
-  font-weight: 700;
-  font-size: 11px;
-  top: 1px;
+.landing-page .ps-vcard--active {
+  border-color: #0c1d3a;
+  background: linear-gradient(135deg, rgba(12,29,58,0.08) 0%, rgba(201,168,76,0.08) 100%);
+  box-shadow: 0 4px 14px rgba(12, 29, 58, 0.14);
 }
 
-/* Excluded row (- prefix) */
-.landing-page .pricing-point-excluded {
-  font-size: clamp(12px, 1vw, 13px);
-  color: #8a9bb0;
-  line-height: 1.5;
-  padding-left: 1.2rem;
-  position: relative;
-  text-decoration: line-through;
-  text-decoration-color: #c9d6e3;
-}
-.landing-page .pricing-point-excluded::before {
-  content: '✗';
-  position: absolute;
-  left: 0;
-  color: #c9d6e3;
-  font-weight: 700;
-  font-size: 11px;
-  top: 1px;
-}
-
-/* Coffee badge */
-.landing-page .pricing-coffee {
+.landing-page .ps-vcard-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: .4rem;
-  color: #7a5c1e;
-  font-size: 12px;
-  font-weight: 600;
-  background: #fdf6e3;
-  border: 1px solid #f0d88a;
-  border-radius: 8px;
-  padding: .35rem .75rem;
+  justify-content: center;
+  padding: 6px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(12,29,58,0.10);
+  transition: background 0.2s;
+}
+.landing-page .ps-vcard-icon svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-vcard-icon {
+    width: 44px;
+    height: 44px;
+    padding: 7px;
+  }
+  .landing-page .ps-vcard-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+.landing-page .ps-vcard-icon--active {
+  background: rgba(12, 29, 58, 0.12);
+  box-shadow: 0 0 0 1px rgba(12,29,58,0.12);
 }
 
-/* Book now button */
-.landing-page .pricing-book-btn {
-  display: block;
-  text-align: center;
-  background: #0c1d3a;
-  color: #fff;
-  font-size: 13px;
+.landing-page .ps-vcard-label {
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: .04em;
-  padding: .7rem 1rem;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background .18s;
-  margin-top: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #1a3560;
+  text-align: center;
+  line-height: 1.4;
 }
-.landing-page .pricing-book-btn:hover {
-  background: #c9a84c;
-  color: #0c1d3a;
+@media (min-width: 640px) {
+  .landing-page .ps-vcard-label { font-size: 11px; }
+}
+.landing-page .ps-vcard--active .ps-vcard-label { color: #0c1d3a; }
+
+/* ─────────────────────────────────────────
+   5. WASH / DETAILING TOGGLE
+   ───────────────────────────────────────── */
+.landing-page .ps-toggle-wrap {
+  display: flex;
+  justify-content: center;
+  /* generous gap above carousel */
+  margin-bottom: 28px;
+}
+@media (min-width: 768px) {
+  .landing-page .ps-toggle-wrap { margin-bottom: 32px; }
 }
 
-/* Arrows sit in the 60px gutter on each side — always clear of cards */
-.landing-page .pricing-arrow {
+.landing-page .ps-toggle {
+  display: inline-flex;
+  width: 100%;
+  max-width: 560px;
+  background: rgba(243,244,246,0.95);
+  border: 1px solid rgba(12,29,58,0.08);
+  border-radius: 14px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.landing-page .ps-toggle-btn {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  line-height: 1.4;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-toggle-btn {
+    padding: 12px 32px;
+    font-size: 12px;
+    letter-spacing: 0.09em;
+  }
+}
+.landing-page .ps-toggle-btn-short { display: inline; }
+.landing-page .ps-toggle-btn-long  { display: none; }
+@media (min-width: 480px) {
+  .landing-page .ps-toggle-btn-short { display: none; }
+  .landing-page .ps-toggle-btn-long  { display: inline; }
+}
+.landing-page .ps-toggle-btn--active {
+  background: #fff;
+  color: #0c1d3a;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10), 0 0 0 1px rgba(229,231,235,0.8);
+}
+.landing-page .ps-toggle-btn:not(.ps-toggle-btn--active):hover { color: #374151; }
+
+/* ─────────────────────────────────────────
+   6. CAROUSEL STRUCTURE
+      ps-carousel-wrap → ps-clip → ps-scroller → ps-track
+   ───────────────────────────────────────── */
+.landing-page .ps-carousel-wrap {
+  position: relative;
+  /* 44 px = 40 px arrow + 4 px clearance — arrows never overlap card content */
+  padding: 0 44px;
+}
+@media (min-width: 768px) {
+  .landing-page .ps-carousel-wrap { padding: 0 52px; }
+}
+
+/* overflow-hidden clip — clips horizontal bleed, keeps vertical for badge */
+.landing-page .ps-clip {
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.landing-page .ps-scroller {
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  /* Column widths use cqw so each card = 1/1, 1/2, or 1/3 of this viewport (not the full track). */
+  container-type: inline-size;
+  container-name: ps-scroller;
+  /* top: clearance for Recommended badge
+     sides: shadow clearance
+     bottom: card shadow clearance */
+  padding: 22px 4px 14px;
+}
+.landing-page .ps-scroller::-webkit-scrollbar { display: none; }
+
+/* Grid track: 1 → 2 → 3 full cards visible per viewport */
+.landing-page .ps-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(100cqw - 8px);
+  gap: 14px;
+  width: max-content;
+  min-width: 100%;
+  align-items: stretch;
+}
+@media (min-width: 768px) {
+  .landing-page .ps-track {
+    grid-auto-columns: calc((100cqw - 8px - 16px) / 2);
+    gap: 16px;
+  }
+}
+@media (min-width: 1024px) {
+  .landing-page .ps-track {
+    grid-auto-columns: calc((100cqw - 8px - 32px) / 3);
+  }
+}
+
+.landing-page .ps-slide {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-width: 0;
+  display: flex;
+  align-self: stretch;
+  height: 100%;
+}
+
+/* ─────────────────────────────────────────
+   7. ARROW BUTTONS
+   ───────────────────────────────────────── */
+.landing-page .ps-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 20;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(229,231,235,0.9);
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+  color: #0c1d3a;
+}
+.landing-page .ps-arrow:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
   background: #fff;
-  border: 1.5px solid #dde6f0;
+}
+.landing-page .ps-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+.landing-page .ps-arrow--prev { left: 4px; }
+.landing-page .ps-arrow--next { right: 4px; }
+.landing-page .ps-arrow--disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────
+   8. SERVICE CARD
+   ───────────────────────────────────────── */
+.landing-page .ps-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 100%;
+  height: 100%;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  padding: 16px 12px;
+  box-sizing: border-box;
+  overflow: visible;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  text-align: left;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-card { padding: 20px; }
+}
+.landing-page .ps-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 6px 20px rgba(12,29,58,0.10);
+  transform: translateY(-2px);
+}
+
+/* Recommended badge — floats above top edge */
+.landing-page .ps-card-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  background: #e8eef8;
   color: #0c1d3a;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  font-size: 26px;
-  line-height: 1;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background .18s, border-color .18s;
-  box-shadow: 0 2px 12px rgba(12,29,58,.13);
-}
-.landing-page .pricing-arrow:hover {
-  background: #0c1d3a;
-  border-color: #0c1d3a;
-  color: #fff;
-}
-/* Place arrows in the gutter (padding area), centred in the 60px strip */
-.landing-page .pricing-arrow--prev { left: 9px; }
-.landing-page .pricing-arrow--next { right: 9px; }
-
-@media (max-width: 600px) {
-  .landing-page .pricing-slider-wrap { padding: 0 50px; }
-  .landing-page .pricing-arrow--prev { left: 4px; }
-  .landing-page .pricing-arrow--next { right: 4px; }
-}
-
-/* Dots */
-.landing-page .pricing-dots {
-  display: flex;
-  gap: .5rem;
-  margin-top: 1.4rem;
-  justify-content: center;
-}
-.landing-page .pricing-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: none;
-  background: #c9d6e3;
-  cursor: pointer;
-  padding: 0;
-  transition: background .2s, transform .2s;
-}
-.landing-page .pricing-dot.active {
-  background: #0c1d3a;
-  transform: scale(1.3);
-}
-
-/* CTA */
-.landing-page .pricing-cta {
-  margin-top: 2.5rem;
-  display: flex;
-  justify-content: center;
-}
-.landing-page .pricing-cta-btn {
-  background: #c9a84c;
-  color: #0c1d3a;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  font-size: clamp(14px, 1.15vw, 16px);
-  letter-spacing: .04em;
-  padding: .9rem 2.4rem;
-  border-radius: 100px;
-  text-decoration: none;
-  transition: background .18s, transform .15s;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 5px 16px;
+  border-radius: 9999px;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(12,29,58,0.16);
+  z-index: 1;
+  pointer-events: none;
 }
-.landing-page .pricing-cta-btn:hover {
-  background: #b8922e;
-  transform: translateY(-1px);
+@media (min-width: 640px) {
+  .landing-page .ps-card-badge { font-size: 12px; padding: 5px 18px; }
 }
 
-/* Loading */
-.landing-page .pricing-loading {
+/* ── Title / Price header row ── */
+.landing-page .ps-card-top {
   display: flex;
-  align-items: center;
-  gap: .75rem;
-  justify-content: center;
-  padding: 3rem 0;
-  color: #7a90a8;
-  font-size: 15px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f1f3;
 }
-.landing-page .pricing-spinner {
-  width: 22px;
-  height: 22px;
-  border: 2.5px solid #dde6f0;
-  border-top-color: #0c1d3a;
-  border-radius: 50%;
-  animation: pricing-spin .7s linear infinite;
-}
-@keyframes pricing-spin {
-  to { transform: rotate(360deg); }
+@media (min-width: 640px) {
+  .landing-page .ps-card-top { margin-bottom: 22px; padding-bottom: 18px; }
 }
 
-/* Error / Empty */
-.landing-page .pricing-error,
-.landing-page .pricing-empty {
-  text-align: center;
-  padding: 2.5rem 1rem;
-  color: #7a90a8;
-  font-size: 15px;
+.landing-page .ps-card-title-row {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.landing-page .pricing-error a {
-  color: #c9a84c;
+@media (min-width: 640px) {
+  .landing-page .ps-card-title-row { gap: 8px; }
+}
+
+.landing-page .ps-card-title {
+  min-width: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #0c1d3a;
+  line-height: 1.2;
+  word-break: break-word;
+  text-align: left;
+  margin: 0;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-card-title { font-size: 18px; }
+}
+@media (min-width: 768px) {
+  .landing-page .ps-card-title { font-size: 20px; }
+}
+
+.landing-page .ps-card-price-col {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  line-height: 1;
+  gap: 5px;
+}
+
+.landing-page .ps-card-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #0c1d3a;
+  margin: 0;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-card-price { font-size: 30px; }
+}
+
+.landing-page .ps-card-duration {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-card-duration { font-size: 14px; }
+}
+
+/* Perk icons — from admin catalog (coffee count / loyalty flag only) */
+.landing-page .ps-card-perk {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.landing-page .ps-card-perk svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+.landing-page .ps-card-perk--coffee {
+  border: 1px solid rgba(251,191,36,0.5);
+  background: #fffbeb;
+  color: #92400e;
+}
+.landing-page .ps-card-perk--loyalty {
+  border: 1px solid rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.12);
+  color: #92650a;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-card-perk {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+  }
+  .landing-page .ps-card-perk svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+/* ── Feature list body — grows so cards in a row share the same height ── */
+.landing-page .ps-card-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-page .ps-detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-detail-rows { gap: 14px; }
+}
+
+/* Section heading (OUTSIDE / INSIDE) */
+.landing-page .ps-row-heading {
+  width: 100%;
+  padding-top: 2px;
+}
+.landing-page .ps-row-heading--gap {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f1f3;
+}
+.landing-page .ps-row-heading-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0c1d3a;
+  line-height: 1.3;
+  text-align: left;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-row-heading-text { font-size: 13px; margin-bottom: 12px; }
+}
+
+/* Feature row */
+.landing-page .ps-row-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  width: 100%;
+}
+.landing-page .ps-row-item--gap { margin-top: 4px; }
+.landing-page .ps-row-item--gap-included-after-excluded {
+  margin-top: 10px;
+  padding-top: 4px;
+}
+
+.landing-page .ps-row-check {
+  flex-shrink: 0;
+  margin-top: 2px;
+  line-height: 0;
+}
+
+.landing-page .ps-row-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1.55;
+  word-break: break-word;
+  min-width: 0;
+  flex: 1;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-row-text { font-size: 15px; }
+}
+.landing-page .ps-row-text--excluded { color: #b0b8c4; }
+
+/* ─────────────────────────────────────────
+   9. PACKAGE FOOTER — single Book Now CTA
+   ───────────────────────────────────────── */
+.landing-page .ps-package-footer {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f1f3;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-package-footer { margin-top: 32px; padding-top: 28px; }
+}
+
+.landing-page .ps-book-btn {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 14px 24px;
+  text-align: center;
+  background: #0c1d3a;
+  color: #fff;
+  font-size: 14px;
   font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.14s;
+  box-shadow: 0 3px 10px rgba(12,29,58,0.20);
+  line-height: 1.4;
+}
+@media (min-width: 640px) {
+  .landing-page .ps-book-btn {
+    font-size: 15px;
+    padding: 15px 32px;
+    max-width: 480px;
+  }
+}
+.landing-page .ps-book-btn:hover {
+  background: #1a3560;
+  box-shadow: 0 6px 18px rgba(12,29,58,0.28);
+  transform: translateY(-2px);
+}
+.landing-page .ps-book-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(12,29,58,0.18);
 }

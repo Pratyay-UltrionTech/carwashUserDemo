@@ -1,4 +1,5 @@
 import type { ComponentType, CSSProperties, ReactNode } from 'react';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 import { cn } from './ui/utils';
 
 /** Shared palette — Home, Profile, Service history, Branch selection */
@@ -85,10 +86,11 @@ export function BookingConfirmationBlock({
   );
 }
 
-/** Section shell — white card, navy left accent, Playfair title */
+/** Section shell — white card, navy left accent, Bebas Neue title */
 export function BookingFlowSection({
   icon: Icon,
   title,
+  step,
   badge,
   headerTrailing,
   children,
@@ -97,6 +99,8 @@ export function BookingFlowSection({
 }: {
   icon: ComponentType<{ className?: string; style?: CSSProperties }>;
   title: string;
+  /** Booking flow step number shown in the card header (e.g. 1, 2, 3). */
+  step?: number;
   badge?: string;
   /** e.g. Edit control — rendered before the optional badge, right-aligned. */
   headerTrailing?: ReactNode;
@@ -110,6 +114,15 @@ export function BookingFlowSection({
         className="px-5 sm:px-6 py-4 flex items-center gap-3 border-b border-gray-100"
         style={{ borderLeftWidth: 4, borderLeftColor: BOOKING_NAVY, borderLeftStyle: 'solid' }}
       >
+        {step != null ? (
+          <span
+            className="flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums"
+            style={{ background: BOOKING_NAVY, color: '#fff', boxShadow: '0 0 0 2px rgba(201,168,76,0.45)' }}
+            aria-label={`Step ${step}`}
+          >
+            {step}
+          </span>
+        ) : null}
         <span
           className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
           style={{ background: BOOKING_NAVY_TINT }}
@@ -118,7 +131,7 @@ export function BookingFlowSection({
         </span>
         <h2
           className="min-w-0 flex-1 font-semibold text-gray-900"
-          style={{ fontFamily: "'Playfair Display', serif", color: BOOKING_NAVY }}
+          style={{ fontFamily: HEADING_FONT_FAMILY, color: BOOKING_NAVY }}
         >
           {title}
         </h2>

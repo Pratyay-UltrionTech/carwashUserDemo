@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { ArrowLeft } from 'lucide-react';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 import { AppLogo } from './AppLogo';
 import { cn } from './ui/utils';
 
@@ -36,7 +37,7 @@ export function BookingFlowBrandedHeader({
         <div className="min-w-0 flex-1">
           <h1
             className="text-xl font-bold text-gray-900"
-            style={{ fontFamily: "'Playfair Display', serif", ...titleStyle }}
+            style={{ fontFamily: HEADING_FONT_FAMILY, ...titleStyle }}
           >
             {title}
           </h1>

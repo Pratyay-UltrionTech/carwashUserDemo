@@ -6,6 +6,7 @@ import {
   getPublicCatalogState,
   subscribePublicCatalog,
 } from '../lib/publicDataStore';
+import { HEADING_FONT_FAMILY } from '../lib/branding';
 
 interface Service {
   id: string;
@@ -99,7 +100,7 @@ export function ServicesPage() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-lg border border-slate-200 p-8 text-center">
             <AlertCircle className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-slate-900 mb-2">No Services Available</h1>
+            <h1 className="text-2xl font-normal text-slate-900 mb-2 tracking-wide" style={{ fontFamily: HEADING_FONT_FAMILY }}>No Services Available</h1>
             <p className="text-slate-600">Services will appear here once they're added by the admin.</p>
           </div>
         </div>
@@ -112,7 +113,7 @@ export function ServicesPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Our Services</h1>
+          <h1 className="text-3xl font-normal text-slate-900 mb-2 tracking-wide" style={{ fontFamily: HEADING_FONT_FAMILY }}>Our Services</h1>
           <p className="text-slate-600">Choose from our washing and detailing services</p>
         </div>
 
@@ -147,7 +148,7 @@ export function ServicesPage() {
               )}
 
               {/* Service Name */}
-              <h3 className="text-lg font-bold text-slate-900 mb-2">{service.name}</h3>
+              <h3 className="text-lg font-normal text-slate-900 mb-2 tracking-wide" style={{ fontFamily: HEADING_FONT_FAMILY }}>{service.name}</h3>
 
               {/* Vehicle Types */}
               <div className="mb-4">

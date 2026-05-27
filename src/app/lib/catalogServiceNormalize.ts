@@ -63,17 +63,29 @@ function readBooleanField(
   return defaultIfMissing;
 }
 
+export type NormalizeCatalogServiceOptions = {
+  /** When false, loyalty icon/perks only show if admin explicitly enabled the flag. */
+  loyaltyDefaultIfMissing?: boolean;
+  /** When true, ignore legacy `includesFreeCoffee` and only use `free_coffee_count`. */
+  coffeeFromCountFieldOnly?: boolean;
+};
+
 /** Normalize API / snapshot JSON into a `ServiceItem` (snake_case + camelCase + 0/1). */
-export function normalizeCatalogServiceItem(s: unknown): ServiceItem {
+export function normalizeCatalogServiceItem(
+  s: unknown,
+  options: NormalizeCatalogServiceOptions = {}
+): ServiceItem {
   const x = s as Record<string, unknown>;
   const pts = x.descriptionPoints ?? x.description_points;
   const exPts = x.excludedPoints ?? x.excluded_points;
+  const loyaltyDefault = options.loyaltyDefaultIfMissing ?? true;
+  const coffeeFromCountOnly = options.coffeeFromCountFieldOnly === true;
 
   let freeCoffeeCount = 0;
   const rawFc = x.freeCoffeeCount ?? x.free_coffee_count;
   if (rawFc !== undefined && rawFc !== null) {
     freeCoffeeCount = coalesceNonNegativeInt(rawFc, 0);
-  } else if (x.includesFreeCoffee === true) {
+  } else if (!coffeeFromCountOnly && x.includesFreeCoffee === true) {
     freeCoffeeCount = 1;
   }
 
@@ -81,7 +93,7 @@ export function normalizeCatalogServiceItem(s: unknown): ServiceItem {
     x,
     'eligibleForLoyaltyPoints',
     'eligible_for_loyalty_points',
-    true
+    loyaltyDefault
   );
   const recommended = readBooleanField(x, 'recommended', 'recommended', false);
   const active = readBooleanField(x, 'active', 'active', true);
@@ -113,4 +125,12 @@ export function normalizeCatalogServiceItem(s: unknown): ServiceItem {
     category: String(x.category ?? x.type ?? 'Washing'),
     sequence: coalesceDisplaySequence(x.sequence ?? x.display_order ?? x.displayOrder),
   };
+}
+
+/** Landing hero pricing — only surface perks explicitly configured in admin catalog. */
+export function normalizeLandingCatalogService(s: unknown): ServiceItem {
+  return normalizeCatalogServiceItem(s, {
+    loyaltyDefaultIfMissing: false,
+    coffeeFromCountFieldOnly: true,
+  });
 }
