@@ -7,12 +7,8 @@ import { getCatalogForVehicle, listBranchAddons } from '../lib/adminPortalBridge
 import { getCachedMobileSnapshot, getMobileCatalogForVehicle } from '../lib/mobilePublicBridge';
 import { useAdminBridgeSync } from '../hooks/useAdminBridgeSync';
 import { cn } from '../components/ui/utils';
-import { HEADING_FONT_FAMILY } from '../lib/branding';
+import { headingFontStyle } from '../lib/branding';
 import {
-
-
-
-  
   BOOKING_NAVY as NAVY,
   BOOKING_NAVY_TINT as NAVY_TINT,
   BOOKING_GOLD as GOLD,
@@ -20,6 +16,33 @@ import {
   BOOKING_BTN_TEXT as BTN_TEXT,
   BookingFlowSection,
 } from '../components/bookingFlowSection';
+
+const BODY_FONT_FAMILY = "'DM Sans', system-ui, sans-serif";
+
+/** Matches landing `.ps-card-title` / `.ps-card-price` (PricingSection.css) */
+const addonTitleStyle = {
+  fontFamily: BODY_FONT_FAMILY,
+  fontSize: '1.0625rem',
+  fontWeight: 600,
+  letterSpacing: 0,
+  lineHeight: 1.35,
+  color: NAVY,
+} as const;
+
+const addonPriceStyle = {
+  fontFamily: BODY_FONT_FAMILY,
+  fontSize: '13px',
+  fontWeight: 600,
+  letterSpacing: 0,
+  lineHeight: 1.4,
+  color: NAVY,
+} as const;
+
+/** Matches service package cards (`.ps-card` / `.ps-card--selected`) */
+const ADDON_CARD_BORDER = 'rgba(107, 125, 151, 0.5)';
+const ADDON_CARD_BG = '#e7edf6';
+const ADDON_CARD_BORDER_SELECTED = 'rgba(64, 84, 116, 0.85)';
+const ADDON_CARD_BG_SELECTED = '#c1d0e3';
 
 /** Additional services from menu — flat rates (branch & mobile). */
 export function AddOnsPage() {
@@ -115,8 +138,8 @@ export function AddOnsPage() {
         <div className="max-w-4xl mx-auto flex items-center gap-3 px-4 py-4">
           <div>
             <h1
-              className="text-xl font-bold leading-tight text-gray-900"
-              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
+              className="text-xl font-normal leading-tight tracking-[0.04em] text-gray-900"
+              style={{ ...headingFontStyle, color: NAVY }}
             >
               Add-ons
             </h1>
@@ -132,6 +155,7 @@ export function AddOnsPage() {
           <BookingFlowSection
             icon={Layers}
             title="Select add-ons"
+            titleClassName="font-normal tracking-[0.04em]"
             badge={count > 0 ? `${count} selected` : undefined}
             rootClassName="border border-white/70 shadow-[0_14px_36px_rgba(12,29,58,0.08),0_2px_8px_rgba(12,29,58,0.04)]"
           >
@@ -184,26 +208,20 @@ export function AddOnsPage() {
                     className={cn(
                       'group relative flex w-full flex-col rounded-2xl border p-5 text-left transition-all duration-200',
                       isSelected
-                        ? 'border-2 shadow-[0_12px_24px_rgba(12,29,58,0.12)] ring-1 ring-[#0c1d3a]/10'
-                        : 'border border-gray-200 bg-white shadow-[0_2px_10px_rgba(12,29,58,0.05)] hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-[0_10px_20px_rgba(12,29,58,0.09)]',
+                        ? 'shadow-[0_2px_10px_rgba(12,29,58,0.06)]'
+                        : 'shadow-[0_1px_6px_rgba(12,29,58,0.04)] hover:-translate-y-0.5 hover:shadow-[0_8px_18px_rgba(12,29,58,0.07)]',
                     )}
-                    style={
-                      isSelected
-                        ? {
-                            borderColor: NAVY,
-                            background: `linear-gradient(165deg, rgba(232,238,248,0.85) 0%, rgba(255,255,255,0.98) 60%)`,
-                          }
-                        : undefined
-                    }
+                    style={{
+                      borderWidth: 1,
+                      borderColor: isSelected ? ADDON_CARD_BORDER_SELECTED : ADDON_CARD_BORDER,
+                      background: isSelected ? ADDON_CARD_BG_SELECTED : ADDON_CARD_BG,
+                    }}
                   >
                     <div className="mb-3 flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
-                        <h3
-                          className="text-[16px] font-bold leading-snug tracking-normal text-gray-900 break-words"
-                          style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
-                        >
+                        <span className="block break-words" style={addonTitleStyle}>
                           {addon.name}
-                        </h3>
+                        </span>
                         {addon.description && (
                           <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-gray-500">
                             {addon.description}
@@ -212,24 +230,24 @@ export function AddOnsPage() {
                       </div>
                       <span
                         className={cn(
-                          'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-all duration-200',
-                          isSelected
-                            ? 'border-transparent shadow-sm'
-                            : 'border-gray-200 bg-white group-hover:border-gray-300',
+                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-all duration-200',
+                          !isSelected && 'border-gray-300 bg-white',
                         )}
-                        style={isSelected ? { background: NAVY, color: 'white' } : undefined}
+                        style={
+                          isSelected
+                            ? { background: NAVY, borderColor: NAVY, borderWidth: 1 }
+                            : { borderWidth: 1 }
+                        }
                         aria-hidden
                       >
                         {isSelected ? (
                           <motion.span initial={{ scale: 0.85, opacity: 0.7 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.15 }}>
-                            <Check className="h-4.5 w-4.5" strokeWidth={2.7} />
+                            <Check className="h-4 w-4 text-white" strokeWidth={2.5} />
                           </motion.span>
-                        ) : (
-                          <span className="h-2.5 w-2.5 rounded-full bg-gray-300/70 transition-all duration-200 group-hover:bg-gray-400/80" />
-                        )}
+                        ) : null}
                       </span>
                     </div>
-                    <p className={cn('text-base font-bold tracking-normal', isSelected ? 'text-[#0c1d3a]' : 'text-gray-800')} style={{ color: isSelected ? NAVY : undefined }}>
+                    <p className="tabular-nums" style={addonPriceStyle}>
                       +${Number(addon.price).toFixed(2)}
                     </p>
                   </button>

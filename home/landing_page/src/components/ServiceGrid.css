@@ -1,6 +1,12 @@
 .landing-page .strip{background:var(--green);padding:1.1rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;text-align:center}
 .landing-page .strip-coffee-icon{color:rgba(255,255,255,0.95);display:flex;align-items:center;line-height:0;flex-shrink:0}
-.landing-page .strip-coffee-icon-inline{color:rgba(255,255,255,0.95);display:inline-flex;vertical-align:baseline;transform:translateY(1px);margin-left:.35rem}
+.landing-page .strip-coffee-icon-inline{
+  display:inline-flex;
+  align-items:center;
+  vertical-align:middle;
+  margin:0 .15rem;
+  line-height:0;
+}
 .landing-page .stag{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;padding:5px 14px;border-radius:100px;font-size:clamp(12px,1.1vw,14px);font-weight:600;letter-spacing:.04em}
 .landing-page .strip p{color:#fff;font-size:clamp(15px,1.25vw,17px);line-height:1.45}
 .landing-page .strip strong{color:#a8e6c5}

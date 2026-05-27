@@ -19,9 +19,9 @@ export const homePageType = {
   sectionTitle: 'text-xl sm:text-2xl font-normal tracking-[0.03em]',
   sectionSubtitle: 'text-sm sm:text-base text-gray-500 leading-relaxed',
 
-  /** Service cards — shared branch + mobile */
+  /** Service cards — shared branch + mobile (tracking matches sectionTitle / Current Offers) */
   cardBadge: 'text-sm font-semibold px-3 py-1 rounded-full',
-  cardTitle: 'text-lg sm:text-xl font-normal leading-snug',
+  cardTitle: 'text-lg sm:text-xl font-normal leading-snug tracking-[0.03em]',
   cardBody: 'text-sm sm:text-base leading-snug',
   cardFeature: 'text-sm leading-relaxed',
   cardStat: 'text-lg sm:text-xl font-bold tabular-nums leading-tight',
@@ -53,4 +53,7 @@ export const homePageType = {
 } as const;
 
 /** Bebas Neue for display headings on the home page */
-export const homeHeadingStyle = { fontFamily: HEADING_FONT_FAMILY } as const;
+export const homeHeadingStyle = {
+  fontFamily: HEADING_FONT_FAMILY,
+  letterSpacing: '0.03em',
+} as const;

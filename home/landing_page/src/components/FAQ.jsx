@@ -1,123 +1,109 @@
 import React, { useState } from 'react';
+import { scrollToContactSection } from '../utils/scrollToContact';
 import './FAQ.css';
 
 const FAQS = [
   {
-    q: "What services do you offer?",
-    a: "We offer a full range of hand car wash and detailing services including express wash, premium polish, interior vacuuming, window cleaning, tyre shine, clay bar treatment, and full interior & exterior detail packages. See our Services & Pricing section for the complete list.",
+    q: 'What services do you offer?',
+    a: 'We offer hand car wash and detailing — express wash, premium polish, interior vacuuming, window cleaning, tyre shine, clay bar, and full interior & exterior packages. See Services & Pricing for the full list.',
   },
   {
-    q: "Do I need to book in advance?",
-    a: "Walk-ins are always welcome — we're open 7 days a week, 9am–5pm. However, for detailing packages we recommend booking online in advance to secure your preferred time slot, especially on weekends.",
+    q: 'Do I need to book in advance?',
+    a: "Walk-ins welcome, 7 days a week 9am–5pm. We recommend booking detailing online for weekends and peak times so you get your preferred slot.",
   },
   {
-    q: "Do you use eco-safe products?",
-    a: "Yes — we exclusively use eco-safe, car-safe, biodegradable products that are gentle on your vehicle's paint and safe for the environment. All our wash water is managed responsibly on-site.",
+    q: 'Do you use eco-safe products?',
+    a: "Yes. We use biodegradable, car-safe formulas that are gentle on paint and managed responsibly on-site.",
   },
   {
-    q: "Is the complimentary coffee really free?",
-    a: "Absolutely! Complimentary takeaway coffee is included on selected service packages (look for the coffee icon on the pricing cards). Drop your car off, grab your coffee, and relax while we do the work.",
+    q: 'Is the complimentary coffee really free?',
+    a: 'Yes — on selected packages (look for the coffee icon on pricing). Drop off your car, grab your coffee, and relax while we work.',
   },
   {
-    q: "What vehicles do you service?",
-    a: "We service all vehicle types — hatchbacks, sedans, SUVs (5-seater and 7-seater), utes, and vans. Pricing is based on vehicle size, so larger vehicles may have a slightly higher price for the same package.",
+    q: 'What vehicles do you service?',
+    a: 'Hatchbacks, sedans, SUVs (5- and 7-seater), utes, and vans. Price varies by vehicle size.',
   },
   {
-    q: "What payment methods do you accept?",
-    a: "We accept all major credit and debit cards, Apple Pay, Google Pay, and cash. Online bookings can be paid securely through our portal.",
+    q: 'What payment methods do you accept?',
+    a: 'Card, Apple Pay, Google Pay, and cash. Online bookings are paid securely through our portal.',
   },
   {
-    q: "Where are you located?",
-    a: "We're located in West Pennant Hills, NSW — conveniently next to the local shopping village so you can grab a coffee or run errands while we look after your car. Exact address details are available on the contact section below.",
+    q: 'Where are you located?',
+    a: '16/35 Coonara Avenue, West Pennant Hills NSW 2125 — next to the local shopping village.',
   },
 ];
 
-function ChevronIcon({ open }) {
+function FAQEntry({ item, index, isOpen, onToggle }) {
   return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`faq-chevron${open ? ' faq-chevron--open' : ''}`}
-      aria-hidden="true"
-    >
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  );
-}
-
-function FAQItem({ item, isOpen, onToggle, index }) {
-  return (
-    <div className={`faq-item${isOpen ? ' faq-item--open' : ''}`}>
+    <div className={`faq-entry${isOpen ? ' faq-entry--open' : ''}`}>
       <button
         type="button"
-        className="faq-trigger"
+        className="faq-entry-trigger"
         aria-expanded={isOpen}
-        aria-controls={`faq-body-${index}`}
+        aria-controls={`faq-panel-${index}`}
         id={`faq-trigger-${index}`}
         onClick={onToggle}
       >
-        <span className="faq-q">{item.q}</span>
-        <span className="faq-icon">
-          <ChevronIcon open={isOpen} />
-        </span>
+        <span className="faq-entry-q">{item.q}</span>
+        <span className="faq-entry-toggle" aria-hidden="true" />
       </button>
       <div
-        id={`faq-body-${index}`}
+        id={`faq-panel-${index}`}
         role="region"
         aria-labelledby={`faq-trigger-${index}`}
-        className="faq-body"
-        style={{ '--faq-max-h': isOpen ? '400px' : '0px' }}
+        className="faq-entry-panel"
+        style={{ '--faq-panel-h': isOpen ? '320px' : '0px' }}
       >
-        <p className="faq-a">{item.a}</p>
+        <div className="faq-entry-panel-inner">
+          <p>{item.a}</p>
+        </div>
       </div>
     </div>
   );
 }
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openSet, setOpenSet] = useState(() => new Set([0]));
 
-  const toggle = (i) => setOpenIndex(prev => (prev === i ? null : i));
+  const toggle = (index) => {
+    setOpenSet((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) next.delete(index);
+      else next.add(index);
+      return next;
+    });
+  };
 
   return (
-    <section className="sec faq-section" id="faq" aria-label="Frequently asked questions">
-      <div className="faq-inner">
-        <div className="faq-header">
-          <div className="lbl">Got Questions?</div>
-          <h2>Frequently Asked Questions</h2>
-          <p className="sub faq-sub">
-            Everything you need to know about our services, booking, and what to expect.
+    <section className="sec faq-section sec-alt-cream" id="faq" aria-labelledby="faq-heading">
+      <div className="faq-shell">
+        <aside className="faq-intro">
+          <p className="lbl">Got questions?</p>
+          <h2 id="faq-heading" className="faq-heading">
+            Answers before<br />you visit
+          </h2>
+          <p className="faq-intro-text">
+            Booking, services, and what to expect — everything in one place.
           </p>
-        </div>
+          <p className="faq-intro-hint">
+            <a href="#contact" className="faq-intro-link" onClick={scrollToContactSection}>
+              Contact us
+            </a>{' '}
+            if you need more help.
+          </p>
+        </aside>
 
-        <div className="faq-list" role="list">
+        <div className="faq-accordion">
           {FAQS.map((item, i) => (
-            <FAQItem
-              key={i}
+            <FAQEntry
+              key={item.q}
               item={item}
               index={i}
-              isOpen={openIndex === i}
+              isOpen={openSet.has(i)}
               onToggle={() => toggle(i)}
             />
           ))}
         </div>
-
-        <p className="faq-cta-line">
-          Still have questions?{' '}
-          <a href="#contact" className="faq-cta-link">
-            Send us a quick message
-          </a>
-          {' '}or{' '}
-          <a href="tel:+61291234567" className="faq-cta-link">
-            call us directly
-          </a>.
-        </p>
       </div>
     </section>
   );

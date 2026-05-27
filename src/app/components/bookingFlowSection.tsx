@@ -1,5 +1,6 @@
 import type { ComponentType, CSSProperties, ReactNode } from 'react';
-import { HEADING_FONT_FAMILY } from '../lib/branding';
+import { Check } from 'lucide-react';
+import { headingFontStyle } from '../lib/branding';
 import { cn } from './ui/utils';
 
 /** Shared palette — Home, Profile, Service history, Branch selection */
@@ -86,6 +87,60 @@ export function BookingConfirmationBlock({
   );
 }
 
+const BOOKING_FLOW_STEPS = ['Vehicle', 'Details', 'Package'] as const;
+
+/** Simple 1–2–3 progress row for vehicle & service selection. */
+export function BookingStepIndicator({ currentStep }: { currentStep: 1 | 2 | 3 }) {
+  return (
+    <nav aria-label="Booking progress" className="flex items-start justify-center">
+      {BOOKING_FLOW_STEPS.map((label, index) => {
+        const step = (index + 1) as 1 | 2 | 3;
+        const isComplete = step < currentStep;
+        const isCurrent = step === currentStep;
+
+        return (
+          <div key={label} className="flex items-start">
+            {index > 0 ? (
+              <div
+                className="mx-2 mt-[18px] h-0.5 w-8 shrink-0 rounded-full sm:w-12"
+                style={{
+                  background:
+                    step <= currentStep ? 'rgba(12, 29, 58, 0.55)' : 'rgba(12, 29, 58, 0.12)',
+                }}
+                aria-hidden
+              />
+            ) : null}
+            <div className="flex min-w-[4.75rem] flex-col items-center gap-1.5 sm:min-w-[5.25rem]">
+              <span
+                className={cn(
+                  'flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums transition-colors',
+                  isCurrent ? 'ring-2 ring-offset-2' : '',
+                )}
+                style={{
+                  background: isComplete || isCurrent ? BOOKING_NAVY : BOOKING_NAVY_TINT,
+                  color: isComplete || isCurrent ? '#fff' : BOOKING_NAVY_MID,
+                  ...(isCurrent ? { boxShadow: '0 0 0 2px rgba(201,168,76,0.45)' } : {}),
+                }}
+                aria-current={isCurrent ? 'step' : undefined}
+              >
+                {isComplete ? <Check className="size-4" strokeWidth={3} aria-hidden /> : step}
+              </span>
+              <span
+                className={cn(
+                  'text-center text-[10px] font-semibold uppercase tracking-wider',
+                  isCurrent ? 'text-gray-800' : 'text-gray-400',
+                )}
+              >
+                {label}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </nav>
+  );
+}
+
 /** Section shell — white card, navy left accent, Bebas Neue title */
 export function BookingFlowSection({
   icon: Icon,
@@ -96,6 +151,7 @@ export function BookingFlowSection({
   children,
   rootClassName,
   bodyClassName,
+  titleClassName,
 }: {
   icon: ComponentType<{ className?: string; style?: CSSProperties }>;
   title: string;
@@ -107,22 +163,15 @@ export function BookingFlowSection({
   children: ReactNode;
   rootClassName?: string;
   bodyClassName?: string;
+  /** Optional override for the section title (e.g. lighter Bebas Neue weight). */
+  titleClassName?: string;
 }) {
   return (
     <div className={cn('bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden', rootClassName)}>
       <div
-        className="px-5 sm:px-6 py-4 flex items-center gap-3 border-b border-gray-100"
+        className="relative px-5 sm:px-6 py-4 flex items-center gap-3 border-b border-gray-100"
         style={{ borderLeftWidth: 4, borderLeftColor: BOOKING_NAVY, borderLeftStyle: 'solid' }}
       >
-        {step != null ? (
-          <span
-            className="flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-bold tabular-nums"
-            style={{ background: BOOKING_NAVY, color: '#fff', boxShadow: '0 0 0 2px rgba(201,168,76,0.45)' }}
-            aria-label={`Step ${step}`}
-          >
-            {step}
-          </span>
-        ) : null}
         <span
           className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
           style={{ background: BOOKING_NAVY_TINT }}
@@ -130,11 +179,20 @@ export function BookingFlowSection({
           <Icon className="w-4 h-4" style={{ color: BOOKING_NAVY }} />
         </span>
         <h2
-          className="min-w-0 flex-1 font-semibold text-gray-900"
-          style={{ fontFamily: HEADING_FONT_FAMILY, color: BOOKING_NAVY }}
+          className={cn('min-w-0 flex-1 text-xl font-normal tracking-[0.04em]', titleClassName)}
+          style={{ ...headingFontStyle, color: BOOKING_NAVY }}
         >
           {title}
         </h2>
+        {step != null ? (
+          <span
+            className="pointer-events-none absolute left-1/2 top-1/2 inline-flex min-w-[4.25rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full px-2.5 py-0.5 text-center text-[11px] font-semibold tabular-nums tracking-wide"
+            style={{ background: 'rgba(12, 29, 58, 0.14)', color: BOOKING_NAVY }}
+            aria-label={`Step ${step}`}
+          >
+            Step {step}
+          </span>
+        ) : null}
         {badge || headerTrailing ? (
           <div className="flex shrink-0 items-center gap-2">
             {badge ? (

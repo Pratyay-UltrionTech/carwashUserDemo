@@ -4,7 +4,7 @@ import './CoffeePromise.css';
 
 const CoffeePromise = () => {
   return (
-    <section className="sec vsec">
+    <section className="sec vsec sec-alt-cream">
       <div className="lbl" style={{ textAlign: 'center' }}>Included With Selected Wash</div>
       <h2 style={{ textAlign: 'center' }}>The Lumi Coffee Promise</h2>
       <p className="sub" style={{ margin: '0 auto', textAlign: 'center' }}>
@@ -15,7 +15,7 @@ const CoffeePromise = () => {
         <div className="vct">
           <div className="vct-head">
             <span className="vct-coffee-icon">
-              <CoffeeIcon size={28} />
+              <CoffeeIcon framed frameSize="lg" />
             </span>
             <div className="vct-lbl">COMPLIMENTARY</div>
           </div>

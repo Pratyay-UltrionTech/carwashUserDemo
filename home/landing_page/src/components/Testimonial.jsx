@@ -133,7 +133,7 @@ const Testimonial = () => {
 
   return (
     <section
-      className="sec tsec"
+      className="sec tsec sec-alt-white"
       aria-roledescription="carousel"
       aria-label="Customer testimonials"
       onMouseEnter={() => setIsPaused(true)}

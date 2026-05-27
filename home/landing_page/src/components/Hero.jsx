@@ -6,6 +6,7 @@ import { absoluteAssetUrl, getSiteOrigin } from '../seo/siteConfig';
 import { BRAND_NAME } from '../../../../src/app/lib/branding';
 import { API_BASE } from '../../../../src/app/lib/apiBase';
 import { BRAND_PHONE } from '../config/brand';
+import { scrollToLandingSection } from '../utils/scrollToContact';
 import './Hero.css';
 
 /* ── Inline SVG icons (no external dep) ── */
@@ -23,10 +24,21 @@ function WhatsAppIcon() {
     </svg>
   );
 }
-function InquiryIcon() {
+function CalendarIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+  );
+}
+function EmailIcon() {
   return (
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-10 6L2 7" />
     </svg>
   );
 }
@@ -62,24 +74,12 @@ const Hero = () => {
   const telHref = `tel:+${contactPhone}`;
 
   const scrollToServices = (event) => {
-    event.preventDefault();
-    const section = document.getElementById('svc');
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    scrollToLandingSection('svc', event);
   };
 
   /* ── Scroll to contact/inquiry form with navbar offset ── */
   const scrollToInquiry = () => {
-    const section = document.getElementById('contact');
-    if (!section) return;
-    const navHeight = parseInt(
-      getComputedStyle(document.documentElement).getPropertyValue('--landing-nav-height') || '80',
-      10,
-    );
-    const offset = isNaN(navHeight) ? 80 : navHeight;
-    const top = section.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top, behavior: 'smooth' });
+    scrollToLandingSection('contact');
   };
 
   const origin = getSiteOrigin();
@@ -160,8 +160,9 @@ const Hero = () => {
             </span>
           </p>
           <div className="hbtns">
-            <a href="#/login" className="bg" aria-label="Book your car wash service — sign in">
-              Book Your Service
+            <a href="#/login" className="bg" aria-label="Book online — sign in">
+              <CalendarIcon />
+              Book Online
             </a>
             <a
               href="#svc"
@@ -197,10 +198,10 @@ const Hero = () => {
               type="button"
               className="h-action-btn h-action-btn--inquiry"
               onClick={scrollToInquiry}
-              aria-label="Quick inquiry — scroll to contact form"
+              aria-label="Email inquiry — scroll to contact form"
             >
-              <span className="h-action-icon"><InquiryIcon /></span>
-              <span className="h-action-label">Quick Inquiry</span>
+              <span className="h-action-icon"><EmailIcon /></span>
+              <span className="h-action-label">Email Inquiry</span>
             </button>
           </div>
 

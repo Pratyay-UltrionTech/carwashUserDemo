@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap');
 .landing-page,.landing-page *,.landing-page *::before,.landing-page *::after{box-sizing:border-box;margin:0;padding:0}
 .landing-page{
   --navy:#0c1d3a;--gold:#c9a84c;--gold2:#e8c97a;
@@ -16,6 +16,10 @@
 .landing-page a{text-decoration:none;color:inherit}
 
 .landing-page .sec{padding:4rem 2rem}
+
+/* Alternating light section bands (white ↔ cream) */
+.landing-page .sec-alt-white{background:#fff}
+.landing-page .sec-alt-cream{background:var(--cream)}
 .landing-page .lbl{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:.5rem}
 .landing-page .lbldk{color:#a8e6c5}
 .landing-page h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,3.4vw,2.85rem);font-weight:400;letter-spacing:.03em;color:var(--navy);line-height:1.05;margin-bottom:.75rem}

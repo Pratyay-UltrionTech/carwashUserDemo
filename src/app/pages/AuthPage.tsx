@@ -22,6 +22,9 @@ const BTN_BG = '#c9a84c';       // gold — matches landing page CTA
 const BTN_TEXT = '#0c1d3a';     // navy text on gold button
 const INDIGO = '#4F46E5';       // used for focus rings & links only
 
+/** Form panel titles — lighter weight & color (same typeface as page body) */
+const AUTH_PAGE_TITLE_CLASS = 'text-2xl font-medium text-gray-900 mb-1';
+
 /* ─── Brand panel ─── */
 function BrandPanel() {
   const trustPoints = [
@@ -219,7 +222,7 @@ function ForgotPasswordFlow({
     return (
       <div className="w-full max-w-sm mx-auto">
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-1">Reset your password</h2>
+          <h2 className={AUTH_PAGE_TITLE_CLASS}>Reset your password</h2>
         </div>
         <div className="space-y-4">
           <p className="text-sm text-gray-700">No account found with this email.</p>
@@ -253,7 +256,7 @@ function ForgotPasswordFlow({
   return (
     <div className="w-full max-w-sm mx-auto">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-1">Reset your password</h2>
+        <h2 className={AUTH_PAGE_TITLE_CLASS}>Reset your password</h2>
         <p className="text-sm text-gray-500">We'll send a verification code to your email.</p>
       </div>
 
@@ -556,7 +559,7 @@ export function AuthPage() {
                 <motion.div key="signup-otp" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
                   <div className="w-full max-w-sm mx-auto">
                     <div className="mb-8">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-1">Verify your email</h2>
+                      <h2 className={AUTH_PAGE_TITLE_CLASS}>Verify your email</h2>
                       <p className="text-sm text-gray-500">We sent a 6-digit code to confirm your email address.</p>
                     </div>
                     <div className="mb-5 rounded-xl px-4 py-3 text-sm" style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)', color: '#7a5c1e' }}>
@@ -632,7 +635,7 @@ export function AuthPage() {
 
                   {/* heading */}
                   <div className="mb-8">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                    <h1 className={AUTH_PAGE_TITLE_CLASS}>
                       {isLogin ? 'Welcome back' : 'Create your account'}
                     </h1>
                     <p className="text-sm text-gray-500">

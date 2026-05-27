@@ -1,17 +1,10 @@
 import React from 'react';
 import { BRAND_NAME, TAGLINE } from '../../../../src/app/lib/branding';
 import { AppLogo } from '../../../../src/app/components/AppLogo';
+import { scrollToLandingSection } from '../utils/scrollToContact';
 import './Navbar.css';
 
 const Navbar = () => {
-  const scrollToSection = (sectionId) => (event) => {
-    event.preventDefault();
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
     <nav className="navbar">
       <div className="nb">
@@ -25,10 +18,12 @@ const Navbar = () => {
       </div>
       <div className="nr">
         <ul className="nl">
-          <li><a href="#svc" onClick={scrollToSection('svc')}>Services</a></li>
-          <li><a href="#why" onClick={scrollToSection('why')}>Why Us</a></li>
-          <li><a href="#nbhd" onClick={scrollToSection('nbhd')}>Community</a></li>
-          <li><a href="#contact" onClick={scrollToSection('contact')}>Contact</a></li>
+          <li><a href="#svc" onClick={(e) => scrollToLandingSection('svc', e)}>Services</a></li>
+          <li><a href="#pricing" onClick={(e) => scrollToLandingSection('pricing', e)}>Pricing</a></li>
+          <li><a href="#why" onClick={(e) => scrollToLandingSection('why', e)}>Why Us</a></li>
+          <li><a href="#nbhd" onClick={(e) => scrollToLandingSection('nbhd', e)}>Community</a></li>
+          <li><a href="#faq" onClick={(e) => scrollToLandingSection('faq', e)}>FAQ</a></li>
+          <li><a href="#contact" onClick={(e) => scrollToLandingSection('contact', e)}>Contact</a></li>
         </ul>
         <a href="#/login" className="nbtn">Book Now</a>
       </div>

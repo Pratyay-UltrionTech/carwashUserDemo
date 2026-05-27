@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useAuth } from '../../../../src/app/context/AuthContext';
 import { API_BASE } from '../../../../src/app/lib/apiBase';
 import { normalizeLandingCatalogService } from '../../../../src/app/lib/catalogServiceNormalize';
-import { flattenStoredServiceLines, parseServiceDetailRows } from '../../../../src/app/lib/serviceDetailsFormat';
-import { LoyaltyCountedIcon } from '../../../../src/app/components/LoyaltyCountedIcon';
-import { TakeawayCoffeeIcon } from '../../../../src/app/components/TakeawayCoffeeIcon';
+import { ServicePricingCard } from '../../../../src/app/components/ServicePricingCard';
 import './PricingSection.css';
 
-/* ── Inline SVG icons (lucide-style) ── */
 function IconCar({ size = 16, color = 'currentColor' }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -32,28 +31,6 @@ function IconCarFront({ size = 16, color = 'currentColor' }) {
     </svg>
   );
 }
-function IconLayoutGrid({ size = 16, color = 'currentColor' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-      <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-    </svg>
-  );
-}
-function IconCheck({ size = 14, color = 'currentColor' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <polyline points="20 6 9 17 4 12"/>
-    </svg>
-  );
-}
-function IconX({ size = 14, color = '#d1d5db' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-    </svg>
-  );
-}
 function IconChevronLeft({ size = 20, color = 'currentColor' }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -68,134 +45,12 @@ function IconChevronRight({ size = 20, color = 'currentColor' }) {
     </svg>
   );
 }
-const NAVY     = '#0c1d3a';
-const NAVY_MID = '#1a3560';
-const NAVY_TINT = '#e8eef8';
-const GOLD     = '#c9a84c';
 
-function getVehicleIcon(type) {
-  const key = String(type || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (/suv|4wd|truck|pickup|van/.test(key)) return IconTruck;
-  if (/sedan|saloon/.test(key)) return IconCarFront;
-  return IconCar;
-}
-
-/* ── BookingFlowSection card shell — mirrors portal's BookingFlowSection ── */
-function FlowCard({ iconEl, title, badge, children, bodyClass = '' }) {
-  return (
-    <div className="ps-flow-card">
-      <div className="ps-flow-header">
-        <span className="ps-flow-icon">{iconEl}</span>
-        <span className="ps-flow-title">{title}</span>
-        {badge && <span className="ps-flow-badge">{badge}</span>}
-      </div>
-      <div className={`ps-flow-body${bodyClass ? ' ' + bodyClass : ''}`}>{children}</div>
-    </div>
-  );
-}
-
-/* ── Service detail rows — same as BranchSelection ServiceCard ── */
-function ServiceDetailRows({ descriptionPoints, excludedPoints }) {
-  const lines = flattenStoredServiceLines(descriptionPoints, excludedPoints ?? []);
-  const rows = parseServiceDetailRows(lines);
-  if (!rows.length) return null;
-  return (
-    <div className="ps-detail-rows">
-      {rows.map((row, i) => {
-        const prev = i > 0 ? rows[i - 1] : null;
-        if (row.kind === 'heading') {
-          return (
-            <div key={i} className={`ps-row-heading${i > 0 ? ' ps-row-heading--gap' : ''}`}>
-              <p className="ps-row-heading-text">{row.text}</p>
-            </div>
-          );
-        }
-        if (row.kind === 'included') {
-          return (
-            <div
-              key={i}
-              className={`ps-row-item${prev?.kind === 'excluded' ? ' ps-row-item--gap-included-after-excluded' : ''}`}
-            >
-              <span className="ps-row-check"><IconCheck size={16} color={NAVY} /></span>
-              <span className="ps-row-text">{row.text}</span>
-            </div>
-          );
-        }
-        return (
-          <div key={i} className={`ps-row-item${prev?.kind === 'included' || prev?.kind === 'heading' ? ' ps-row-item--gap' : ''}`}>
-            <span className="ps-row-check"><IconX size={16} /></span>
-            <span className="ps-row-text ps-row-text--excluded">{row.text}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-/* ── Service card — badges/icons only from admin catalog flags ── */
-function ServiceCard({ svc }) {
-  const showRecommended = svc.recommended === true;
-  const freeCoffeeCount = Math.max(0, Math.floor(Number(svc.freeCoffeeCount ?? 0)));
-  const hasCoffee = freeCoffeeCount > 0;
-  const hasLoyalty = svc.eligibleForLoyaltyPoints === true;
-  const price = Number(svc.price);
-  const priceDisplay = price % 1 === 0 ? `$${price.toFixed(0)}` : `$${price.toFixed(2)}`;
-  const durationMinutes = Number(svc.durationMinutes ?? 0);
-  const durationDisplay = durationMinutes > 0 ? `${durationMinutes} min` : '';
-
-  return (
-    <div className="ps-card">
-      {showRecommended ? (
-        <span className="ps-card-badge">Recommended</span>
-      ) : null}
-
-      <div className="ps-card-top">
-        <div className="ps-card-title-row">
-          <h3 className="ps-card-title">{svc.name}</h3>
-          {hasCoffee ? (
-            <span
-              className="ps-card-perk ps-card-perk--coffee"
-              title={`Complimentary takeaway coffee${freeCoffeeCount > 1 ? ` (×${freeCoffeeCount})` : ''}`}
-              aria-label="Complimentary takeaway coffee"
-            >
-              <TakeawayCoffeeIcon size={15} />
-            </span>
-          ) : null}
-          {hasLoyalty ? (
-            <span
-              className="ps-card-perk ps-card-perk--loyalty"
-              title="Loyalty counted"
-              aria-label="Loyalty counted"
-            >
-              <LoyaltyCountedIcon size={14} style={{ color: '#92650a' }} />
-            </span>
-          ) : null}
-        </div>
-        <div className="ps-card-price-col">
-          <p className="ps-card-price">{priceDisplay}</p>
-          {durationDisplay ? (
-            <p className="ps-card-duration">{durationDisplay}</p>
-          ) : null}
-        </div>
-      </div>
-
-      <div className="ps-card-body">
-        <ServiceDetailRows
-          descriptionPoints={svc.descriptionPoints}
-          excludedPoints={svc.excludedPoints}
-        />
-      </div>
-    </div>
-  );
-}
-
-const SLIDE_INTERVAL = 3500;
 const SCROLL_THRESHOLD = 8;
 
 function getCarouselVisibleCount() {
   if (typeof window === 'undefined') return 1;
-  if (window.matchMedia('(min-width: 1024px)').matches) return 3;
-  if (window.matchMedia('(min-width: 768px)').matches) return 2;
+  if (window.matchMedia('(min-width: 768px)').matches) return 3;
   return 1;
 }
 
@@ -204,34 +59,45 @@ function useCarouselVisibleCount() {
 
   useEffect(() => {
     const mqMd = window.matchMedia('(min-width: 768px)');
-    const mqLg = window.matchMedia('(min-width: 1024px)');
     const sync = () => setVisibleCount(getCarouselVisibleCount());
     sync();
     mqMd.addEventListener('change', sync);
-    mqLg.addEventListener('change', sync);
-    return () => {
-      mqMd.removeEventListener('change', sync);
-      mqLg.removeEventListener('change', sync);
-    };
+    return () => mqMd.removeEventListener('change', sync);
   }, []);
 
   return visibleCount;
 }
 
+const NAVY = '#0c1d3a';
+
+function getVehicleIcon(type) {
+  const key = String(type || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (/suv|4wd|truck|pickup|van/.test(key)) return IconTruck;
+  if (/sedan|saloon/.test(key)) return IconCarFront;
+  return IconCar;
+}
+
 const PricingSection = () => {
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
+
+  const handleBookNow = (e) => {
+    e.preventDefault();
+    signOut();
+    navigate('/home');
+  };
+
   const [vehicleBlocks, setVehicleBlocks] = useState([]);
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [activeTab, setActiveTab] = useState('wash');
+  const [selectedServiceId, setSelectedServiceId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const scrollerRef = useRef(null);
-  const autoSlideRef = useRef(null);
-  const pausedRef = useRef(false);
   const visibleCardCount = useCarouselVisibleCount();
 
-  /* ── Fetch ── */
   useEffect(() => {
     (async () => {
       try {
@@ -253,7 +119,6 @@ const PricingSection = () => {
     })();
   }, []);
 
-  /* ── Derive lists ── */
   const allServices = useMemo(() => {
     const block = vehicleBlocks.find((b) => b.vehicle_type === selectedVehicle);
     if (!block) return [];
@@ -263,15 +128,36 @@ const PricingSection = () => {
       .sort((a, b) => a.sequence - b.sequence);
   }, [vehicleBlocks, selectedVehicle]);
 
-  const washServices   = useMemo(() => allServices.filter((s) => (s.category?.toLowerCase() || '') !== 'detailing'), [allServices]);
-  const detailServices = useMemo(() => allServices.filter((s) => (s.category?.toLowerCase() || '') === 'detailing'), [allServices]);
-  const hasDetailing   = detailServices.length > 0;
+  const washServices = useMemo(
+    () => allServices.filter((s) => (s.category?.toLowerCase() || '') !== 'detailing'),
+    [allServices],
+  );
+  const detailServices = useMemo(
+    () => allServices.filter((s) => (s.category?.toLowerCase() || '') === 'detailing'),
+    [allServices],
+  );
+  const hasDetailing = detailServices.length > 0;
   const activeServices = activeTab === 'wash' ? washServices : detailServices;
 
-  /* ── Scroll helpers ── */
+  useEffect(() => {
+    if (!activeServices.length) {
+      setSelectedServiceId(null);
+      return;
+    }
+    setSelectedServiceId((prev) => {
+      if (prev && activeServices.some((s) => s.id === prev)) return prev;
+      const recommended = activeServices.find((s) => s.recommended === true);
+      return (recommended ?? activeServices[0]).id;
+    });
+  }, [activeServices]);
+
   const updateScrollBtns = useCallback(() => {
     const el = scrollerRef.current;
-    if (!el) { setCanScrollPrev(false); setCanScrollNext(false); return; }
+    if (!el) {
+      setCanScrollPrev(false);
+      setCanScrollNext(false);
+      return;
+    }
     setCanScrollPrev(el.scrollLeft > SCROLL_THRESHOLD);
     setCanScrollNext(el.scrollLeft < el.scrollWidth - el.clientWidth - SCROLL_THRESHOLD);
   }, []);
@@ -326,20 +212,9 @@ const PricingSection = () => {
     else if (activeTab === 'wash' && hasDetailing) setActiveTab('detail');
   }, [scrollToIdx, getCurrentIdx, getCards, maxScrollIdx, activeTab, hasDetailing]);
 
-  const canGoLeft  = canScrollPrev || activeTab === 'detail';
+  const canGoLeft = canScrollPrev || activeTab === 'detail';
   const canGoRight = canScrollNext || (activeTab === 'wash' && hasDetailing);
 
-  /* ── Auto-slide ── */
-  useEffect(() => {
-    clearInterval(autoSlideRef.current);
-    if (activeServices.length <= 1) return;
-    autoSlideRef.current = setInterval(() => {
-      if (!pausedRef.current) doScrollNext();
-    }, SLIDE_INTERVAL);
-    return () => clearInterval(autoSlideRef.current);
-  }, [activeServices.length, doScrollNext]);
-
-  /* ── Reset on tab / vehicle change ── */
   useEffect(() => {
     const el = scrollerRef.current;
     if (el) el.scrollLeft = 0;
@@ -348,7 +223,6 @@ const PricingSection = () => {
     requestAnimationFrame(() => requestAnimationFrame(updateScrollBtns));
   }, [activeTab, selectedVehicle, updateScrollBtns]);
 
-  /* ── ResizeObserver ── */
   useEffect(() => {
     let ro = null;
     const t = requestAnimationFrame(() => {
@@ -358,16 +232,16 @@ const PricingSection = () => {
       ro.observe(el);
       updateScrollBtns();
     });
-    return () => { cancelAnimationFrame(t); ro?.disconnect(); };
+    return () => {
+      cancelAnimationFrame(t);
+      ro?.disconnect();
+    };
   }, [activeTab, activeServices.length, selectedVehicle, visibleCardCount, updateScrollBtns]);
 
-  const selectedBodyLabel = vehicleBlocks.find((b) => b.vehicle_type === selectedVehicle)?.vehicle_type ?? '';
-
   return (
-    <section className="ps-section sec" id="pricing">
+    <section className="ps-section sec sec-alt-cream" id="pricing">
       <div className="ps-section-inner">
         <h2>Service Pricing</h2>
-        <p className="ps-section-subtitle">Select your vehicle and explore wash or detailing packages tailored for your car.</p>
 
         {loading && (
           <div className="ps-loading">
@@ -375,138 +249,123 @@ const PricingSection = () => {
             <span>Loading services…</span>
           </div>
         )}
+
         {error && (
           <div className="ps-error">
-            Unable to load live pricing. <a href="#/home">Book online</a> to see all services.
+            Unable to load live pricing. <a href="#/home" onClick={handleBookNow}>Book online</a> to see all services.
           </div>
         )}
 
         {!loading && !error && vehicleBlocks.length > 0 && (
-          <div className="ps-cards-wrap">
-
-          {/* ── Card 1: Vehicle selection ── */}
-          <FlowCard
-            iconEl={<IconCar size={16} color={NAVY} />}
-            title="Select your vehicle"
-            badge={selectedBodyLabel || undefined}
-          >
-            <p className="ps-body-label">Body type</p>
-            <div className="ps-vehicles" role="group" aria-label="Select vehicle type">
-              {vehicleBlocks.map((b) => {
-                const Icon = getVehicleIcon(b.vehicle_type);
-                const isSelected = selectedVehicle === b.vehicle_type;
-                return (
-                  <button
-                    key={b.vehicle_type}
-                    type="button"
-                    className={`ps-vcard${isSelected ? ' ps-vcard--active' : ''}`}
-                    onClick={() => { setSelectedVehicle(b.vehicle_type); setActiveTab('wash'); }}
-                    aria-pressed={isSelected}
-                  >
-                    <span className={`ps-vcard-icon${isSelected ? ' ps-vcard-icon--active' : ''}`}>
-                      <Icon size={20} color={isSelected ? NAVY : NAVY_MID} />
-                    </span>
-                    <span className="ps-vcard-label">{b.vehicle_type}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </FlowCard>
-
-          {/* ── Card 2: Service selection ── */}
-          <FlowCard
-            iconEl={<IconLayoutGrid size={16} color={NAVY} />}
-            title="Choose your package"
-            badge={activeTab === 'wash' ? 'Wash' : 'Detailing'}
-            bodyClass="ps-flow-body--overflow"
-          >
-            {/* Wash / Detailing toggle */}
-            {hasDetailing && (
-              <div className="ps-toggle-wrap">
-                <div className="ps-toggle" role="tablist" aria-label="Service category">
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeTab === 'wash'}
-                    className={`ps-toggle-btn${activeTab === 'wash' ? ' ps-toggle-btn--active' : ''}`}
-                    onClick={() => setActiveTab('wash')}
-                  >
-                    <span className="ps-toggle-btn-long">Wash service</span>
-                    <span className="ps-toggle-btn-short">Wash</span>
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={activeTab === 'detail'}
-                    className={`ps-toggle-btn${activeTab === 'detail' ? ' ps-toggle-btn--active' : ''}`}
-                    onClick={() => setActiveTab('detail')}
-                  >
-                    <span className="ps-toggle-btn-long">Detailing service</span>
-                    <span className="ps-toggle-btn-short">Detailing</span>
-                  </button>
+          <div className="ps-panel">
+            <div className="ps-panel-toolbar">
+              <div className="ps-toolbar-block ps-toolbar-block--vehicles">
+                <div className="ps-vehicles" role="group" aria-label="Select vehicle type">
+                  {vehicleBlocks.map((b) => {
+                    const Icon = getVehicleIcon(b.vehicle_type);
+                    const isSelected = selectedVehicle === b.vehicle_type;
+                    return (
+                      <button
+                        key={b.vehicle_type}
+                        type="button"
+                        className={`ps-vbtn${isSelected ? ' ps-vbtn--active' : ''}`}
+                        onClick={() => { setSelectedVehicle(b.vehicle_type); setActiveTab('wash'); }}
+                        aria-pressed={isSelected}
+                      >
+                        <Icon size={15} color={isSelected ? '#fff' : NAVY} />
+                        <span>{b.vehicle_type}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            )}
 
-            {/* Carousel */}
-            {activeServices.length > 0 ? (
-              <div
-                className="ps-carousel-wrap"
-                onMouseEnter={() => { pausedRef.current = true; }}
-                onMouseLeave={() => { pausedRef.current = false; }}
-              >
-                {/* Clip wrapper — same as portal's overflow-hidden rounded-lg */}
-                <div className="ps-clip">
-                  <div
-                    ref={scrollerRef}
-                    className="ps-scroller"
-                    onScroll={updateScrollBtns}
-                  >
-                    <div className="ps-track">
-                      {activeServices.map((svc) => (
-                        <div key={svc.id} className="ps-slide">
-                          <ServiceCard svc={svc} />
-                        </div>
-                      ))}
-                    </div>
+              {hasDetailing ? (
+                <div className="ps-toolbar-block ps-toolbar-block--tabs">
+                  <div className="ps-tabs" role="tablist" aria-label="Service category">
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeTab === 'wash'}
+                      className={`ps-tab${activeTab === 'wash' ? ' ps-tab--active' : ''}`}
+                      onClick={() => setActiveTab('wash')}
+                    >
+                      Wash
+                    </button>
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={activeTab === 'detail'}
+                      className={`ps-tab${activeTab === 'detail' ? ' ps-tab--active' : ''}`}
+                      onClick={() => setActiveTab('detail')}
+                    >
+                      Detailing
+                    </button>
                   </div>
                 </div>
+              ) : null}
+            </div>
 
-                {/* Floating arrows — outside clip, inside carousel-wrap */}
-                <button
-                  type="button"
-                  className={`ps-arrow ps-arrow--prev${!canGoLeft ? ' ps-arrow--disabled' : ''}`}
-                  onClick={doScrollPrev}
-                  disabled={!canGoLeft}
-                  aria-label="Previous services"
-                >
-                  <IconChevronLeft size={20} color={NAVY} />
-                </button>
-                <button
-                  type="button"
-                  className={`ps-arrow ps-arrow--next${!canGoRight ? ' ps-arrow--disabled' : ''}`}
-                  onClick={doScrollNext}
-                  disabled={!canGoRight}
-                  aria-label="Next services"
-                >
-                  <IconChevronRight size={20} color={NAVY} />
-                </button>
-              </div>
-            ) : (
-              <p className="ps-empty">
-                No {activeTab === 'wash' ? 'wash' : 'detailing'} services available for this vehicle type.
-              </p>
-            )}
+            <div className="ps-panel-body">
+              {activeServices.length > 0 ? (
+                <div className="ps-carousel-wrap">
+                  <button
+                    type="button"
+                    className={`ps-arrow ps-arrow--prev${!canGoLeft ? ' ps-arrow--disabled' : ''}`}
+                    onClick={doScrollPrev}
+                    disabled={!canGoLeft}
+                    aria-label="Previous services"
+                  >
+                    <IconChevronLeft size={20} color={NAVY} />
+                  </button>
+                  <div className="ps-clip">
+                    <div
+                      ref={scrollerRef}
+                      className="ps-scroller"
+                      onScroll={updateScrollBtns}
+                    >
+                      <div className="ps-track">
+                        {activeServices.map((svc) => (
+                          <div key={svc.id} className="ps-slide">
+                            <ServicePricingCard
+                              title={svc.name}
+                              price={svc.price}
+                              durationMinutes={svc.durationMinutes}
+                              descriptionPoints={svc.descriptionPoints}
+                              excludedPoints={svc.excludedPoints}
+                              recommended={svc.recommended === true}
+                              freeCoffeeCount={svc.freeCoffeeCount}
+                              eligibleForLoyaltyPoints={svc.eligibleForLoyaltyPoints === true}
+                              isSelected={selectedServiceId === svc.id}
+                              onClick={() => setSelectedServiceId(svc.id)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className={`ps-arrow ps-arrow--next${!canGoRight ? ' ps-arrow--disabled' : ''}`}
+                    onClick={doScrollNext}
+                    disabled={!canGoRight}
+                    aria-label="Next services"
+                  >
+                    <IconChevronRight size={20} color={NAVY} />
+                  </button>
+                </div>
+              ) : (
+                <p className="ps-empty">
+                  No {activeTab === 'wash' ? 'wash' : 'detailing'} services available for this vehicle type.
+                </p>
+              )}
+            </div>
 
             {activeServices.length > 0 ? (
-              <div className="ps-package-footer">
-                <a href="#/home" className="ps-book-btn">
-                  Book Now
-                </a>
+              <div className="ps-panel-footer">
+                <a href="#/home" className="ps-book-btn" onClick={handleBookNow}>Book Now</a>
               </div>
             ) : null}
-          </FlowCard>
-
           </div>
         )}
       </div>

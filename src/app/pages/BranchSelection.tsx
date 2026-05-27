@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, useRef, type CSSProperties } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
-import { Car, CarFront, Truck, Check, X, ChevronLeft, ChevronRight, LayoutGrid, MapPin } from 'lucide-react';
+import { Car, CarFront, Truck, Check, ChevronLeft, ChevronRight, LayoutGrid, MapPin } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useBooking } from '../context/BookingContext';
 import { useAuth } from '../context/AuthContext';
@@ -32,14 +32,12 @@ import {
   SelectValue,
 } from '../components/ui/select';
 import { cn } from '../components/ui/utils';
-import { flattenStoredServiceLines, parseServiceDetailRows } from '../lib/serviceDetailsFormat';
 import { addressMatchesAcceptedPins, normalizePinDigits } from '../lib/mobileVisitAddress';
 import { createEmptyAddressDetails, sanitizePostcode, validateRequiredAddress, withFullAddress } from '../lib/addressDetails';
 import { AddressDetailsFields } from '../components/AddressDetailsFields';
 import { BookingDisclaimerNotes } from '../components/BookingDisclaimerNotes';
+import { ServicePricingCard } from '../components/ServicePricingCard';
 import { HEADING_FONT_FAMILY } from '../lib/branding';
-import { LoyaltyCountedIcon } from '../components/LoyaltyCountedIcon';
-import { TakeawayCoffeeIcon } from '../components/TakeawayCoffeeIcon';
 
 type ServicePackage = {
   id: string;
@@ -78,6 +76,10 @@ const inp =
   'w-full px-4 py-3 border rounded-xl text-sm outline-none transition-all text-gray-900 placeholder:text-gray-400 placeholder:font-normal focus:ring-2 focus:border-transparent';
 
 const inpFocus = { '--tw-ring-color': NAVY } as CSSProperties;
+const VEHICLE_CARD_BG = '#e7edf6';
+const VEHICLE_CARD_BORDER = 'rgba(107, 125, 151, 0.5)';
+const VEHICLE_CARD_BG_SELECTED = '#c1d0e3';
+const VEHICLE_CARD_BORDER_SELECTED = 'rgba(0, 0, 0, 0.9)';
 
 // Services are now dynamically loaded and grouped from ALL_PACKAGES below
 
@@ -590,7 +592,7 @@ export function BranchSelection() {
         >
           <div className="mb-1">
             <h1
-              className="text-2xl font-bold"
+              className="text-2xl font-normal tracking-[0.03em]"
               style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
             >
               Vehicle &amp; service
@@ -747,7 +749,7 @@ export function BranchSelection() {
                           setAddVehicleTouched(false);
                           setContinueSaveError('');
                         }}
-                        className={`flex w-36 shrink-0 flex-col items-center justify-center p-3 sm:w-40 sm:p-4 rounded-xl border-2 transition-all duration-200 ${
+                        className={`flex w-36 shrink-0 flex-col items-center justify-center p-3 sm:w-40 sm:p-4 rounded-xl border transition-all duration-200 ${
                           isSelected
                             ? 'shadow-md'
                             : 'shadow-sm hover:shadow-md'
@@ -755,10 +757,10 @@ export function BranchSelection() {
                         style={
                           isSelected
                             ? {
-                                borderColor: NAVY,
-                                background: `linear-gradient(135deg, ${NAVY}14 0%, ${GOLD}14 100%)`,
+                                borderColor: VEHICLE_CARD_BORDER_SELECTED,
+                                background: VEHICLE_CARD_BG_SELECTED,
                               }
-                            : { borderColor: `${NAVY}2e`, background: `${NAVY_TINT}` }
+                            : { borderColor: VEHICLE_CARD_BORDER, background: VEHICLE_CARD_BG }
                         }
                       >
                         <span
@@ -787,16 +789,8 @@ export function BranchSelection() {
             </div>
           </BookingFlowSection>
 
-          <AnimatePresence>
-            {vehicleId ? (
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.28, ease: 'easeOut' }}
-              >
-                <BookingFlowSection step={2} icon={Car} title="Model & registration">
-                    {session ? (
+          <BookingFlowSection step={2} icon={Car} title="Model & registration">
+            {session ? (
                       <div className="flex flex-col gap-4">
                         {(() => {
                           const modelsForType = modelsForSelectedBodyStyle;
@@ -1050,27 +1044,16 @@ export function BranchSelection() {
                         </div>
                       </div>
                     )}
-                </BookingFlowSection>
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+          </BookingFlowSection>
 
-          <AnimatePresence>
-            {vehicleDetailsReady ? (
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.28, ease: 'easeOut' }}
-              >
-                <BookingFlowSection
-                  step={3}
-                  icon={LayoutGrid}
-                  title="Choose your package"
-                  badge={activeTab === 'wash' ? 'Wash' : 'Detailing'}
-                  rootClassName="overflow-visible"
-                  bodyClassName="overflow-visible"
-                >
+          <BookingFlowSection
+            step={3}
+            icon={LayoutGrid}
+            title="Choose your package"
+            badge={vehicleId ? (activeTab === 'wash' ? 'Wash' : 'Detailing') : undefined}
+            rootClassName="overflow-visible"
+            bodyClassName="overflow-visible"
+          >
                   <div className="space-y-6">
                     <div className="flex justify-center">
                       <div
@@ -1130,7 +1113,7 @@ export function BranchSelection() {
                               transition={{ duration: 0.24, ease: [0.4, 0, 0.2, 1] }}
                               ref={serviceScrollerRef}
                               onScroll={updateServiceScrollButtons}
-                              className={`overflow-x-auto overflow-y-visible px-1 pt-3 pb-2 snap-x snap-mandatory ${
+                              className={`overflow-x-auto overflow-y-visible px-1 pt-5 pb-2 snap-x snap-mandatory ${
                                 activeServiceList.length === 0 ? 'hidden' : ''
                               } [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
                             >
@@ -1139,12 +1122,12 @@ export function BranchSelection() {
                                   const isSelected = selectedPackageId === svc.id;
                                   return (
                                     <div key={svc.id} className="h-full min-w-0 snap-start">
-                                      <ServiceCard
+                                      <ServicePricingCard
                                         title={svc.name}
                                         price={svc.price}
+                                        duration={`${svc.durationMinutes} mins`}
                                         features={svc.features}
                                         excludedFeatures={svc.excludedFeatures}
-                                        duration={`${svc.durationMinutes} mins`}
                                         badge={svc.recommended ? 'Recommended' : undefined}
                                         freeCoffeeCount={svc.freeCoffeeCount}
                                         eligibleForLoyaltyPoints={svc.eligibleForLoyaltyPoints === true}
@@ -1206,10 +1189,7 @@ export function BranchSelection() {
                       </div>
                     </div>
                   </div>
-                </BookingFlowSection>
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+          </BookingFlowSection>
 
           {continueSaveError ? (
             <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 flex items-start gap-2">
@@ -1293,157 +1273,5 @@ function AddOnsSection() {
         );
       })}
     </div>
-  );
-}
-
-interface ServiceCardProps {
-  title: string;
-  price: number;
-  features: string[];
-  excludedFeatures: string[];
-  duration: string;
-  badge?: string;
-  freeCoffeeCount?: number;
-  eligibleForLoyaltyPoints?: boolean;
-  isSelected: boolean;
-  onClick: () => void;
-}
-
-function ServiceCard({
-  title,
-  price,
-  features,
-  excludedFeatures,
-  duration,
-  badge,
-  freeCoffeeCount = 0,
-  eligibleForLoyaltyPoints = false,
-  isSelected,
-  onClick,
-}: ServiceCardProps) {
-  const detailRows = useMemo(
-    () => parseServiceDetailRows(flattenStoredServiceLines(features, excludedFeatures)),
-    [features, excludedFeatures],
-  );
-
-  const showRecommended = Boolean(badge);
-  const priceDisplay =
-    Number(price) % 1 === 0 ? `$${Number(price).toFixed(0)}` : `$${Number(price).toFixed(2)}`;
-  const durationDisplay = duration.replace(/^duration:\s*/i, '').replace(/\s*mins?\s*$/i, ' min').trim();
-
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        'group relative flex h-full min-h-0 w-full min-w-0 flex-col overflow-visible rounded-2xl bg-white text-left transition-all duration-300 break-words',
-        isSelected
-          ? 'border-2 shadow-md ring-1 ring-[#0c1d3a]/10'
-          : 'border border-gray-200 shadow-sm hover:border-gray-300',
-        'px-3 pb-4 pt-4 sm:px-5 sm:pb-5 sm:pt-5',
-      )}
-      style={isSelected ? { borderColor: NAVY } : undefined}
-    >
-      {showRecommended ? (
-        <span
-          className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full border-2 border-white px-3 py-0.5 text-xs font-semibold uppercase tracking-wide shadow-sm sm:text-sm"
-          style={{ background: NAVY_TINT, color: NAVY }}
-        >
-          {badge}
-        </span>
-      ) : null}
-
-      {/* Title (left) · price, duration, perks (right) */}
-      <div className="mb-3 flex items-start justify-between gap-3 sm:mb-4">
-        <h3
-          className="min-w-0 flex-1 pr-2 text-left text-sm font-normal uppercase leading-snug tracking-[0.03em] sm:text-base md:text-lg"
-          style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
-        >
-          {title}
-        </h3>
-        <div className="flex shrink-0 flex-col items-end text-right leading-none">
-          <p
-            className="text-xl font-normal tracking-[0.02em] sm:text-2xl"
-            style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
-          >
-            {priceDisplay}
-          </p>
-          {durationDisplay ? (
-            <p className="mt-1 text-sm font-normal text-gray-500">{durationDisplay}</p>
-          ) : null}
-          {freeCoffeeCount > 0 || eligibleForLoyaltyPoints ? (
-            <div className="mt-2 flex items-center justify-end gap-1.5">
-              {freeCoffeeCount > 0 ? (
-                <span
-                  className="inline-flex size-6 items-center justify-center rounded-full border border-amber-200/80 bg-amber-50 text-amber-900 shadow-sm"
-                  title="Complimentary takeaway coffee"
-                  aria-label="Complimentary takeaway coffee"
-                >
-                  <TakeawayCoffeeIcon size={12} />
-                </span>
-              ) : null}
-              {eligibleForLoyaltyPoints ? (
-                <span
-                  className="inline-flex size-6 items-center justify-center rounded-full border shadow-sm"
-                  style={{
-                    background: 'rgba(201,168,76,0.12)',
-                    color: '#92650a',
-                    borderColor: 'rgba(201,168,76,0.35)',
-                  }}
-                  title="Loyalty counted"
-                  aria-label="Loyalty counted"
-                >
-                  <LoyaltyCountedIcon size={12} strokeWidth={2} />
-                </span>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-      </div>
-
-      {/* Service details: # heading, * / + included, - excluded (legacy arrays merged) */}
-      <div className="flex w-full flex-grow flex-col gap-2.5">
-        {detailRows.map((row, i) => {
-          const prev = i > 0 ? detailRows[i - 1] : null;
-          if (row.kind === 'heading') {
-            return (
-              <div
-                key={`d-${i}-${row.text}`}
-                className={cn('w-full scroll-mt-1', i > 0 && 'mt-3 pt-2')}
-              >
-                <p
-                  className="text-left text-sm font-normal leading-snug tracking-[0.03em] text-gray-900 sm:text-base"
-                  style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
-                >
-                  {row.text}
-                </p>
-              </div>
-            );
-          }
-          if (row.kind === 'included') {
-            const gapBefore = prev?.kind === 'excluded' ? 'mt-2 pt-1' : '';
-            return (
-              <div key={`d-${i}-${row.text}`} className={cn('flex w-full items-start gap-2', gapBefore)}>
-                <Check className="mt-0.5 h-4 w-4 shrink-0" strokeWidth={3} aria-hidden style={{ color: NAVY }} />
-                <span className="min-w-0 flex-1 break-words text-sm font-medium leading-relaxed text-gray-700">
-                  {row.text}
-                </span>
-              </div>
-            );
-          }
-          const gapBefore =
-            prev?.kind === 'included' || prev?.kind === 'heading' ? 'mt-1' : '';
-          return (
-            <div key={`d-${i}-${row.text}`} className={cn('flex w-full items-start gap-2', gapBefore)}>
-              <X className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" strokeWidth={2.5} aria-hidden />
-              <span className="min-w-0 flex-1 break-words text-sm font-medium leading-relaxed text-gray-400">
-                {row.text}
-                <span className="sr-only"> — not included in this package</span>
-              </span>
-            </div>
-          );
-        })}
-      </div>
-    </button>
   );
 }

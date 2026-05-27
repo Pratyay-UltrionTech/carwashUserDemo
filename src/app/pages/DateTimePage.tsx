@@ -26,7 +26,7 @@ import {
   type MobileSnapshot,
 } from '../lib/mobilePublicBridge';
 import { resolveOperatingCloseMinutes } from '../lib/operatingHours';
-import { HEADING_FONT_FAMILY } from '../lib/branding';
+import { headingFontStyle } from '../lib/branding';
 /** Parse "HH:MM" to minutes — same logic as adminPortalBridge. */
 function parseHHMMToMinutes(t: string): number {
   const [h, m] = t.split(':').map((x) => parseInt(x, 10));
@@ -339,8 +339,8 @@ export function DateTimePage() {
         <div className="max-w-4xl mx-auto flex items-center gap-3 px-4 py-4">
           <div>
             <h1
-              className="text-xl font-bold text-gray-900"
-              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
+              className="text-2xl font-normal leading-tight tracking-[0.04em] text-gray-900"
+              style={{ ...headingFontStyle, color: NAVY }}
             >
               Date &amp; time
             </h1>
@@ -407,12 +407,16 @@ export function DateTimePage() {
                         className={cn(
                           'relative h-11 rounded-lg border bg-white px-1 text-center transition-all duration-150 sm:h-12',
                           selected
-                            ? 'border-2 shadow-sm ring-1 ring-[#0c1d3a]/10'
+                            ? 'border shadow-sm text-[#0c1d3a]'
                             : cell.disabled
                               ? 'cursor-not-allowed border-gray-200 bg-gray-50 text-gray-400 opacity-60'
                               : 'border-gray-200 hover:-translate-y-px hover:border-gray-300 hover:shadow-sm',
                         )}
-                        style={selected ? { borderColor: NAVY, background: NAVY_TINT } : undefined}
+                        style={
+                          selected
+                            ? { borderColor: 'rgba(0, 0, 0, 0.92)', background: '#c1d0e3' }
+                            : undefined
+                        }
                       >
                         <div className="flex h-full flex-col items-center justify-center leading-none">
                           <span className={cn('tabular-nums text-sm font-medium', selected ? 'text-[#0c1d3a]' : 'text-gray-800')}>
@@ -486,20 +490,20 @@ export function DateTimePage() {
                               setSelectedEndTime(slot.endTime ?? null);
                             }}
                             className={cn(
-                              'relative overflow-hidden rounded-xl border-2 py-2.5 px-2 text-center text-xs font-semibold tabular-nums transition-all sm:px-3 sm:text-sm',
+                              'relative overflow-hidden rounded-xl border py-2.5 px-2 text-center text-xs tabular-nums transition-all sm:px-3 sm:text-sm',
                               isOriginal
-                                ? 'border-emerald-500 bg-emerald-50 text-emerald-900'
+                                ? 'border border-emerald-500 bg-emerald-50 font-semibold text-emerald-900'
                                 : selected
-                                  ? 'shadow-md ring-1 ring-[#0c1d3a]/20'
+                                  ? 'border font-medium shadow-sm text-[#0c1d3a]'
                                   : state === 'closed'
-                                    ? 'cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
+                                    ? 'border font-semibold cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400'
                                     : state === 'full'
-                                      ? 'cursor-not-allowed border-amber-300 bg-amber-50 text-amber-950'
-                                      : 'border-gray-200 bg-white text-gray-900 hover:border-gray-300',
+                                      ? 'border font-semibold cursor-not-allowed border-amber-300 bg-amber-50 text-amber-950'
+                                      : 'border border-gray-200 bg-white font-semibold text-gray-900 hover:border-gray-300',
                             )}
                             style={
                               selected && !isOriginal
-                                ? { borderColor: NAVY, background: NAVY, color: '#fff' }
+                                ? { borderColor: 'rgba(0, 0, 0, 0.92)', background: '#c1d0e3' }
                                 : undefined
                             }
                           >
@@ -511,15 +515,6 @@ export function DateTimePage() {
                                 <svg width="100%" height="100%" viewBox="0 0 60 40" preserveAspectRatio="none">
                                   <line x1="4" y1="4" x2="56" y2="36" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
                                   <line x1="56" y1="4" x2="4" y2="36" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />
-                                </svg>
-                              </span>
-                            ) : null}
-
-                            {/* Selected: checkmark badge */}
-                            {selected && !isOriginal ? (
-                              <span className="pointer-events-none absolute right-1 top-1" aria-hidden>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                  <polyline points="20 6 9 17 4 12" />
                                 </svg>
                               </span>
                             ) : null}
@@ -562,13 +557,13 @@ export function DateTimePage() {
                       Closed
                     </span>
 
-                    {/* Selected — solid navy + checkmark */}
+                    {/* Selected — navy border + tint (matches date picker) */}
                     <span className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1 text-[11px] font-medium text-gray-700">
-                      <span className="relative flex h-3 w-3 shrink-0 items-center justify-center rounded-sm" style={{ background: NAVY }} aria-hidden>
-                        <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      </span>
+                      <span
+                        className="h-3 w-3 shrink-0 rounded-sm border"
+                        style={{ borderColor: 'rgba(0, 0, 0, 0.92)', background: '#c1d0e3' }}
+                        aria-hidden
+                      />
                       Selected
                     </span>
                   </div>

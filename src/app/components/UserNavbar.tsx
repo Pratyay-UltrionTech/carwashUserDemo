@@ -11,6 +11,7 @@ import {
   TAGLINE,
   landingNavBrandNameStyle,
   landingNavTaglineStyle,
+  landingNavTaglineLightColor,
 } from '../lib/branding';
 import { AppLogo } from './AppLogo';
 
@@ -107,8 +108,8 @@ export function UserNavbar() {
                   {BRAND_NAME}
                 </p>
                 <p
-                  className="hidden uppercase md:block"
-                  style={{ ...landingNavTaglineStyle, color: GOLD2 }}
+                  className="hidden md:block"
+                  style={{ ...landingNavTaglineStyle, color: landingNavTaglineLightColor }}
                 >
                   {TAGLINE}
                 </p>

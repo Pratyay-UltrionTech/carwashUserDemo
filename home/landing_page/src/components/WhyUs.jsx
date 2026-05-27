@@ -5,7 +5,7 @@ import './WhyUs.css';
 
 const WhyUs = () => {
   return (
-    <section className="sec why-layout" style={{ background: 'var(--cream)' }} id="why">
+    <section className="sec why-layout sec-alt-white" id="why">
       <div className="wi-wrap">
         <img className="wi" src={carImg} alt="Detailing" />
         <div className="wbadge">

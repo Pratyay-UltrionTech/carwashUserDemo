@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { useNavigate } from 'react-router';
 import {
-  ArrowLeft,
   CreditCard,
   Apple,
   Wallet,
@@ -41,7 +40,7 @@ import { sanitizePostcode } from '../lib/addressDetails';
 import { AuStateSelect } from '../components/AuStateSelect';
 import { cn } from '../components/ui/utils';
 import { API_BASE } from '../lib/apiBase';
-import { HEADING_FONT_FAMILY } from '../lib/branding';
+import { headingFontStyle } from '../lib/branding';
 import {
   BOOKING_NAVY as NAVY,
   BOOKING_NAVY_TINT as NAVY_TINT,
@@ -742,20 +741,12 @@ export function PaymentPage() {
         style={{ background: `linear-gradient(90deg, ${GOLD} 0%, #e8c97a 50%, transparent 100%)` }}
       />
 
-      <header className="sticky top-0 z-40 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-40 border-b border-gray-100/80 bg-white/95 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto flex items-center gap-3 px-4 py-4">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 transition hover:border-gray-300 hover:bg-gray-50"
-            aria-label="Back"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </button>
           <div>
             <h1
-              className="text-xl font-bold text-gray-900"
-              style={{ fontFamily: HEADING_FONT_FAMILY, color: NAVY }}
+              className="text-2xl font-normal leading-tight tracking-[0.04em] text-gray-900"
+              style={{ ...headingFontStyle, color: NAVY }}
             >
               Payment
             </h1>

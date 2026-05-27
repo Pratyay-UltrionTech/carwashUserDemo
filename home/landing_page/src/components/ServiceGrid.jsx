@@ -50,14 +50,14 @@ const ServiceGrid = () => {
           <p>
             Relax with a complimentary coffee
             <span className="strip-coffee-icon-inline" aria-hidden="true">
-              <CoffeeIcon size={20} />
+              <CoffeeIcon framed frameSize="inline" />
             </span>
             {' '}— available on selected services.
           </p>
         </div>
       </div>
 
-      <section className="sec service-section" id="svc" style={{ background: '#fff' }}>
+      <section className="sec service-section sec-alt-white" id="svc">
         <div className="lbl">Our Services</div>
         <h2>Choose Your Level of Luxury</h2>
         <p className="sub">Done entirely by hand — no machine brushes, no shortcuts. Skilled care and premium eco-friendly products every time.</p>

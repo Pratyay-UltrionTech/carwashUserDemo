@@ -67,22 +67,19 @@ const ContactForm = () => {
             </div>
           </div>
 
-          <div className="cir-duo">
-            <div className="cir">
-              <div className="cic">🕐</div>
-              <div>
-                <div className="cil">Hours</div>
-                <div className="civ">Monday – Sunday: 9:00am – 5:00pm</div>
-              </div>
+          <div className="cir">
+            <div className="cic">🕐</div>
+            <div>
+              <div className="cil">Hours</div>
+              <div className="civ">Monday – Sunday: 9:00am – 5:00pm</div>
             </div>
-            <div className="cir">
-              <div className="cic cic--line" aria-hidden="true">
-                <CoffeeIcon size={17} />
-              </div>
-              <div>
-                <div className="cil">Free Coffee</div>
-                <div className="civ">Included with selected wash</div>
-              </div>
+          </div>
+
+          <div className="cir">
+            <CoffeeIcon size={20} framed frameSize="md" />
+            <div>
+              <div className="cil">Free Coffee</div>
+              <div className="civ">Included with selected wash</div>
             </div>
           </div>
         </div>

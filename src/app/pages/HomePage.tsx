@@ -31,6 +31,22 @@ const GOLD      = '#c9a84c';
 const BTN_BG    = '#c9a84c';
 const BTN_TEXT  = '#0c1d3a';
 
+/** Booking tiles — content-sized rectangle; shared padding & vertical rhythm. */
+const BOOKING_TILE = 'flex w-full flex-col overflow-hidden rounded-2xl border-2';
+const BOOKING_TILE_BODY = 'flex min-h-0 flex-1 flex-col gap-3 px-5 py-4';
+const BOOKING_LINE_GAP = 'space-y-3';
+
+const BRANCH_PERKS = [
+  'Trained detailing specialists',
+  'Walk-in friendly',
+  'Complimentary coffee on select services',
+] as const;
+
+const MOBILE_PIN_HIGHLIGHTS = [
+  { icon: Clock, text: 'Flexible scheduling' },
+  { icon: Sparkles, text: 'Premium finish' },
+] as const;
+
 const FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1680533749371-59c49b31fd74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080';
 
@@ -431,14 +447,18 @@ export function HomePage() {
             <p className={homePageType.sectionSubtitle}>Choose how you'd like your car serviced today.</p>
           </div>
 
-          {/* ── Two equal-height side-by-side tiles (h-full so both fill the grid row) ── */}
-          <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2 sm:items-stretch">
+          {/* ── Same-height rectangles side by side (PIN step); mobile grows on address step ── */}
+          <div
+            className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${
+              mobileCardStep === 'pin' ? 'items-stretch' : 'items-start'
+            }`}
+          >
 
             {/* ── Tile 1: Coonara Wash (branch) ── */}
             {BRANCHES.length === 0 ? (
               <div
-                className="rounded-2xl border-2 border-dashed p-6 flex flex-col items-center justify-center text-center"
-                style={{ borderColor: NAVY_TINT, minHeight: 320 }}
+                className={`${BOOKING_TILE} border-dashed p-6 items-center justify-center text-center`}
+                style={{ borderColor: NAVY_TINT }}
               >
                 <Building2 className="w-8 h-8 mb-3 opacity-30" style={{ color: NAVY }} />
                 <p className={homePageType.emptyState}>No locations available at this time.</p>
@@ -453,74 +473,69 @@ export function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.06 }}
                   whileHover={{ y: -3 }}
-                  className="group flex h-full min-h-0 flex-col text-left rounded-2xl border-2 overflow-hidden transition-all duration-200 hover:shadow-xl w-full"
+                  className={`group ${BOOKING_TILE} h-full text-left transition-all duration-200 hover:shadow-xl`}
                   style={{ background: NAVY, borderColor: NAVY, boxShadow: '0 4px 20px rgba(12,29,58,0.18)' }}
                 >
-                  <div className="flex flex-col px-5 pt-5 pb-3">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="w-10 h-10 rounded-xl flex items-center justify-center"
+                  <div className={BOOKING_TILE_BODY}>
+                    <div className="flex items-center justify-between">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl"
                         style={{ background: 'rgba(201,168,76,0.2)' }}>
-                        <Building2 className="w-5 h-5" style={{ color: GOLD }} />
+                        <Building2 className="h-5 w-5" style={{ color: GOLD }} />
                       </span>
-                      <span className={homePageType.cardBadge}
+                      <span className={`${homePageType.cardBadge} !px-2.5 !py-0.5 !text-xs`}
                         style={{ background: 'rgba(201,168,76,0.15)', color: GOLD }}>
                         In-Bay Wash
                       </span>
                     </div>
 
-                    <p className={`${homePageType.cardTitle} text-white mb-1`} style={homeHeadingStyle}>
-                      {branch.name}
-                    </p>
-                    <p className={`flex items-start gap-1.5 ${homePageType.cardBody}`} style={{ color: 'rgba(255,255,255,0.6)' }}>
-                      <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />
-                      <span className="line-clamp-2">{branch.location}</span>
-                    </p>
+                    <div className="space-y-1.5">
+                      <p className={`${homePageType.cardTitle} !text-base sm:!text-lg text-white`} style={homeHeadingStyle}>
+                        {branch.name}
+                      </p>
+                      <p className={`flex items-start gap-1.5 ${homePageType.cardBody} !text-xs sm:!text-sm leading-relaxed`} style={{ color: 'rgba(255,255,255,0.6)' }}>
+                        <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                        <span className="line-clamp-2">{branch.location}</span>
+                      </p>
+                    </div>
 
-                    <div className="flex flex-col gap-4 pt-3">
-                      <div
-                        className="flex items-center gap-3 rounded-xl border px-3 py-2.5"
-                        style={{ borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}
+                    <div
+                      className="flex items-center gap-3 rounded-xl border px-3 py-2"
+                      style={{ borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.04)' }}
+                    >
+                      <span
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+                        style={{ background: 'rgba(201,168,76,0.15)' }}
                       >
-                        <span
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
-                          style={{ background: 'rgba(201,168,76,0.15)' }}
-                        >
-                          <LayoutGrid className="h-5 w-5" style={{ color: GOLD }} />
-                        </span>
-                        <div className="min-w-0">
-                          
-                          <p className={`${homePageType.cardStat} text-white`}>
-                            {branch.bayCount}
-                            <span className={homePageType.cardStatSuffix} style={{ color: 'rgba(255,255,255,0.55)' }}>
-                              {' '}
-                              Wash Bays
-                            </span>
-                          </p>
-                        </div>
+                        <LayoutGrid className="h-4 w-4" style={{ color: GOLD }} />
+                      </span>
+                      <div className="min-w-0">
+                        <p className={`${homePageType.cardStat} !text-base sm:!text-lg text-white`}>
+                          {branch.bayCount}
+                          <span className={`${homePageType.cardStatSuffix} !text-sm`} style={{ color: 'rgba(255,255,255,0.55)' }}>
+                            {' '}
+                            Wash Bays
+                          </span>
+                        </p>
                       </div>
+                    </div>
 
-                      <div className="space-y-1.5">
-                        {[
-                          'Trained detailing specialists',
-                          'Walk-in friendly',
-                          'Complimentary coffee on selected services',
-                        ].map(perk => (
-                          <div key={perk} className="flex items-start gap-2">
-                            <span className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                              style={{ background: 'rgba(201,168,76,0.2)' }}>
-                              <Check className="w-2.5 h-2.5" style={{ color: GOLD }} />
-                            </span>
-                            <p className={homePageType.cardFeature} style={{ color: 'rgba(255,255,255,0.7)' }}>{perk}</p>
-                          </div>
-                        ))}
-                      </div>
+                    <div className={BOOKING_LINE_GAP}>
+                      {BRANCH_PERKS.map(perk => (
+                        <div key={perk} className="flex items-start gap-2.5">
+                          <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full"
+                            style={{ background: 'rgba(201,168,76,0.2)' }}>
+                            <Check className="h-2.5 w-2.5" style={{ color: GOLD }} />
+                          </span>
+                          <p className="text-xs leading-relaxed sm:text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{perk}</p>
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   {/* footer */}
-                  <div className="px-5 py-3.5 flex items-center justify-between"
+                  <div className="flex shrink-0 items-center justify-between px-5 py-3"
                     style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                    <span className={`flex items-center gap-1.5 ${homePageType.cardFooter}`} style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    <span className={`flex items-center gap-1.5 ${homePageType.cardFooter} !text-xs`} style={{ color: 'rgba(255,255,255,0.5)' }}>
                       <Clock className="h-3.5 w-3.5 shrink-0" />
                       {branch.openTime} – {branch.closeTime}
                     </span>
@@ -533,67 +548,148 @@ export function HomePage() {
               ))
             )}
 
-            {/* ── Tile 2: Mobile Service (same row height as branch card) ── */}
+            {/* ── Tile 2: Mobile Service (rectangle, matches branch tile) ── */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.06 }}
-              className="flex h-full min-h-0 flex-col rounded-2xl border-2 overflow-hidden"
+              className={`${BOOKING_TILE} ${mobileCardStep === 'pin' ? 'h-full' : ''}`}
               style={{ background: '#fff', borderColor: 'rgba(12,29,58,0.12)' }}
             >
-              <div className="flex h-full min-h-0 flex-col px-5 pt-5 pb-4">
-                <div className="mb-4 flex items-start justify-between gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                    style={{ background: NAVY_TINT }}>
-                    <Car className="w-5 h-5" style={{ color: NAVY }} />
-                  </span>
-                  <div className="flex min-w-0 flex-col items-end gap-1.5 text-right">
-                    <span
-                      className="whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider sm:text-sm"
-                      style={{ background: 'rgba(201,168,76,0.22)', color: NAVY }}
-                    >
-                      Coming Soon
+              <div
+                className={
+                  mobileCardStep === 'pin'
+                    ? BOOKING_TILE_BODY
+                    : 'flex flex-col px-5 py-5'
+                }
+              >
+                {mobileCardStep === 'pin' ? (
+                <>
+                  <div className="flex items-start justify-between gap-2 shrink-0">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                      style={{ background: NAVY_TINT }}>
+                      <Car className="h-5 w-5" style={{ color: NAVY }} />
                     </span>
-                    <span className={homePageType.cardBadge}
-                      style={{ background: NAVY_TINT, color: NAVY }}>
-                      We Come to You
+                    <div className="flex min-w-0 flex-col items-end gap-1.5 text-right">
+                      <span
+                        className="whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider sm:text-xs"
+                        style={{ background: 'rgba(201,168,76,0.22)', color: NAVY }}
+                      >
+                        Coming Soon
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="shrink-0 space-y-1.5">
+                    <p className={`${homePageType.cardTitle} !text-base sm:!text-lg`} style={{ ...homeHeadingStyle, color: NAVY }}>
+                      Mobile Service
+                    </p>
+                    <p className={`${homePageType.cardBody} !text-xs sm:!text-sm leading-relaxed text-gray-500`}>
+                      Enter your postcode to check mobile availability.
+                    </p>
+                  </div>
+
+                  <div className="flex min-h-0 flex-1 flex-col justify-between gap-3">
+                    <div className="space-y-2.5">
+                      <div className="relative">
+                        <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2"
+                          style={{ color: NAVY }} />
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          autoComplete="postal-code"
+                          maxLength={6}
+                          value={mobileLocation}
+                          onChange={(e) => {
+                            setMobileLocation(sanitizePostcode(e.target.value));
+                            setMobileError('');
+                          }}
+                          onKeyDown={e => { if (e.key === 'Enter' && mobilePinValid) void handleMobileCheckPin(); }}
+                          placeholder="e.g. 2125 or 721101"
+                          aria-label="Postcode or service PIN (4–6 digits)"
+                          className="h-11 w-full rounded-xl border pl-11 pr-4 text-sm leading-normal text-gray-900 outline-none transition-all focus:border-transparent focus:ring-2"
+                          style={{ borderColor: 'rgba(12,29,58,0.18)', ['--tw-ring-color' as any]: NAVY }}
+                        />
+                      </div>
+
+                      {mobileError && (
+                        <p className={homePageType.formError}>
+                          <span aria-hidden>⚠</span>{mobileError}
+                        </p>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => void handleMobileCheckPin()}
+                        disabled={!mobilePinValid || mobileBusy}
+                        className="flex h-11 w-full shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-semibold leading-none transition-all disabled:cursor-not-allowed disabled:opacity-50"
+                        style={{
+                          background: mobilePinValid && !mobileBusy ? BTN_BG : '#e5e7eb',
+                          color:      mobilePinValid && !mobileBusy ? BTN_TEXT : '#9ca3af',
+                          boxShadow:  mobilePinValid && !mobileBusy ? '0 4px 14px rgba(201,168,76,0.35)' : 'none',
+                        }}
+                      >
+                        {mobileBusy ? (
+                          <>
+                            <svg className="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                            </svg>
+                            Checking…
+                          </>
+                        ) : (
+                          <>Check availability <ArrowRight className="h-4 w-4" /></>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 border-t border-gray-100 pt-3">
+                      {MOBILE_PIN_HIGHLIGHTS.map(({ icon: Icon, text }) => (
+                        <div key={text} className="flex min-w-0 flex-col items-center gap-1.5 text-center">
+                          <span
+                            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+                            style={{ background: NAVY_TINT }}
+                          >
+                            <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: NAVY }} />
+                          </span>
+                          <p className="min-w-0 text-[10px] font-semibold leading-relaxed sm:text-xs" style={{ color: NAVY }}>
+                            {text}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+                ) : (
+                <>
+                <div className="mb-4 space-y-2.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                      style={{ background: NAVY_TINT }}>
+                      <Car className="h-5 w-5" style={{ color: NAVY }} />
                     </span>
+                    <div className="flex min-w-0 flex-col items-end gap-1.5 text-right">
+                      <span
+                        className="whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider sm:text-xs"
+                        style={{ background: 'rgba(201,168,76,0.22)', color: NAVY }}
+                      >
+                        Coming Soon
+                      </span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p className={`${homePageType.cardTitle} !text-base sm:!text-lg`} style={{ ...homeHeadingStyle, color: NAVY }}>
+                      Mobile Service
+                    </p>
+                    <p className={`${homePageType.cardBody} !text-xs sm:!text-sm leading-relaxed text-gray-500`}>
+                      Enter the full service address (same postcode).
+                    </p>
                   </div>
                 </div>
 
-                <p className={`${homePageType.cardTitle} mb-1`} style={{ ...homeHeadingStyle, color: NAVY }}>
-                  Mobile Service
-                </p>
-                <p className={`${homePageType.cardBody} text-gray-500 mb-3`}>
-                  {mobileCardStep === 'pin'
-                    ? 'Enter your postcode to check if a driver can reach your area.'
-                    : 'Great — mobile wash is available. Enter the full address where we should meet you (include the same postcode).'}
-                </p>
-
-                {/* form — PIN step then address step in the same card */}
-                <div className="flex flex-1 flex-col gap-3">
-                  {mobileCardStep === 'pin' ? (
-                    <div className="relative">
-                      <MapPin className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2"
-                        style={{ color: NAVY }} />
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        autoComplete="postal-code"
-                        maxLength={6}
-                        value={mobileLocation}
-                        onChange={(e) => {
-                          setMobileLocation(sanitizePostcode(e.target.value));
-                          setMobileError('');
-                        }}
-                        onKeyDown={e => { if (e.key === 'Enter' && mobilePinValid) void handleMobileCheckPin(); }}
-                        placeholder="e.g. 2125 or 721101"
-                        aria-label="Postcode or service PIN (4–6 digits)"
-                        className={homePageType.input}
-                        style={{ borderColor: 'rgba(12,29,58,0.18)', ['--tw-ring-color' as any]: NAVY }}
-                      />
-                    </div>
-                  ) : (
+                <div
+                  className="flex max-h-[min(52vh,22rem)] flex-col gap-2.5 overflow-y-auto overscroll-contain pr-0.5"
+                >
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -697,94 +793,35 @@ export function HomePage() {
                         streetInputRef={streetInputRef}
                       />
                     </motion.div>
-                  )}
 
-                  {mobileError && (
-                    <p className={homePageType.formError}>
-                      <span aria-hidden>⚠</span>{mobileError}
-                    </p>
-                  )}
                   {mobileAddressError && (
                     <p className={homePageType.formError}>
                       <span aria-hidden>⚠</span>{mobileAddressError}
                     </p>
                   )}
 
-                  {mobileCardStep === 'pin' ? (
-                  <button
-                    type="button"
-                    onClick={() => void handleMobileCheckPin()}
-                    disabled={!mobilePinValid || mobileBusy}
-                    className={homePageType.btn}
-                    style={{
-                      background: mobilePinValid && !mobileBusy ? BTN_BG : '#e5e7eb',
-                      color:      mobilePinValid && !mobileBusy ? BTN_TEXT : '#9ca3af',
-                      boxShadow:  mobilePinValid && !mobileBusy ? '0 4px 14px rgba(201,168,76,0.35)' : 'none',
-                    }}
-                  >
-                    {mobileBusy ? (
-                      <>
-                        <svg className="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
-                        </svg>
-                        Checking…
-                      </>
-                    ) : (
-                      <>Check availability <ArrowRight className="w-5 h-5" /></>
-                    )}
-                  </button>
-                  ) : (
                   <button
                     type="button"
                     onClick={handleMobileAddressContinue}
                     disabled={!canContinueToBooking}
-                    className={homePageType.btn}
+                    className="flex h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl text-sm font-semibold leading-none transition-all disabled:cursor-not-allowed disabled:opacity-50"
                     style={{
                       background: canContinueToBooking ? BTN_BG : '#e5e7eb',
                       color:      canContinueToBooking ? BTN_TEXT : '#9ca3af',
                       boxShadow:  canContinueToBooking ? '0 4px 14px rgba(201,168,76,0.35)' : 'none',
                     }}
                   >
-                    Continue to booking <ArrowRight className="w-5 h-5" />
+                    Continue to booking <ArrowRight className="h-4 w-4" />
                   </button>
-                  )}
-
-                  {/* highlights — horizontal row (compact; matches branch card height) */}
-                  <div
-                    className="mt-auto grid grid-cols-3 gap-2 border-t border-gray-100 pt-4 sm:gap-3"
-                  >
-                    {[
-                      { icon: Car, text: 'We come to you' },
-                      { icon: Clock, text: 'Flexible scheduling' },
-                      { icon: Sparkles, text: 'Premium finish' },
-                    ].map(({ icon: Icon, text }) => (
-                      <div
-                        key={text}
-                        className="flex min-w-0 flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:gap-1.5 sm:text-left"
-                      >
-                        <span
-                          className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full sm:mt-0.5"
-                          style={{ background: NAVY_TINT }}
-                        >
-                          <Icon className="h-2.5 w-2.5 shrink-0" style={{ color: NAVY }} />
-                        </span>
-                        <p
-                          className="min-w-0 text-[10px] font-semibold leading-tight sm:text-xs"
-                          style={{ color: NAVY }}
-                        >
-                          {text}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
+                </>
+                )}
               </div>
 
               {/* footer — mirrors branch tile footer height */}
-              <div className="px-5 py-3.5 flex items-center justify-between"
+              <div className="flex shrink-0 items-center justify-between px-5 py-3"
                 style={{ borderTop: '1px solid rgba(12,29,58,0.06)' }}>
-                <span className={`${homePageType.cardFooter} text-gray-400`}>
+                <span className={`${homePageType.cardFooter} !text-xs text-gray-400`}>
                   {mobileCardStep === 'pin' ? 'Mobile service · Postcode check' : 'Mobile service · Service address'}
                 </span>
                 <span className="w-2 h-2 rounded-full" style={{ background: GOLD }} />
