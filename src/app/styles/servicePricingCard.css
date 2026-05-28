@@ -15,15 +15,15 @@
   appearance: none;
   -webkit-tap-highlight-color: transparent;
   background: #fff;
-  border: 1px solid rgba(12, 29, 58, 0.1);
-  border-radius: 12px;
+  border: 1px solid rgba(22, 61, 117, 0.26);
+  border-radius: 14px;
   overflow: visible;
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.18s;
 }
 
 .ps-card:hover {
-  border-color: rgba(12, 29, 58, 0.22);
-  box-shadow: 0 6px 20px rgba(12, 29, 58, 0.08);
+  border-color: rgba(22, 61, 117, 0.34);
+  box-shadow: 0 8px 22px rgba(22, 61, 117, 0.14);
   transform: translateY(-2px);
 }
 
@@ -33,36 +33,36 @@
 }
 
 .ps-card--selected {
-  background: #e8f0fe;
-  border: 1px solid #0c1d3a;
-  box-shadow: 0 4px 14px rgba(12, 29, 58, 0.1);
+  background: #edf4ff;
+  border: 1px solid #154a93;
+  box-shadow: 0 5px 16px rgba(25, 89, 177, 0.2);
 }
 
 .ps-card--selected:hover {
-  background: #dfe8fc;
-  border-color: #0c1d3a;
-  box-shadow: 0 6px 18px rgba(12, 29, 58, 0.12);
+  background: #e6efff;
+  border-color: #154a93;
+  box-shadow: 0 8px 20px rgba(25, 89, 177, 0.22);
   transform: translateY(-2px);
 }
 
 .ps-card--selected .ps-card-head {
-  background: transparent;
+  background: linear-gradient(180deg, rgba(25, 89, 177, 0.34) 0%, rgba(25, 89, 177, 0.18) 100%);
   border-bottom-color: rgba(12, 29, 58, 0.1);
 }
 
 .ps-card--selected .ps-card-body {
-  background: transparent;
+  background: #e3edff;
 }
 
 .ps-card-head {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.4rem;
-  min-height: 5.25rem;
-  padding: 1.2rem 1.15rem 0.95rem;
+  justify-content: space-between;
+  gap: 0.3rem;
+  min-height: 4.6rem;
+  padding: 0.75rem 1rem 0.65rem;
   border-bottom: 1px solid rgba(12, 29, 58, 0.07);
-  background: rgba(12, 29, 58, 0.025);
+  background: linear-gradient(180deg, rgba(25, 89, 177, 0.22) 0%, rgba(25, 89, 177, 0.1) 100%);
   transition: background 0.2s;
   border-radius: 12px 12px 0 0;
   box-sizing: border-box;
@@ -70,8 +70,8 @@
 
 @media (min-width: 640px) {
   .ps-card-head {
-    min-height: 5.5rem;
-    padding: 1.25rem 1.25rem 1rem;
+    min-height: 4.8rem;
+    padding: 0.8rem 1.1rem 0.7rem;
   }
 }
 
@@ -88,7 +88,7 @@
   flex: 1;
   min-width: 0;
   font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 1.08rem;
+  font-size: 1.22rem;
   font-weight: 600;
   color: #0c1d3a;
   line-height: 1.35;
@@ -101,7 +101,7 @@
 
 @media (min-width: 640px) {
   .ps-card-title {
-    font-size: 1.12rem;
+    font-size: 1.28rem;
   }
 }
 
@@ -111,14 +111,16 @@
   justify-content: space-between;
   gap: 10px;
   min-width: 0;
+  min-height: 0;
 }
 
 .ps-card-meta {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
   min-width: 0;
   flex-wrap: nowrap;
+  white-space: nowrap;
 }
 
 .ps-card-badge {
@@ -153,17 +155,43 @@
 .ps-card-price,
 .ps-card-duration {
   font-family: 'DM Sans', system-ui, sans-serif;
-  font-size: 14.5px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0;
   color: #0c1d3a;
   line-height: 1.4;
 }
 
+.ps-card-price {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #0f3570;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.ps-card-duration {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #48648d;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 @media (min-width: 640px) {
   .ps-card-price,
   .ps-card-duration {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .ps-card-price {
+    font-size: 1.12rem;
+  }
+
+  .ps-card-duration {
+    font-size: 0.98rem;
   }
 }
 
@@ -172,9 +200,9 @@
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
-  margin-left: 0;
+  margin-left: auto;
   min-width: 0;
-  min-height: 28px;
+  min-height: 0;
   justify-content: flex-end;
 }
 
@@ -197,15 +225,42 @@
 }
 
 .ps-card-perk--coffee {
-  background: #fffbeb;
-  color: #92400e;
-  border: 1px solid rgba(251, 191, 36, 0.45);
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.ps-card-perk--coffee svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  color: #92650a;
 }
 
 .ps-card-perk--loyalty {
   background: rgba(201, 168, 76, 0.12);
   color: #92650a;
   border: 1px solid rgba(201, 168, 76, 0.35);
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+
+.ps-card-perk--loyalty svg {
+  width: 17px;
+  height: 17px;
+}
+
+.ps-card-perk--placeholder {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  visibility: hidden;
+  box-shadow: none;
 }
 
 .ps-card-body {
@@ -282,4 +337,19 @@
 
 .ps-row-text--excluded {
   color: #b0b8c4;
+}
+
+.ps-card-duration-row {
+  margin-top: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(22, 61, 117, 0.18);
+  display: flex;
+  justify-content: center;
+}
+
+.ps-card-duration-text {
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #35537e;
+  line-height: 1.25;
 }

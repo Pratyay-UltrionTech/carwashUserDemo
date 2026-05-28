@@ -20,10 +20,10 @@ export const landingNavBrandNameStyle = {
 export const landingNavTaglineStyle = {
   fontFamily: "'DM Sans', sans-serif",
   fontSize: "clamp(12px, 0.85rem, 14px)",
-  fontWeight: 400,
+  fontWeight: 500,
   letterSpacing: "1.5px",
   lineHeight: 1.35,
   marginTop: 3,
 } as const;
 /** Muted navy for tagline on white app headers (hero uses gold on navy background). */
-export const landingNavTaglineLightColor = "#5f7289";
+export const landingNavTaglineLightColor = "#4f627a";

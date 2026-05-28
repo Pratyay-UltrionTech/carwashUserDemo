@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router';
 import {
   MapPin, Building2, Car, Clock, Calendar,
   Zap, TrendingDown, Sparkles, Check, ArrowRight,
-  LayoutGrid,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useBooking } from '../context/BookingContext';
@@ -28,6 +27,9 @@ import { homeHeadingStyle, homePageType } from '../lib/homePageTypography';
 const NAVY      = '#0c1d3a';
 const NAVY_TINT = '#e8eef8';
 const GOLD      = '#c9a84c';
+const MOBILE_CARD_BG = '#E6F3F1';
+const MOBILE_CARD_BORDER = '#9ECFC9';
+const MOBILE_BADGE_BG = '#2FAE97';
 const BTN_BG    = '#c9a84c';
 const BTN_TEXT  = '#0c1d3a';
 
@@ -474,7 +476,11 @@ export function HomePage() {
                   transition={{ delay: index * 0.06 }}
                   whileHover={{ y: -3 }}
                   className={`group ${BOOKING_TILE} h-full text-left transition-all duration-200 hover:shadow-xl`}
-                  style={{ background: NAVY, borderColor: NAVY, boxShadow: '0 4px 20px rgba(12,29,58,0.18)' }}
+                  style={{
+                    background: 'linear-gradient(160deg, #183f6e 0%, #112f58 55%, #0c2244 100%)',
+                    borderColor: '#28508a',
+                    boxShadow: '0 6px 22px rgba(12,29,58,0.18)',
+                  }}
                 >
                   <div className={BOOKING_TILE_BODY}>
                     <div className="flex items-center justify-between">
@@ -489,10 +495,10 @@ export function HomePage() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <p className={`${homePageType.cardTitle} !text-base sm:!text-lg text-white`} style={homeHeadingStyle}>
+                      <p className={`${homePageType.cardTitle} !text-lg sm:!text-xl text-white`} style={homeHeadingStyle}>
                         {branch.name}
                       </p>
-                      <p className={`flex items-start gap-1.5 ${homePageType.cardBody} !text-xs sm:!text-sm leading-relaxed`} style={{ color: 'rgba(255,255,255,0.6)' }}>
+                      <p className={`flex items-start gap-1.5 ${homePageType.cardBody} !text-sm sm:!text-base leading-relaxed`} style={{ color: 'rgba(255,255,255,0.72)' }}>
                         <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />
                         <span className="line-clamp-2">{branch.location}</span>
                       </p>
@@ -506,15 +512,11 @@ export function HomePage() {
                         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
                         style={{ background: 'rgba(201,168,76,0.15)' }}
                       >
-                        <LayoutGrid className="h-4 w-4" style={{ color: GOLD }} />
+                        <Sparkles className="h-4 w-4" style={{ color: GOLD }} />
                       </span>
                       <div className="min-w-0">
-                        <p className={`${homePageType.cardStat} !text-base sm:!text-lg text-white`}>
-                          {branch.bayCount}
-                          <span className={`${homePageType.cardStatSuffix} !text-sm`} style={{ color: 'rgba(255,255,255,0.55)' }}>
-                            {' '}
-                            Wash Bays
-                          </span>
+                        <p className="text-base sm:text-lg font-medium leading-tight text-white">
+                          Premium Hand Wash
                         </p>
                       </div>
                     </div>
@@ -526,7 +528,7 @@ export function HomePage() {
                             style={{ background: 'rgba(201,168,76,0.2)' }}>
                             <Check className="h-2.5 w-2.5" style={{ color: GOLD }} />
                           </span>
-                          <p className="text-xs leading-relaxed sm:text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{perk}</p>
+                          <p className="text-sm leading-relaxed sm:text-[15px]" style={{ color: 'rgba(255,255,255,0.78)' }}>{perk}</p>
                         </div>
                       ))}
                     </div>
@@ -535,7 +537,7 @@ export function HomePage() {
                   {/* footer */}
                   <div className="flex shrink-0 items-center justify-between px-5 py-3"
                     style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                    <span className={`flex items-center gap-1.5 ${homePageType.cardFooter} !text-xs`} style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    <span className={`flex items-center gap-1.5 ${homePageType.cardFooter} !text-sm`} style={{ color: 'rgba(255,255,255,0.65)' }}>
                       <Clock className="h-3.5 w-3.5 shrink-0" />
                       {branch.openTime} – {branch.closeTime}
                     </span>
@@ -554,7 +556,7 @@ export function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.06 }}
               className={`${BOOKING_TILE} ${mobileCardStep === 'pin' ? 'h-full' : ''}`}
-              style={{ background: '#fff', borderColor: 'rgba(12,29,58,0.12)' }}
+              style={{ background: MOBILE_CARD_BG, borderColor: MOBILE_CARD_BORDER }}
             >
               <div
                 className={
@@ -572,8 +574,12 @@ export function HomePage() {
                     </span>
                     <div className="flex min-w-0 flex-col items-end gap-1.5 text-right">
                       <span
-                        className="whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider sm:text-xs"
-                        style={{ background: 'rgba(201,168,76,0.22)', color: NAVY }}
+                        className="whitespace-nowrap rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-wider sm:text-sm"
+                        style={{
+                          background: MOBILE_BADGE_BG,
+                          color: '#ffffff',
+                          boxShadow: '0 2px 10px rgba(47,174,151,0.3)',
+                        }}
                       >
                         Coming Soon
                       </span>
@@ -581,10 +587,10 @@ export function HomePage() {
                   </div>
 
                   <div className="shrink-0 space-y-1.5">
-                    <p className={`${homePageType.cardTitle} !text-base sm:!text-lg`} style={{ ...homeHeadingStyle, color: NAVY }}>
+                    <p className={`${homePageType.cardTitle} !text-lg sm:!text-xl`} style={{ ...homeHeadingStyle, color: NAVY }}>
                       Mobile Service
                     </p>
-                    <p className={`${homePageType.cardBody} !text-xs sm:!text-sm leading-relaxed text-gray-500`}>
+                    <p className={`${homePageType.cardBody} !text-sm sm:!text-base leading-relaxed text-slate-600`}>
                       Enter your postcode to check mobile availability.
                     </p>
                   </div>
@@ -608,7 +614,12 @@ export function HomePage() {
                           placeholder="e.g. 2125 or 721101"
                           aria-label="Postcode or service PIN (4–6 digits)"
                           className="h-11 w-full rounded-xl border pl-11 pr-4 text-sm leading-normal text-gray-900 outline-none transition-all focus:border-transparent focus:ring-2"
-                          style={{ borderColor: 'rgba(12,29,58,0.18)', ['--tw-ring-color' as any]: NAVY }}
+                          style={{
+                            borderColor: 'rgba(12,29,58,0.32)',
+                            background: '#ffffff',
+                            boxShadow: 'inset 0 1px 0 rgba(12,29,58,0.04)',
+                            ['--tw-ring-color' as any]: NAVY,
+                          }}
                         />
                       </div>
 
@@ -652,7 +663,7 @@ export function HomePage() {
                           >
                             <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: NAVY }} />
                           </span>
-                          <p className="min-w-0 text-[10px] font-semibold leading-relaxed sm:text-xs" style={{ color: NAVY }}>
+                          <p className="min-w-0 text-xs font-semibold leading-relaxed sm:text-sm" style={{ color: NAVY }}>
                             {text}
                           </p>
                         </div>
@@ -670,18 +681,22 @@ export function HomePage() {
                     </span>
                     <div className="flex min-w-0 flex-col items-end gap-1.5 text-right">
                       <span
-                        className="whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider sm:text-xs"
-                        style={{ background: 'rgba(201,168,76,0.22)', color: NAVY }}
+                        className="whitespace-nowrap rounded-full px-4 py-1.5 text-[12px] font-extrabold uppercase tracking-wider sm:text-sm"
+                        style={{
+                          background: MOBILE_BADGE_BG,
+                          color: '#ffffff',
+                          boxShadow: '0 2px 10px rgba(47,174,151,0.3)',
+                        }}
                       >
                         Coming Soon
                       </span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <p className={`${homePageType.cardTitle} !text-base sm:!text-lg`} style={{ ...homeHeadingStyle, color: NAVY }}>
+                    <p className={`${homePageType.cardTitle} !text-lg sm:!text-xl`} style={{ ...homeHeadingStyle, color: NAVY }}>
                       Mobile Service
                     </p>
-                    <p className={`${homePageType.cardBody} !text-xs sm:!text-sm leading-relaxed text-gray-500`}>
+                    <p className={`${homePageType.cardBody} !text-sm sm:!text-base leading-relaxed text-slate-600`}>
                       Enter the full service address (same postcode).
                     </p>
                   </div>

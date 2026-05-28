@@ -472,7 +472,7 @@ export function BranchSelection() {
 
   const selectedPackage = useMemo(() => ALL_PACKAGES.find(p => p.id === selectedPackageId), [selectedPackageId, ALL_PACKAGES]);
 
-  const newPlateValid = /^[A-Z0-9]{2,7}$/.test(newVehicleNumber);
+  const newPlateValid = newVehicleNumber === '' || /^[A-Z0-9]{2,7}$/.test(newVehicleNumber);
 
   const resolveRegistrationForBooking = (): string => {
     if (!session) return registrationNumber.trim();
@@ -491,7 +491,7 @@ export function BranchSelection() {
   const handleContinue = async () => {
     if (!vehicleId || !selectedPackage) return;
     if (session && (addingNewVehicleMode || saveVehicleToProfileOnContinue)) {
-      if (!vehicleModel.trim() || !newPlateValid) {
+      if (!newPlateValid) {
         setAddVehicleTouched(true);
         return;
       }
@@ -543,10 +543,9 @@ export function BranchSelection() {
 
   const canContinue = Boolean(
     vehicleId &&
-    vehicleModel.trim() &&
     selectedPackageId &&
     (!isMobileFlow || !!mobileVisitAddress?.full_address?.trim()) &&
-    (!session ? registrationNumber.trim() : (!addingNewVehicleMode && !saveVehicleToProfileOnContinue) || newPlateValid)
+    (!session ? true : (!addingNewVehicleMode && !saveVehicleToProfileOnContinue) || newPlateValid)
   );
 
   const saveMobileVisitAddressFromBranch = () => {
@@ -570,9 +569,8 @@ export function BranchSelection() {
 
   const vehicleDetailsReady = Boolean(
     vehicleId &&
-      vehicleModel.trim() &&
       (!session
-        ? registrationNumber.trim()
+        ? true
         : (!addingNewVehicleMode && !saveVehicleToProfileOnContinue) || newPlateValid),
   );
 
@@ -717,10 +715,10 @@ export function BranchSelection() {
           ) : null}
 
           <BookingFlowSection
-            step={1}
             icon={Car}
-            title="Select your vehicle"
+            title="Step-1 Select your Vehicle"
             badge={vehicleId ? selectedBodyLabel : undefined}
+            titleClassName="text-lg sm:text-xl"
           >
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">
@@ -789,11 +787,17 @@ export function BranchSelection() {
             </div>
           </BookingFlowSection>
 
-          <BookingFlowSection step={2} icon={Car} title="Model & registration">
+          <BookingFlowSection
+            icon={Car}
+            title="Step-2 Vehicle Details (Optional)"
+            titleClassName="text-lg sm:text-xl"
+          >
             {session ? (
                       <div className="flex flex-col gap-4">
                         {(() => {
-                          const modelsForType = modelsForSelectedBodyStyle;
+                          const modelsForType = modelsForSelectedBodyStyle.filter(
+                            (v) => String(v.model ?? '').trim().length > 0,
+                          );
 
                           if (modelsForType.length === 0) {
                             return (
@@ -813,15 +817,8 @@ export function BranchSelection() {
                                       onBlur={() => setAddVehicleTouched(true)}
                                       placeholder="e.g. BMW X7"
                                       style={inpFocus}
-                                      className={`${inp} ${
-                                        addVehicleTouched && !vehicleModel?.trim()
-                                          ? 'border-red-400 bg-red-50'
-                                          : 'border-gray-300 hover:border-gray-400'
-                                      }`}
+                                      className={`${inp} border-gray-300 hover:border-gray-400`}
                                     />
-                                    {addVehicleTouched && !vehicleModel?.trim() ? (
-                                      <p className="mt-1.5 text-xs text-red-500">Model is required</p>
-                                    ) : null}
                                   </div>
                                   <div>
                                     <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wider">
@@ -841,18 +838,14 @@ export function BranchSelection() {
                                       style={inpFocus}
                                       className={`${inp} font-mono ${
                                         addVehicleTouched &&
-                                        (!newVehicleNumber || !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber))
+                                        newVehicleNumber && !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber)
                                           ? 'border-red-400 bg-red-50'
                                           : 'border-gray-300 hover:border-gray-400'
                                       }`}
                                     />
                                     {addVehicleTouched &&
-                                      (!newVehicleNumber || !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber)) && (
-                                        <p className="mt-1.5 text-xs text-red-500">
-                                          {!newVehicleNumber
-                                            ? 'Registration number is required'
-                                            : '2–7 letters or numbers only'}
-                                        </p>
+                                      newVehicleNumber && !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber) && (
+                                        <p className="mt-1.5 text-xs text-red-500">2–7 letters or numbers only</p>
                                       )}
                                   </div>
                                 </div>
@@ -960,15 +953,8 @@ export function BranchSelection() {
                                         onBlur={() => setAddVehicleTouched(true)}
                                         placeholder="e.g. BMW X7"
                                         style={inpFocus}
-                                        className={`${inp} ${
-                                          addVehicleTouched && !vehicleModel?.trim()
-                                            ? 'border-red-400 bg-red-50'
-                                            : 'border-gray-300 hover:border-gray-400'
-                                        }`}
+                                        className={`${inp} border-gray-300 hover:border-gray-400`}
                                       />
-                                      {addVehicleTouched && !vehicleModel?.trim() ? (
-                                        <p className="mt-1.5 text-xs text-red-500">Model is required</p>
-                                      ) : null}
                                     </div>
                                     <div>
                                       <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wider">
@@ -988,18 +974,14 @@ export function BranchSelection() {
                                         style={inpFocus}
                                         className={`${inp} font-mono ${
                                           addVehicleTouched &&
-                                          (!newVehicleNumber || !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber))
+                                          newVehicleNumber && !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber)
                                             ? 'border-red-400 bg-red-50'
                                             : 'border-gray-300 hover:border-gray-400'
                                         }`}
                                       />
                                       {addVehicleTouched &&
-                                        (!newVehicleNumber || !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber)) && (
-                                          <p className="mt-1.5 text-xs text-red-500">
-                                            {!newVehicleNumber
-                                              ? 'Registration number is required'
-                                              : '2–7 letters or numbers only'}
-                                          </p>
+                                        newVehicleNumber && !/^[A-Z0-9]{2,7}$/.test(newVehicleNumber) && (
+                                          <p className="mt-1.5 text-xs text-red-500">2–7 letters or numbers only</p>
                                         )}
                                     </div>
                                   </div>
@@ -1031,7 +1013,7 @@ export function BranchSelection() {
                         </div>
                         <div>
                           <label className="block text-xs font-semibold text-gray-500 mb-1 uppercase tracking-wider">
-                            Registration Number *
+                            Registration Number
                           </label>
                           <input
                             type="text"
@@ -1047,12 +1029,12 @@ export function BranchSelection() {
           </BookingFlowSection>
 
           <BookingFlowSection
-            step={3}
             icon={LayoutGrid}
-            title="Choose your package"
+            title="Step-3 Choose your Package"
             badge={vehicleId ? (activeTab === 'wash' ? 'Wash' : 'Detailing') : undefined}
             rootClassName="overflow-visible"
             bodyClassName="overflow-visible"
+            titleClassName="text-lg sm:text-xl"
           >
                   <div className="space-y-6">
                     {vehicleId ? (
@@ -1133,6 +1115,7 @@ export function BranchSelection() {
                                         badge={svc.recommended ? 'Recommended' : undefined}
                                         freeCoffeeCount={svc.freeCoffeeCount}
                                         eligibleForLoyaltyPoints={svc.eligibleForLoyaltyPoints === true}
+                                        takeawayCoffeeIcon
                                         isSelected={isSelected}
                                         onClick={() => {
                                           setSelectedPackageId(svc.id);
@@ -1154,19 +1137,19 @@ export function BranchSelection() {
                           disabled={!canGoLeft}
                           onClick={() => navigateCarousel(-1)}
                           className={cn(
-                            'absolute left-0 top-[22%] z-20 -translate-y-1/2 sm:top-[24%]',
-                            'flex h-10 w-10 items-center justify-center rounded-full',
-                            'bg-white/90 shadow-md border border-gray-200/80',
+                            'absolute -left-4 top-[27%] z-20 sm:-left-5 sm:top-[29%]',
+                            'flex h-11 w-11 items-center justify-center rounded-lg',
+                            'bg-[#1d74d8] shadow-lg border border-[#1565c6]',
                             'transition-all duration-200 ease-out',
-                            'hover:scale-110 hover:shadow-lg hover:bg-white active:scale-95',
+                            'hover:scale-110 hover:shadow-xl hover:bg-[#1669c8] active:scale-95',
                             'disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none',
                             !canScrollServicePrev && activeTab === 'detail'
                               ? 'ring-2 ring-amber-400/70 ring-offset-1'
                               : '',
                           )}
-                          style={{ color: NAVY }}
+                          style={{ color: '#ffffff' }}
                         >
-                          <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+                          <ChevronLeft className="h-6 w-6" strokeWidth={2.8} />
                         </button>
                         <button
                           type="button"
@@ -1174,19 +1157,19 @@ export function BranchSelection() {
                           disabled={!canGoRight}
                           onClick={() => navigateCarousel(1)}
                           className={cn(
-                            'absolute right-0 top-[22%] z-20 -translate-y-1/2 sm:top-[24%]',
-                            'flex h-10 w-10 items-center justify-center rounded-full',
-                            'bg-white/90 shadow-md border border-gray-200/80',
+                            'absolute -right-4 top-[27%] z-20 sm:-right-5 sm:top-[29%]',
+                            'flex h-11 w-11 items-center justify-center rounded-lg',
+                            'bg-[#1d74d8] shadow-lg border border-[#1565c6]',
                             'transition-all duration-200 ease-out',
-                            'hover:scale-110 hover:shadow-lg hover:bg-white active:scale-95',
+                            'hover:scale-110 hover:shadow-xl hover:bg-[#1669c8] active:scale-95',
                             'disabled:pointer-events-none disabled:opacity-30 disabled:shadow-none',
                             !canScrollServiceNext && activeTab === 'wash' && detailingGroups.length > 0
                               ? 'ring-2 ring-amber-400/70 ring-offset-1'
                               : '',
                           )}
-                          style={{ color: NAVY }}
+                          style={{ color: '#ffffff' }}
                         >
-                          <ChevronRight className="h-5 w-5" strokeWidth={2.5} />
+                          <ChevronRight className="h-6 w-6" strokeWidth={2.8} />
                         </button>
                       </div>
                     </div>

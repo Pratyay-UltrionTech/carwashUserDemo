@@ -5,6 +5,19 @@ import { LoyaltyCountedIcon } from './LoyaltyCountedIcon';
 import { TakeawayCoffeeIcon } from './TakeawayCoffeeIcon';
 import '../styles/servicePricingCard.css';
 
+function CoffeeCupIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+      stroke="#92650a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
+      <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
+      <line x1="6" y1="2" x2="6" y2="4" />
+      <line x1="10" y1="2" x2="10" y2="4" />
+      <line x1="14" y1="2" x2="14" y2="4" />
+    </svg>
+  );
+}
+
 const NAVY = '#0c1d3a';
 
 function formatPrice(price: number) {
@@ -36,6 +49,7 @@ export type ServicePricingCardProps = {
   badge?: string;
   freeCoffeeCount?: number;
   eligibleForLoyaltyPoints?: boolean;
+  takeawayCoffeeIcon?: boolean;
   isSelected: boolean;
   onClick: () => void;
 };
@@ -107,6 +121,7 @@ export function ServicePricingCard({
   badge,
   freeCoffeeCount = 0,
   eligibleForLoyaltyPoints = false,
+  takeawayCoffeeIcon = false,
   isSelected,
   onClick,
 }: ServicePricingCardProps) {
@@ -136,31 +151,40 @@ export function ServicePricingCard({
         <div className="ps-card-price-row">
           <div className="ps-card-meta">
             <span className="ps-card-price">{priceDisplay}</span>
-            {durationDisplay ? <span className="ps-card-duration">{durationDisplay}</span> : null}
           </div>
-          {hasCoffee || hasLoyalty ? (
-            <div className="ps-card-perks">
-              {hasCoffee ? (
-                <span
-                  className="ps-card-perk ps-card-perk--coffee"
-                  title={`Complimentary takeaway coffee${coffeeCount > 1 ? ` (×${coffeeCount})` : ''}`}
-                  aria-label="Complimentary takeaway coffee"
-                >
-                  <TakeawayCoffeeIcon size={15} />
-                </span>
-              ) : null}
-              {hasLoyalty ? (
-                <span className="ps-card-perk ps-card-perk--loyalty" title="Loyalty counted" aria-label="Loyalty counted">
-                  <LoyaltyCountedIcon size={14} style={{ color: '#92650a' }} />
-                </span>
-              ) : null}
-            </div>
-          ) : null}
+          <div className="ps-card-perks">
+            {hasCoffee ? (
+              <span
+                className="ps-card-perk ps-card-perk--coffee"
+                title={`Complimentary takeaway coffee${coffeeCount > 1 ? ` (×${coffeeCount})` : ''}`}
+                aria-label="Complimentary takeaway coffee"
+              >
+                {takeawayCoffeeIcon ? (
+                  <TakeawayCoffeeIcon size={18} style={{ color: '#92650a' }} />
+                ) : (
+                  <CoffeeCupIcon />
+                )}
+              </span>
+            ) : null}
+            {hasLoyalty ? (
+              <span className="ps-card-perk ps-card-perk--loyalty" title="Loyalty counted" aria-label="Loyalty counted">
+                <LoyaltyCountedIcon size={14} style={{ color: '#92650a' }} />
+              </span>
+            ) : null}
+            {!hasCoffee && !hasLoyalty ? (
+              <span className="ps-card-perk ps-card-perk--placeholder" aria-hidden />
+            ) : null}
+          </div>
         </div>
       </div>
 
       <div className="ps-card-body">
         <ServiceDetailRows descriptionPoints={included} excludedPoints={excluded} />
+        {durationDisplay ? (
+          <div className="ps-card-duration-row">
+            <span className="ps-card-duration-text">Duration: {durationDisplay}</span>
+          </div>
+        ) : null}
       </div>
     </button>
   );

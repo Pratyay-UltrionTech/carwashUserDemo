@@ -21,13 +21,13 @@ export const homePageType = {
 
   /** Service cards — shared branch + mobile (tracking matches sectionTitle / Current Offers) */
   cardBadge: 'text-sm font-semibold px-3 py-1 rounded-full',
-  cardTitle: 'text-lg sm:text-xl font-normal leading-snug tracking-[0.03em]',
-  cardBody: 'text-sm sm:text-base leading-snug',
-  cardFeature: 'text-sm leading-relaxed',
-  cardStat: 'text-lg sm:text-xl font-bold tabular-nums leading-tight',
-  cardStatSuffix: 'text-base font-medium',
-  cardFooter: 'text-sm leading-normal',
-  cardCta: 'text-sm font-semibold',
+  cardTitle: 'text-xl sm:text-2xl font-normal leading-snug tracking-[0.03em]',
+  cardBody: 'text-base sm:text-lg leading-snug',
+  cardFeature: 'text-base leading-relaxed',
+  cardStat: 'text-xl sm:text-2xl font-bold tabular-nums leading-tight',
+  cardStatSuffix: 'text-lg font-medium',
+  cardFooter: 'text-sm sm:text-base leading-normal',
+  cardCta: 'text-sm sm:text-base font-semibold',
 
   /** Buttons & postcode input */
   input:

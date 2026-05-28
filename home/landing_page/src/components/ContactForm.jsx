@@ -6,6 +6,7 @@ import './ContactForm.css';
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [service, setService] = useState('');
   const [preferredDate, setPreferredDate] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'success' | 'error'
@@ -21,6 +22,7 @@ const ContactForm = () => {
         body: JSON.stringify({
           name: name.trim(),
           phone: phone.trim(),
+          email: email.trim(),
           service: service.trim(),
           preferred_date: preferredDate,
         }),
@@ -29,6 +31,7 @@ const ContactForm = () => {
       setStatus('success');
       setName('');
       setPhone('');
+      setEmail('');
       setService('');
       setPreferredDate('');
     } catch {
@@ -76,7 +79,9 @@ const ContactForm = () => {
           </div>
 
           <div className="cir">
-            <CoffeeIcon size={20} framed frameSize="md" />
+            <div className="cic" style={{ color: 'rgba(255,255,255,0.9)' }}>
+              <CoffeeIcon size={20} />
+            </div>
             <div>
               <div className="cil">Free Coffee</div>
               <div className="civ">Included with selected wash</div>
@@ -140,6 +145,15 @@ const ContactForm = () => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/[^0-9+\s()-]/g, ''))}
                   required
+                />
+              </div>
+              <div className="fr">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  placeholder="e.g. john@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="fr">

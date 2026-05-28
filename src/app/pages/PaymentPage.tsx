@@ -875,7 +875,7 @@ export function PaymentPage() {
                     </div>
                     <div className="min-w-0">
                       <span className="font-medium text-gray-900">Log in as existing customer</span>
-                      <p className="mt-1 text-xs font-normal leading-snug text-gray-500">
+                      <p className="mt-1 text-xs font-semibold leading-snug text-gray-900">
                         (10th wash will be free if booked as a member)
                       </p>
                     </div>

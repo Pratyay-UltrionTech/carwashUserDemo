@@ -11,6 +11,7 @@
 .landing-page .fr{margin-bottom:.9rem}
 .landing-page .fr label{display:block;font-size:clamp(11px,1vw,13px);color:#fff;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
 .landing-page .fr input,.landing-page .fr select{width:100%;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:11px 13px;color:#fff;font-size:clamp(14px,1.1vw,16px);outline:none;font-family:inherit}
+.landing-page .fr input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) brightness(2);cursor:pointer;width:20px;height:20px;opacity:1}
 .landing-page .fr input::placeholder{color:rgba(255,255,255,0.28)}
 .landing-page .fr select option{background:#162e58}
 .landing-page .fsub{width:100%;background:var(--gold);color:var(--navy);padding:13px;border:none;border-radius:7px;font-size:clamp(15px,1.1vw,16px);font-weight:700;cursor:pointer;margin-top:.4rem}

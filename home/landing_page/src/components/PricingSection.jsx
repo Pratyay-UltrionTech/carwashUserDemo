@@ -336,6 +336,7 @@ const PricingSection = () => {
                               recommended={svc.recommended === true}
                               freeCoffeeCount={svc.freeCoffeeCount}
                               eligibleForLoyaltyPoints={svc.eligibleForLoyaltyPoints === true}
+                              takeawayCoffeeIcon
                               isSelected={selectedServiceId === svc.id}
                               onClick={() => setSelectedServiceId(svc.id)}
                             />

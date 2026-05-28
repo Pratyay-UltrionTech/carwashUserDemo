@@ -143,6 +143,9 @@
 .landing-page .sl{font-size:clamp(11px,1vw,12px);color:#fff;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
 
 @media(max-width:768px){
+  .landing-page{
+    padding-bottom:calc(82px + env(safe-area-inset-bottom, 0px));
+  }
   .landing-page .hero{
     min-height:auto;
     height:auto;
@@ -184,13 +187,49 @@
   }
   .landing-page .hbtns{margin:0}
   .landing-page .h-action-btns{
-    gap:.5rem;
-    margin-bottom:0;
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:calc(10px + env(safe-area-inset-bottom, 0px));
+    z-index:110;
+    margin:0;
+    padding:0;
+    border:none;
+    background:transparent;
+    backdrop-filter:none;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:.4rem;
   }
   .landing-page .h-action-btn{
-    padding:.5rem .9rem;
-    font-size:.7rem;
+    width:100%;
+    justify-content:center;
+    padding:.55rem .35rem;
+    font-size:.64rem;
+    letter-spacing:.03em;
+    border-radius:10px;
+    border-width:1.4px;
+    font-weight:700;
   }
+  .landing-page .h-action-label{white-space:nowrap}
+  .landing-page .h-action-btn--call{
+    background:#fff7dd;
+    border-color:#b3871f;
+    color:#7c5a08;
+  }
+  .landing-page .h-action-btn--call .h-action-icon{color:#a77913}
+  .landing-page .h-action-btn--wa{
+    background:#e8fff1;
+    border-color:#22b665;
+    color:#13884a;
+  }
+  .landing-page .h-action-btn--wa .h-action-icon{color:#10a152}
+  .landing-page .h-action-btn--inquiry{
+    background:#edf5ff;
+    border-color:#5f9ee9;
+    color:#2d6fbe;
+  }
+  .landing-page .h-action-btn--inquiry .h-action-icon{color:#3e80cf}
   .landing-page .hero-footer{display:flex;flex-direction:column;gap:0;margin:0}
   .landing-page .hformer{
     margin:calc(1rem - var(--hero-mobile-stack-gap)) 0 0;

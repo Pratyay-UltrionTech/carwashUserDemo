@@ -15,7 +15,7 @@ const CoffeePromise = () => {
         <div className="vct">
           <div className="vct-head">
             <span className="vct-coffee-icon">
-              <CoffeeIcon framed frameSize="lg" />
+              <CoffeeIcon size={32} />
             </span>
             <div className="vct-lbl">COMPLIMENTARY</div>
           </div>
