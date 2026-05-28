@@ -165,7 +165,7 @@ const ContactForm = () => {
                   onChange={(e) => setService(e.target.value)}
                 />
               </div>
-              <div className="fr">
+              <div className="fr fr--date">
                 <label>Preferred Date</label>
                 <input
                   type="date"

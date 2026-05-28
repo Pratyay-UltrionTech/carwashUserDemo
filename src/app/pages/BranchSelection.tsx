@@ -66,9 +66,9 @@ function normalizeVehicleTypeForMatch(type: string): string {
 
 function getVehicleIconForType(type: string) {
   const key = normalizeVehicleTypeForMatch(type);
-  if (/suv|4wd|truck|pickup|van|tempo/.test(key)) return Truck;
-  if (/sedan|saloon/.test(key)) return CarFront;
-  if (/hatch|hatchback|coupe|buggy|mini/.test(key)) return Car;
+  if (/ute|truck|pickup|van|tempo/.test(key)) return Truck;
+  if (/suv|4wd/.test(key)) return Car;
+  if (/hatch|hatchback|sedan|saloon|coupe|buggy|mini/.test(key)) return CarFront;
   return Car;
 }
 

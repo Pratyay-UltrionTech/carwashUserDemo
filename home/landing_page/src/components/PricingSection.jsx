@@ -72,7 +72,9 @@ const NAVY = '#0c1d3a';
 
 function getVehicleIcon(type) {
   const key = String(type || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  if (/suv|4wd|truck|pickup|van/.test(key)) return IconTruck;
+  // Keep UTE/truck-like types distinct from SUV so tabs don't show identical icons.
+  if (/ute|truck|pickup|van/.test(key)) return IconTruck;
+  if (/suv|4wd/.test(key)) return IconCar;
   if (/sedan|saloon/.test(key)) return IconCarFront;
   return IconCar;
 }
