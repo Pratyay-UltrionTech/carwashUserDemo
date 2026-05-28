@@ -11,7 +11,7 @@
   --hero-mobile-paragraph-cta-gap:2.35rem;
   --hero-mobile-after-stats-gap:1.25rem;
 }
-.landing-page{scroll-behavior:smooth;font-family:'DM Sans',sans-serif;background:var(--cream);color:#1c1c1c;line-height:1.6;overflow-x:hidden}
+.landing-page{scroll-behavior:smooth;font-family:'DM Sans',sans-serif;background:var(--cream);color:#1c1c1c;line-height:1.6}
 .landing-page img{display:block;width:100%;object-fit:cover}
 .landing-page a{text-decoration:none;color:inherit}
 

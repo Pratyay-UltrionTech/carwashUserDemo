@@ -10,7 +10,8 @@
 .landing-page .qf h3{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,2.2vw,1.75rem);font-weight:400;letter-spacing:.04em;color:#fff;margin-bottom:1.25rem}
 .landing-page .fr{margin-bottom:.9rem}
 .landing-page .fr label{display:block;font-size:clamp(11px,1vw,13px);color:#fff;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
-.landing-page .fr input,.landing-page .fr select{width:100%;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:11px 13px;color:#fff;font-size:clamp(14px,1.1vw,16px);outline:none;font-family:inherit}
+.landing-page .fr input,.landing-page .fr select{width:100%;background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:11px 13px;color:#fff;font-size:clamp(14px,1.1vw,16px);outline:none;font-family:inherit;-webkit-appearance:none;appearance:none}
+.landing-page .fr input[type="date"]{color-scheme:dark}
 /* Hide the native browser calendar icon — we use our own SVG background-image instead (works on Chrome, Edge and Safari) */
 .landing-page .fr input[type="date"]::-webkit-calendar-picker-indicator{opacity:0;width:0;height:0;padding:0}
 /* White calendar SVG icon via background-image — works in all browsers including Safari iOS */

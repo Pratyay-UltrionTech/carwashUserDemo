@@ -43,9 +43,6 @@
   align-items: center;
   position: relative;
   z-index: 1;
-  /* force Safari to create a compositing layer so rgba backgrounds render */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
 }
 
 /* Base button */
@@ -167,12 +164,14 @@
 
 @media(max-width:768px){
   .landing-page{
+    padding-bottom:calc(82px + constant(safe-area-inset-bottom, 0px));
     padding-bottom:calc(82px + env(safe-area-inset-bottom, 0px));
   }
   .landing-page .hero{
     min-height:auto;
     height:auto;
-    overflow:hidden;
+    /* overflow:visible so Safari iOS does not clip position:fixed children (buttons bar) */
+    overflow:visible;
     align-items:stretch;
   }
   .landing-page .hc{
@@ -213,6 +212,8 @@
     position:fixed;
     left:10px;
     right:10px;
+    /* constant() for Safari < 11.2, env() for Safari 11.2+ */
+    bottom:calc(10px + constant(safe-area-inset-bottom, 0px));
     bottom:calc(10px + env(safe-area-inset-bottom, 0px));
     z-index:110;
     margin:0;
@@ -220,6 +221,7 @@
     border:none;
     background:transparent;
     backdrop-filter:none;
+    -webkit-backdrop-filter:none;
     display:grid;
     grid-template-columns:repeat(3,minmax(0,1fr));
     gap:.4rem;
