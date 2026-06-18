@@ -43,8 +43,15 @@ function EmailIcon() {
   );
 }
 
-const SEO_TITLE = `${BRAND_NAME} | West Pennant Hills | Premium Detailing`;
-const SEO_DESCRIPTION = `${BRAND_NAME} in West Pennant Hills — premium hand car wash, interior vacuuming, window cleaning, tire shine, and luxury detailing. Eco-safe products; complimentary coffee on selected services. Mon–Sun 9am–5pm.`;
+const SEO_TITLE = `${BRAND_NAME} | Premium Hand Car Wash & Detailing`;
+const SEO_DESCRIPTION = `${BRAND_NAME} — premium hand car wash, interior vacuuming, window cleaning, tire shine, and luxury detailing. Eco-safe products; complimentary coffee on selected services.`;
+
+const HERO_STATS = [
+  { value: '850+', label: 'Happy Cars' },
+  { value: '4 Yrs', label: 'Serving WPH' },
+  { value: '100%', label: 'Eco-Safe' },
+  { value: '7 Days', label: '9am–5pm' },
+];
 
 const Hero = () => {
   /* ── Dynamic phone: fetched from branch settings, falls back to branding const ── */
@@ -124,108 +131,79 @@ const Hero = () => {
           />
         </div>
         <div className="hero-ov" aria-hidden="true" />
+        <div className="hero-glow hero-glow--1" aria-hidden="true" />
+        <div className="hero-glow hero-glow--2" aria-hidden="true" />
         <div className="hc">
-          <div className="hbadge">✦ Your Local Community Car Wash · West Pennant Hills</div>
-          <h1>
-            Lumi Car <em>Spa</em>
-            <span className="h1-seo">
-              <span className="h1-seo-set h1-seo-set--mobile">
-                <span className="h1-seo-line h1-seo-line--single">
-                  Premium hand wash, interior vacuuming &amp; detailing&nbsp;
-                </span>
-                <span className="h1-seo-line">–&nbsp;West Pennant Hills, NSW · Mon–Sun 9am–5pm</span>
-              </span>
-              <span className="h1-seo-set h1-seo-set--desktop">
-                <span className="h1-seo-line">Premium hand wash, interior vacuuming &amp; detailing&nbsp;—</span>
-                <span className="h1-seo-line">West Pennant Hills, NSW · Mon–Sun 9am–5pm</span>
-              </span>
-            </span>
-          </h1>
-          <p className="hsub">
-            <span className="hsub-copy hsub-copy--desktop">
-              Eco-safe, car-safe products and careful hand work. Drop your
-              <br aria-hidden="true" />
-              car, enjoy a complimentary coffee on selected services, and relax
-              <br aria-hidden="true" />
-              while we look after your vehicle.
-            </span>
-            <span className="hsub-copy hsub-copy--mobile">
-              Eco-safe, car-safe products and careful hand
-              <br aria-hidden="true" />
-              work. Drop your car, enjoy a complimentary coffee
-              <br aria-hidden="true" />
-              on selected services, and relax while we look after
-              <br aria-hidden="true" />
-              your vehicle.
-            </span>
-          </p>
-          <div className="hbtns">
-            <a href="#/login" className="bg" aria-label="Book online — sign in">
-              <CalendarIcon />
-              Book Online
-            </a>
-            <a
-              href="#svc"
-              className="bgh"
-              onClick={scrollToServices}
-              aria-label="Scroll to our services — hand car wash, interior vacuuming, and detailing"
-            >
-              Our Services →
-            </a>
+          <div className="hc-main lp-reveal">
+            <div className="hbadge">Open 7 Days · West Pennant Hills</div>
+
+            <h1>
+              Your Car<em>wash</em>
+            </h1>
+
+            <p className="htagline">
+              Premium hand wash &amp; detailing — book online in minutes.
+            </p>
+
+            <ul className="hpills" aria-label="Service highlights">
+              <li>Hand wash</li>
+              <li>Interior care</li>
+              <li>Eco-safe products</li>
+            </ul>
+
+            <div className="hbtns">
+              <a href="#/login" className="bg hbtn-primary" aria-label="Book online — sign in">
+                <CalendarIcon />
+                Book Online
+              </a>
+              <a
+                href="#svc"
+                className="bgh hbtn-secondary"
+                onClick={scrollToServices}
+                aria-label="Scroll to our services"
+              >
+                View Services
+              </a>
+            </div>
+
+            <div className="h-contact-bar" role="group" aria-label="Quick contact options">
+              <span className="h-contact-label">Or reach us directly</span>
+              <div className="h-action-btns">
+                <a href={telHref} className="h-action-btn h-action-btn--call" aria-label="Call us now">
+                  <span className="h-action-icon"><PhoneIcon /></span>
+                  <span className="h-action-label">Call</span>
+                </a>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-action-btn h-action-btn--wa"
+                  aria-label="Chat with us on WhatsApp"
+                >
+                  <span className="h-action-icon"><WhatsAppIcon /></span>
+                  <span className="h-action-label">WhatsApp</span>
+                </a>
+                <button
+                  type="button"
+                  className="h-action-btn h-action-btn--inquiry"
+                  onClick={scrollToInquiry}
+                  aria-label="Email inquiry — scroll to contact form"
+                >
+                  <span className="h-action-icon"><EmailIcon /></span>
+                  <span className="h-action-label">Email</span>
+                </button>
+              </div>
+            </div>
           </div>
 
-          {/* ── Secondary quick-contact action buttons ── */}
-          <div className="h-action-btns" role="group" aria-label="Quick contact options">
-            <a
-              href={telHref}
-              className="h-action-btn h-action-btn--call"
-              aria-label="Call us now"
-            >
-              <span className="h-action-icon"><PhoneIcon /></span>
-              <span className="h-action-label">Call Now</span>
-            </a>
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="h-action-btn h-action-btn--wa"
-              aria-label="Chat with us on WhatsApp"
-            >
-              <span className="h-action-icon"><WhatsAppIcon /></span>
-              <span className="h-action-label">WhatsApp</span>
-            </a>
-            <button
-              type="button"
-              className="h-action-btn h-action-btn--inquiry"
-              onClick={scrollToInquiry}
-              aria-label="Email inquiry — scroll to contact form"
-            >
-              <span className="h-action-icon"><EmailIcon /></span>
-              <span className="h-action-label">Email Inquiry</span>
-            </button>
-          </div>
-
-          <div className="hero-footer">
-            <p className="hformer">Formerly known as Coonara Professional Hand Car Wash</p>
-            <div className="hstats" aria-label="Service highlights">
-            <div className="hstat">
-              <span className="sn">850+</span>
-              <span className="sl">Happy Cars</span>
-            </div>
-            <div className="hstat">
-              <span className="sn">4 Yrs</span>
-              <span className="sl">Serving WPH</span>
-            </div>
-            <div className="hstat">
-              <span className="sn">100%</span>
-              <span className="sl">Eco-Safe</span>
-            </div>
-            <div className="hstat hstat-hours">
-              <span className="sn">7 Days</span>
-              <span className="sl">9am–5pm</span>
-            </div>
-            </div>
-          </div>
+          <aside className="hero-stats-panel lp-reveal" aria-label="Service highlights" style={{ animationDelay: '0.12s' }}>
+            {HERO_STATS.map((stat) => (
+              <div key={stat.label} className="hstat-card">
+                <span className="sn">{stat.value}</span>
+                <span className="sl">{stat.label}</span>
+              </div>
+            ))}
+          </aside>
         </div>
       </section>
     </>

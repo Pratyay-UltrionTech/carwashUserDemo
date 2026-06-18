@@ -13,7 +13,6 @@ import {
   landingNavTaglineStyle,
   landingNavTaglineLightColor,
 } from '../lib/branding';
-import { AppLogo } from './AppLogo';
 
 const NAVY      = '#0c1d3a';
 const NAVY_TINT = '#e8eef8';
@@ -81,7 +80,7 @@ export function UserNavbar() {
           style={{ minHeight: LANDING_NAV_HEIGHT }}
         >
 
-          {/* ── left: back + logo (sizes match hero `.landing-page` navbar) ── */}
+          {/* ── left: back + brand name (sizes match hero `.landing-page` navbar) ── */}
           <div className="flex min-w-0 flex-1 items-center gap-[clamp(10px,1.5vw,14px)] pr-2">
             {!isHomePage && (
               <button
@@ -96,10 +95,9 @@ export function UserNavbar() {
             <button
               type="button"
               onClick={() => navigate('/')}
-              className="group flex min-w-0 max-w-full shrink items-center gap-[clamp(10px,1.5vw,14px)] text-left transition-opacity hover:opacity-90"
+              className="group flex min-w-0 max-w-full shrink items-center text-left transition-opacity hover:opacity-90"
               aria-label="Go to home"
             >
-              <AppLogo variant="landingNav" className="shrink-0" />
               <div className="min-w-0">
                 <p
                   className="truncate whitespace-nowrap"

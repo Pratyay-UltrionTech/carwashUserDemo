@@ -1,4 +1,26 @@
-.landing-page .fbar{background:#060f1e;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
-.landing-page .fbar p,.landing-page .fbar a{font-size:11px;color:rgba(255,255,255,0.28)}
-.landing-page .footer-links{display:flex;gap:1.25rem}
-.landing-page .footer-links a:hover{color:rgba(255,255,255,0.55)}
+.landing-page .fbar {
+  background: var(--ink);
+  padding: 1.25rem var(--section-x);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.landing-page .fbar p,
+.landing-page .fbar a {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+
+.landing-page .footer-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.landing-page .footer-links a:hover {
+  color: var(--accent);
+}

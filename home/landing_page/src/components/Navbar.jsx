@@ -1,11 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BRAND_NAME, TAGLINE } from '../../../../src/app/lib/branding';
-import { AppLogo } from '../../../../src/app/components/AppLogo';
 import { scrollToLandingSection } from '../utils/scrollToContact';
 import './Navbar.css';
 
+const NAV_LINKS = [
+  { id: 'svc', label: 'Services' },
+  { id: 'pricing', label: 'Pricing' },
+  { id: 'why', label: 'Why Us' },
+  { id: 'nbhd', label: 'Community' },
+  { id: 'faq', label: 'FAQ' },
+  { id: 'contact', label: 'Contact' },
+];
+
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleNavClick = (sectionId, event) => {
     scrollToLandingSection(sectionId, event);
@@ -13,11 +29,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar${scrolled ? ' navbar--scrolled' : ''}`}>
       <div className="nb">
-        <div className="ni">
-          <AppLogo variant="landingNav" className="ni-logo" />
-        </div>
         <div className="nn">
           {BRAND_NAME}
           <small>{TAGLINE}</small>
@@ -37,12 +50,11 @@ const Navbar = () => {
           <span />
         </button>
         <ul className="nl">
-          <li><a href="#svc" onClick={(e) => handleNavClick('svc', e)}>Services</a></li>
-          <li><a href="#pricing" onClick={(e) => handleNavClick('pricing', e)}>Pricing</a></li>
-          <li><a href="#why" onClick={(e) => handleNavClick('why', e)}>Why Us</a></li>
-          <li><a href="#nbhd" onClick={(e) => handleNavClick('nbhd', e)}>Community</a></li>
-          <li><a href="#faq" onClick={(e) => handleNavClick('faq', e)}>FAQ</a></li>
-          <li><a href="#contact" onClick={(e) => handleNavClick('contact', e)}>Contact</a></li>
+          {NAV_LINKS.map(({ id, label }) => (
+            <li key={id}>
+              <a href={`#${id}`} onClick={(e) => handleNavClick(id, e)}>{label}</a>
+            </li>
+          ))}
         </ul>
         <a href="#/login" className="nbtn">Book Now</a>
       </div>
@@ -51,12 +63,11 @@ const Navbar = () => {
         className={`nmobile ${isMobileMenuOpen ? 'open' : ''}`}
       >
         <ul className="nmobile-list">
-          <li><a href="#svc" onClick={(e) => handleNavClick('svc', e)}>Services</a></li>
-          <li><a href="#pricing" onClick={(e) => handleNavClick('pricing', e)}>Pricing</a></li>
-          <li><a href="#why" onClick={(e) => handleNavClick('why', e)}>Why Us</a></li>
-          <li><a href="#nbhd" onClick={(e) => handleNavClick('nbhd', e)}>Community</a></li>
-          <li><a href="#faq" onClick={(e) => handleNavClick('faq', e)}>FAQ</a></li>
-          <li><a href="#contact" onClick={(e) => handleNavClick('contact', e)}>Contact</a></li>
+          {NAV_LINKS.map(({ id, label }) => (
+            <li key={id}>
+              <a href={`#${id}`} onClick={(e) => handleNavClick(id, e)}>{label}</a>
+            </li>
+          ))}
           <li><a href="#/login" onClick={() => setIsMobileMenuOpen(false)}>Book Now</a></li>
         </ul>
       </div>

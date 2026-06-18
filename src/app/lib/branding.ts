@@ -1,5 +1,5 @@
-export const BRAND_NAME = "Lumi Car Spa";
-export const BRAND_NAME_SHORT = "Lumi";
+export const BRAND_NAME = "Your Carwash";
+export const BRAND_NAME_SHORT = "Your Carwash";
 /** Central public asset — copy stays in sync under each app's `public/branding/`. */
 export const LOGO_PATH = "/branding/company-logo.png";
 export const TAGLINE = "Your Hills Shine Specialist · West Pennant Hills";

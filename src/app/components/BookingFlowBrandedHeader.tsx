@@ -1,7 +1,6 @@
 import type { CSSProperties } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { HEADING_FONT_FAMILY } from '../lib/branding';
-import { AppLogo } from './AppLogo';
 import { cn } from './ui/utils';
 
 type Props = {
@@ -43,7 +42,6 @@ export function BookingFlowBrandedHeader({
           </h1>
           <p className="text-xs font-medium uppercase tracking-wider text-gray-500">{subtitle}</p>
         </div>
-        <AppLogo variant="mark" className="hidden shrink-0 sm:block" />
       </div>
     </header>
   );

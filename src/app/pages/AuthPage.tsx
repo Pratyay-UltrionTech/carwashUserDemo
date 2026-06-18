@@ -12,7 +12,6 @@ import {
   apiVerifySignupOtp,
 } from '../lib/userApi';
 import { BRAND_NAME, HEADING_FONT_FAMILY, TAGLINE } from '../lib/branding';
-import { AppLogo } from '../components/AppLogo';
 
 /* ─── design tokens (mirror landing-page palette) ─── */
 const NAVY = '#0c1d3a';
@@ -49,19 +48,16 @@ function BrandPanel() {
       />
 
       {/* brand */}
-      <div className="relative z-10 flex items-center gap-4">
-        <AppLogo variant="auth" className="shrink-0 drop-shadow-lg" />
-        <div>
-          <h2
-            className="text-2xl font-bold leading-snug mb-0.5"
-            style={{ fontFamily: HEADING_FONT_FAMILY, color: '#fff' }}
-          >
-            {BRAND_NAME}
-          </h2>
-          <p className="text-xs tracking-widest uppercase" style={{ color: GOLD2 }}>
-            {TAGLINE}
-          </p>
-        </div>
+      <div className="relative z-10">
+        <h2
+          className="text-2xl font-bold leading-snug mb-0.5"
+          style={{ fontFamily: HEADING_FONT_FAMILY, color: '#fff' }}
+        >
+          {BRAND_NAME}
+        </h2>
+        <p className="text-xs tracking-widest uppercase" style={{ color: GOLD2 }}>
+          {TAGLINE}
+        </p>
       </div>
 
       {/* mid quote */}
@@ -625,12 +621,9 @@ export function AuthPage() {
               ) : (
                 <motion.div key={isLogin ? 'login-form' : 'signup-form'} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
                   {/* mobile brand header */}
-                  <div className="mb-8 lg:hidden flex items-center gap-3">
-                    <AppLogo variant="mark" className="max-h-10 shrink-0" />
-                    <div>
-                      <p className="text-sm font-bold text-gray-900" style={{ fontFamily: HEADING_FONT_FAMILY }}>{BRAND_NAME}</p>
-                      <p className="text-[10px] tracking-widest uppercase mt-0.5" style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif" }}>{TAGLINE}</p>
-                    </div>
+                  <div className="mb-8 lg:hidden">
+                    <p className="text-sm font-bold text-gray-900" style={{ fontFamily: HEADING_FONT_FAMILY }}>{BRAND_NAME}</p>
+                    <p className="text-[10px] tracking-widest uppercase mt-0.5" style={{ color: GOLD, fontFamily: "'DM Sans', sans-serif" }}>{TAGLINE}</p>
                   </div>
 
                   {/* heading */}

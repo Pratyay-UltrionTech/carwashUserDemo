@@ -22,6 +22,7 @@ import {
 } from '../lib/addressDetails';
 import { apiListAddresses, type SavedAddress } from '../lib/userApi';
 import { BrandLoading } from '../components/BrandLoading';
+import { BRAND_NAME } from '../lib/branding';
 import { homeHeadingStyle, homePageType } from '../lib/homePageTypography';
 
 const NAVY      = '#0c1d3a';
@@ -285,7 +286,7 @@ export function HomePage() {
         {/* ── Welcome ── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className={homePageType.heroTitle} style={{ ...homeHeadingStyle, color: NAVY }}>
-            {firstName ? `Welcome back, ${firstName}` : 'Welcome to Lumi Car Spa'}
+            {firstName ? `Welcome back, ${firstName}` : `Welcome to ${BRAND_NAME}`}
           </h1>
           <p className={homePageType.heroSubtitle}>
             Your Hills shine specialist — book a service in under two minutes.
